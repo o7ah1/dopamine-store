@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدوبامين | متجر خدمات السوشيال ميديا الآلي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- شريط التنقل العلوي -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <span class="text-2xl font-black text-indigo-600">⚡ الدوبامين</span>
+            </div>
+            <div>
+                <!-- زر سري لإعدادات الربح مخفي عن الزبائن -->
+                <button onclick="toggleAdminPanel()" class="text-xs text-slate-400 hover:text-indigo-600 transition">⚙️ إعدادات</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- الواجهة الترحيبية -->
+    <section class="container mx-auto px-6 py-8 text-center max-w-4xl">
+        <h1 class="text-3xl md:text-4xl font-extrabold mb-3 text-slate-900">
+            متجر <span class="text-indigo-600">الدوبامين</span> الآلي للخدمات الرقمية
+        </h1>
+        <p class="text-slate-600 text-base">متجر آلي متكامل لخدمات السوشيال ميديا والتسويق الرقمي.</p>
+    </section>
+
+    <!-- لوحة التحكم السرية (مخفية عن الزبائن) -->
+    <section id="adminPanel" class="container mx-auto px-4 max-w-xl mb-6 hidden">
+        <div class="bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-center justify-between shadow-sm">
+            <div>
+                <h4 class="text-xs font-bold text-amber-800">🎛️ لوحة تحكم المالك السرية</h4>
+                <p class="text-xs text-amber-600 mt-0.5">اختر نسبة الأرباح المضافة:</p>
+            </div>
+            <div>
+                <select id="markupSelector" onchange="calculateTotal()" class="bg-white border border-amber-300 text-slate-800 text-xs font-bold rounded-lg p-2 focus:outline-none">
+                    <option value="1.2">ربح 20%</option>
+                    <option value="1.5" selected>ربح 50%</option>
+                    <option value="2.0">ربح 100%</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- صندوق تقديم الطلب -->
+    <main class="container mx-auto px-4 pb-16 max-w-xl">
+        <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-200">
+            <h2 class="text-2xl font-bold mb-6 text-center text-slate-950">إرسال طلب جديد</h2>
+            
+            <form id="dopamineOrderForm" class="space-y-5">
+                <!-- اختيار الخدمة -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-slate-700">الخدمة المطلوبة</label>
+                    <select id="serviceId" onchange="calculateTotal()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-slate-800 focus:outline-none font-medium">
+                        <option value="">جاري تحميل الخدمات من قاعدة البيانات...</option>
+                    </select>
+                    <p id="displayPrice" class="text-xs text-indigo-600 mt-2 font-bold"></p>
+                </div>
+
+                <!-- الرابط -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-slate-700">رابط الحساب أو المنشور</label>
+                    <input type="url" id="targetLink" required placeholder="https://www.instagram.com/username" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-slate-800 focus:outline-none">
+                </div>
+
+                <!-- الكمية -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-slate-700">الكمية</label>
+                    <input type="number" id="quantity" min="100" value="1000" oninput="calculateTotal()" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-slate-800 focus:outline-none">
+                </div>
+
+                <!-- إجمالي السعر -->
+                <div class="bg-indigo-50/50 border border-indigo-100 p-4 rounded-xl flex justify-between items-center">
+                    <span class="text-sm font-semibold text-slate-600">إجمالي السعر على العميل:</span>
+                    <span id="totalCost" class="text-lg font-black text-indigo-600">$0.00</span>
+                </div>
+
+                <!-- زر الإرسال -->
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-indigo-600/30">
+                    تنفيذ الطلب أوتوماتيكياً 🚀
+                </button>
+            </form>
+
+            <div id="statusMessage" class="mt-4 text-center text-sm hidden font-medium"></div>
+        </div>
+    </main>
+
+    <!-- الفوتر وبرمجية الربط -->
+    <script>
+        // إعدادات الاتصال بـ Supabase
+        const SUPABASE_URL = 'https://kwxqjtnfppffuoohlmpl.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_IlwfSs6aK0UH72AFS-s8UA_tQG...';
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let servicesData = [];
+
+        // دالة لإظهار/إخفاء لوحة التحكم الخاصة بك عند الضغط على زر الإعدادات
+        function toggleAdminPanel() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('hidden');
+        }
+
+        // جلب الخدمات من Supabase
+        async function fetchServices() {
+            const { data, error } = await supabaseClient.from('services').select('*');
+            if (error) {
+                console.error('خطأ في جلب الخدمات:', error);
+                document.getElementById('serviceId').innerHTML = '<option>تأكد من الاتصال بقاعدة البيانات</option>';
+                return;
+            }
+
+            servicesData = data;
+            const select = document.getElementById('serviceId');
+            select.innerHTML = '';
+
+            data.forEach(service => {
+                const option = document.createElement('option');
+                option.value = service.id;
+                option.setAttribute('data-base-price', service.base_price);
+                option.textContent = `${service.name} (السعر: $${service.base_price})`;
+                select.appendChild(option);
+            });
+
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const select = document.getElementById('serviceId');
+            const selectedOption = select.options[select.selectedIndex];
+            if (!selectedOption) return;
+
+            const basePrice = parseFloat(selectedOption.getAttribute('data-base-price')) || 0;
+            const markupSelector = document.getElementById('markupSelector');
+            const markup = markupSelector ? parseFloat(markupSelector.value) : 1.5;
+            
+            const finalPricePerThousand = basePrice * markup;
+            const quantity = parseInt(document.getElementById('quantity').value) || 0;
+            const total = (finalPricePerThousand * quantity) / 1000;
+
+            document.getElementById('displayPrice').innerText = `السعر لكل 1000: $${finalPricePerThousand.toFixed(2)}`;
+            document.getElementById('totalCost').innerText = `$${total.toFixed(2)}`;
+        }
+
+        // إرسال الطلب وحفظه في جدول orders
+        document.getElementById('dopamineOrderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const statusBox = document.getElementById('statusMessage');
+            statusBox.classList.remove('hidden', 'text-red-500');
+            statusBox.classList.add('text-indigo-600');
+            statusBox.innerText = '⏳ جاري إرسال الطلب وتنفيذه...';
+
+            const serviceId = document.getElementById('serviceId' ).value;
+            const targetLink = document.getElementById('targetLink').value;
+            const quantity = document.getElementById('quantity').value;
+            const totalCost = parseFloat(document.getElementById('totalCost').innerText.replace('$', ''));
+
+            const { data, error } = await supabaseClient.from('orders').insert([
+                { service_id: serviceId, target_link: targetLink, quantity: quantity, total_price: totalCost, status: 'pending' }
+            ]);
+
+            if (error) {
+                statusBox.classList.remove('text-indigo-600');
+                statusBox.classList.add('text-red-500');
+                statusBox.innerText = '❌ خطأ: ' + error.message;
+            } else {
+                statusBox.classList.remove('text-indigo-600');
+                statusBox.classList.add('text-emerald-600');
+                statusBox.innerText = '✅ تم إرسال الطلب بنجاح!';
+                document.getElementById('dopamineOrderForm').reset();
+                calculateTotal();
+            }
+        });
+
+        // تشغيل الجلب عند فتح الصفحة
+        fetchServices();
+    </script>
+</body>
+</html>
