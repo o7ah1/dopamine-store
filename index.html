@@ -6,56 +6,71 @@
 <title>Dopamine Store</title>
 
 <style>
+*{box-sizing:border-box}
+
 body{
 margin:0;
-font-family:Arial;
+font-family:Arial,Tahoma,sans-serif;
 background:#0f172a;
 color:white;
-padding:20px
+padding:20px;
 }
+
 .container{
-max-width:700px;
-margin:auto
+max-width:800px;
+margin:auto;
 }
+
 .card{
 background:#1e293b;
-padding:20px;
-border-radius:15px
+padding:25px;
+border-radius:18px;
 }
-h1{text-align:center}
+
+h1{
+text-align:center;
+}
+
 label{
 display:block;
-margin:15px 0 7px
+margin:15px 0 7px;
 }
+
 select,input,button{
 width:100%;
-padding:13px;
-border-radius:8px;
+padding:14px;
+border-radius:10px;
 border:0;
-box-sizing:border-box;
-font-size:16px
+font-size:16px;
 }
+
 select,input{
 background:#334155;
-color:white
+color:white;
 }
+
 button{
 margin-top:20px;
 background:#22c55e;
 color:white;
-font-weight:bold
+font-weight:bold;
+cursor:pointer;
 }
-#price{
+
+.price{
 margin-top:20px;
-padding:15px;
+padding:18px;
 background:#0f172a;
 text-align:center;
-font-size:22px
+font-size:25px;
+font-weight:bold;
+border-radius:10px;
 }
-#error{
+
+.status{
 margin-top:15px;
-color:#fca5a5;
-text-align:center
+text-align:center;
+color:#94a3b8;
 }
 </style>
 </head>
@@ -87,15 +102,18 @@ id="quantity"
 type="number"
 placeholder="مثلاً 1000">
 
-<div id="price">
-السعر: 0.0000 $
+<div class="price">
+السعر:
+<span id="price">0.0000</span> $
 </div>
 
 <button>
 إتمام الطلب
 </button>
 
-<div id="error"></div>
+<div class="status"
+id="status">
+</div>
 
 </div>
 
@@ -106,7 +124,7 @@ placeholder="مثلاً 1000">
 const API =
 "https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/hyper-worker";
 
-let services=[];
+let services = [];
 
 const serviceBox =
 document.getElementById("service");
@@ -117,8 +135,8 @@ document.getElementById("quantity");
 const priceBox =
 document.getElementById("price");
 
-const errorBox =
-document.getElementById("error");
+const statusBox =
+document.getElementById("status");
 
 
 async function loadServices(){
@@ -128,40 +146,26 @@ try{
 const response =
 await fetch(API,{
 method:"POST",
-
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
-
 body:JSON.stringify({
 action:"services"
 })
-
 });
 
 const result =
 await response.json();
 
-console.log(result);
-
 if(!result.success){
 throw new Error(
-result.error || "API Error"
+result.error
 );
 }
 
 services =
-Array.isArray(result.data)
-? result.data
-: [];
-
-if(services.length===0){
-
-throw new Error(
-"لم يتم العثور على خدمات"
-);
-
-}
+result.services || [];
 
 serviceBox.innerHTML="";
 
@@ -171,13 +175,10 @@ const option =
 document.createElement("option");
 
 option.value =
-service.service;
+service.provider_service_id;
 
 option.textContent =
-service.name +
-" — " +
-service.rate +
-" $ / 1000";
+service.name;
 
 serviceBox.appendChild(option);
 
@@ -185,47 +186,68 @@ serviceBox.appendChild(option);
 
 updatePrice();
 
+statusBox.textContent =
+"الخدمات محدثة";
+
 }catch(error){
 
 console.error(error);
 
-serviceBox.innerHTML =
-"<option>تعذر تحميل الخدمات</option>";
-
-errorBox.textContent =
-error.message;
+statusBox.textContent =
+"تعذر تحميل الخدمات";
 
 }
+
+}
+
+
+function selectedService(){
+
+return services.find(
+x =>
+String(
+x.provider_service_id
+) ===
+String(
+serviceBox.value
+)
+);
 
 }
 
 
 function updatePrice(){
 
-const selected =
-services.find(
-x =>
-String(x.service) ===
-String(serviceBox.value)
-);
-
-if(!selected)return;
+const service =
+selectedService();
 
 const quantity =
 Number(
 quantityBox.value || 0
 );
 
+if(!service){
+priceBox.textContent =
+"0.0000";
+return;
+}
+
 const rate =
-Number(selected.rate || 0);
+Number(
+service.sell_rate || 0
+);
+
+/*
+  السعر محسوب لكل 1000
+*/
 
 const total =
-rate * quantity / 1000;
+rate *
+quantity /
+1000;
 
 priceBox.textContent =
-"السعر: " +
-total.toFixed(4) +
-" $";
+total.toFixed(4);
 
 }
 
@@ -238,6 +260,16 @@ updatePrice
 quantityBox.addEventListener(
 "input",
 updatePrice
+);
+
+
+/*
+  تحديث تلقائي كل 3 ثواني
+*/
+
+setInterval(
+loadServices,
+3000
 );
 
 loadServices();
