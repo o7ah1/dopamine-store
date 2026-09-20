@@ -9,68 +9,117 @@
 *{box-sizing:border-box}
 
 body{
-margin:0;
-font-family:Arial,Tahoma,sans-serif;
-background:#0f172a;
-color:white;
-padding:20px;
+  margin:0;
+  font-family:Arial,Tahoma,sans-serif;
+  background:#0f172a;
+  color:white;
+  padding:20px;
 }
 
 .container{
-max-width:800px;
-margin:auto;
+  max-width:800px;
+  margin:auto;
 }
 
 .card{
-background:#1e293b;
-padding:25px;
-border-radius:18px;
+  background:#1e293b;
+  padding:25px;
+  border-radius:18px;
 }
 
 h1{
-text-align:center;
+  text-align:center;
 }
 
 label{
-display:block;
-margin:15px 0 7px;
+  display:block;
+  margin:15px 0 7px;
 }
 
 select,input,button{
-width:100%;
-padding:14px;
-border-radius:10px;
-border:0;
-font-size:16px;
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:0;
+  font-size:16px;
 }
 
 select,input{
-background:#334155;
-color:white;
+  background:#334155;
+  color:white;
 }
 
 button{
-margin-top:20px;
-background:#22c55e;
-color:white;
-font-weight:bold;
-cursor:pointer;
+  margin-top:20px;
+  background:#22c55e;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 .price{
-margin-top:20px;
-padding:18px;
-background:#0f172a;
-text-align:center;
-font-size:25px;
-font-weight:bold;
-border-radius:10px;
+  margin-top:20px;
+  padding:18px;
+  background:#0f172a;
+  text-align:center;
+  font-size:25px;
+  font-weight:bold;
+  border-radius:10px;
 }
 
 .status{
-margin-top:15px;
-text-align:center;
-color:#94a3b8;
+  margin-top:15px;
+  text-align:center;
+  color:#94a3b8;
+}
+
+.hint{
+  margin-top:8px;
+  color:#94a3b8;
+  font-size:14px;
+}
+
+/* الأقسام */
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:8px;
+  margin-bottom:5px;
+  scrollbar-width:thin;
+}
+
+.tabs button{
+  width:auto;
+  flex:0 0 auto;
+  margin-top:0;
+  padding:11px 16px;
+  font-size:15px;
+  white-space:nowrap;
+  background:#334155;
+  color:#cbd5e1;
+}
+
+.tabs button.active{
+  background:#22c55e;
+  color:white;
+}
+
+.tabs button:focus-visible,
+select:focus-visible,
+input:focus-visible{
+  outline:2px solid #22c55e;
+  outline-offset:2px;
+}
+
+optgroup{
+  background:#1e293b;
+  color:#94a3b8;
+}
+
+option{
+  background:#334155;
+  color:white;
 }
 </style>
 </head>
@@ -83,32 +132,43 @@ color:#94a3b8;
 
 <h1>🚀 Dopamine Store</h1>
 
+<label>القسم</label>
+
+<div class="tabs" id="tabs"></div>
+
 <label>الخدمة</label>
 
-<select id="service">
-<option>جاري تحميل الخدمات...</option>
+<input
+  id="search"
+  placeholder="🔎 ابحث عن خدمة داخل القسم"
+  autocomplete="off">
+
+<select id="service" style="margin-top:10px">
+  <option>جاري تحميل الخدمات...</option>
 </select>
+
+<div class="hint" id="rateHint"></div>
 
 <label>الرابط</label>
 
 <input
-id="link"
-placeholder="ضع الرابط هنا">
+  id="link"
+  placeholder="ضع الرابط هنا">
 
 <label>الكمية</label>
 
 <input
-id="quantity"
-type="number"
-placeholder="مثلاً 1000">
+  id="quantity"
+  type="number"
+  placeholder="مثلاً 1000">
 
 <div class="price">
-السعر:
-<span id="price">0.0000</span> $
+  السعر:
+  <span id="price">0.0000</span> $
 </div>
 
 <button>
-إتمام الطلب
+  إتمام الطلب
 </button>
 
 <div class="status" id="status"></div>
@@ -119,239 +179,255 @@ placeholder="مثلاً 1000">
 
 <script>
 
+/* الأقسام تجي من دالة admin-worker (إجراء عام يرجع الخدمات وأسعار البيع فقط) */
 const API =
-"https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/hyper-worker";
+  "https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/admin-worker";
 
+const TABS = [
+  ["cheap","💰 الأرخص"],
+  ["instagram","📸 انستقرام"],
+  ["tiktok","🎵 تيك توك"],
+  ["youtube","▶️ يوتيوب"],
+  ["facebook","👍 فيسبوك"],
+  ["twitter","🐦 تويتر"],
+  ["telegram","✈️ تيليجرام"],
+  ["snapchat","👻 سناب"],
+  ["all","🔎 كل الخدمات"]
+];
+
+let tab = "cheap";
 let services = [];
+let requestId = 0;
+let searchTimer = null;
 
-const serviceBox =
-document.getElementById("service");
+const tabsBox     = document.getElementById("tabs");
+const searchBox   = document.getElementById("search");
+const serviceBox  = document.getElementById("service");
+const quantityBox = document.getElementById("quantity");
+const priceBox    = document.getElementById("price");
+const statusBox   = document.getElementById("status");
+const rateHint    = document.getElementById("rateHint");
 
-const quantityBox =
-document.getElementById("quantity");
 
-const priceBox =
-document.getElementById("price");
+function renderTabs(){
 
-const statusBox =
-document.getElementById("status");
+  tabsBox.innerHTML = "";
+
+  TABS.forEach(([key,label])=>{
+
+    const b = document.createElement("button");
+
+    b.textContent = label;
+
+    if(key === tab){
+      b.className = "active";
+    }
+
+    b.onclick = ()=>{
+      tab = key;
+      renderTabs();
+      loadServices();
+      if(key === "all"){
+        searchBox.focus();
+      }
+    };
+
+    tabsBox.appendChild(b);
+
+  });
+
+}
 
 
 async function loadServices(){
 
-try{
+  const myRequest = ++requestId;
 
-const response = await fetch(API,{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-action:"services"
-})
-});
+  statusBox.textContent = "جاري تحميل الخدمات...";
 
-if(!response.ok){
-throw new Error(
-"HTTP " + response.status
-);
-}
+  try{
 
-const result = await response.json();
+    const response = await fetch(API,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({
+        action:"public_services",
+        platform:tab,
+        search:searchBox.value.trim()
+      })
+    });
 
-console.log("API RESULT:", result);
+    const result = await response.json();
 
+    /* تجاهل الردود القديمة إذا المستخدم غيّر القسم بسرعة */
+    if(myRequest !== requestId) return;
 
-/*
-  الـ Worker الحالي يرجع
-  مصفوفة الخدمات مباشرة
-*/
-if(Array.isArray(result)){
+    if(!response.ok){
+      throw new Error(result.error || ("HTTP " + response.status));
+    }
 
-services = result;
+    services = Array.isArray(result.items) ? result.items : [];
 
-}
+    renderServices();
 
-/*
-  دعم النسخ القديمة أيضًا
-*/
-else if(
-result &&
-Array.isArray(result.services)
-){
+  }catch(error){
 
-services = result.services;
+    if(myRequest !== requestId) return;
 
-}
+    console.error("LOAD SERVICES ERROR:", error);
 
-else if(
-result &&
-Array.isArray(result.data)
-){
+    services = [];
 
-services = result.data;
+    serviceBox.innerHTML =
+      "<option>تعذر تحميل الخدمات</option>";
 
-}
+    statusBox.textContent =
+      "تعذر تحميل الخدمات، حدّث الصفحة وحاول مرة ثانية";
 
-else{
+    updatePrice();
 
-throw new Error(
-"صيغة الخدمات غير صحيحة"
-);
+  }
 
 }
 
 
-serviceBox.innerHTML = "";
+function renderServices(){
 
+  serviceBox.innerHTML = "";
 
-if(services.length === 0){
+  if(!services.length){
 
-const option =
-document.createElement("option");
+    const option = document.createElement("option");
 
-option.textContent =
-"لا توجد خدمات";
+    option.textContent =
+      (tab === "all" && searchBox.value.trim().length < 2)
+        ? "اكتب اسم الخدمة في خانة البحث"
+        : "لا توجد خدمات";
 
-serviceBox.appendChild(option);
+    serviceBox.appendChild(option);
 
-statusBox.textContent =
-"لم يتم العثور على خدمات";
+    statusBox.textContent = "";
 
-return;
+    updatePrice();
+
+    return;
+
+  }
+
+  if(tab === "cheap" || tab === "all"){
+
+    /* الأرخص والبحث: قائمة وحدة مرتبة */
+    services.forEach(service=>{
+      serviceBox.appendChild(makeOption(service));
+    });
+
+  }else{
+
+    /* أقسام المنصات: الخدمات مجمّعة حسب النوع داخل القسم */
+    const groups = new Map();
+
+    services.forEach(service=>{
+
+      const name = service.category || "أخرى";
+
+      if(!groups.has(name)){
+        groups.set(name,[]);
+      }
+
+      groups.get(name).push(service);
+
+    });
+
+    groups.forEach((list,name)=>{
+
+      const group = document.createElement("optgroup");
+
+      group.label = name;
+
+      list.forEach(service=>{
+        group.appendChild(makeOption(service));
+      });
+
+      serviceBox.appendChild(group);
+
+    });
+
+  }
+
+  statusBox.textContent =
+    "تم تحميل " + services.length + " خدمة ✅";
+
+  updatePrice();
 
 }
 
 
-services.forEach(service=>{
+function makeOption(service){
 
-const option =
-document.createElement("option");
+  const option = document.createElement("option");
 
-option.value =
-service.service ??
-service.provider_service_id ??
-service.id;
+  option.value = service.id;
 
-option.textContent =
-service.name || "خدمة بدون اسم";
+  option.textContent =
+    service.name || "خدمة بدون اسم";
 
-serviceBox.appendChild(option);
-
-});
-
-
-updatePrice();
-
-statusBox.textContent =
-"تم تحميل " +
-services.length +
-" خدمة ✅";
-
-}
-catch(error){
-
-console.error(
-"LOAD SERVICES ERROR:",
-error
-);
-
-serviceBox.innerHTML =
-"<option>تعذر تحميل الخدمات</option>";
-
-statusBox.textContent =
-"تعذر تحميل الخدمات";
-
-}
+  return option;
 
 }
 
 
 function selectedService(){
 
-const id =
-serviceBox.value;
-
-return services.find(service => {
-
-const serviceId =
-service.service ??
-service.provider_service_id ??
-service.id;
-
-return String(serviceId) ===
-String(id);
-
-});
+  return services.find(service =>
+    String(service.id) === String(serviceBox.value)
+  );
 
 }
 
 
 function updatePrice(){
 
-const service =
-selectedService();
+  const service = selectedService();
 
-const quantity =
-Number(
-quantityBox.value || 0
-);
+  const quantity = Number(quantityBox.value || 0);
 
-if(!service){
+  if(!service){
 
-priceBox.textContent =
-"0.0000";
+    priceBox.textContent = "0.0000";
 
-return;
+    rateHint.textContent = "";
 
-}
+    return;
 
+  }
 
-const rate =
-Number(
-service.sell_rate ??
-service.rate ??
-service.provider_rate ??
-0
-);
+  const rate = Number(service.sell_rate || 0);
 
+  /* السعر محسوب لكل 1000 */
+  const total = rate * quantity / 1000;
 
-/*
- السعر محسوب لكل 1000
-*/
+  priceBox.textContent = total.toFixed(4);
 
-const total =
-rate *
-quantity /
-1000;
-
-
-priceBox.textContent =
-total.toFixed(4);
+  rateHint.textContent =
+    "السعر لكل 1000: $" + rate;
 
 }
 
 
-serviceBox.addEventListener(
-"change",
-updatePrice
-);
+serviceBox.addEventListener("change", updatePrice);
 
-quantityBox.addEventListener(
-"input",
-updatePrice
-);
+quantityBox.addEventListener("input", updatePrice);
+
+searchBox.addEventListener("input", ()=>{
+
+  clearTimeout(searchTimer);
+
+  searchTimer = setTimeout(loadServices, 400);
+
+});
 
 
-/*
- تحديث الخدمات كل 5 ثواني
-*/
-
-setInterval(
-loadServices,
-5000
-);
-
+renderTabs();
 
 loadServices();
 
