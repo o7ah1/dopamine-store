@@ -105,6 +105,52 @@ button.logout{
     grid-template-columns:1fr;
   }
 }
+.bulk{
+  background:#0f172a;
+  padding:15px;
+  border-radius:14px;
+  margin-top:15px;
+}
+
+.bulkrow{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+}
+
+.bulkrow button{
+  margin-top:8px;
+  padding:12px 4px;
+  background:#8b5cf6;
+}
+
+.bulkrow button.reset{
+  background:#64748b;
+}
+
+@media(max-width:600px){
+  .bulkrow{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+.tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:15px 0 5px;
+}
+
+.tabs button{
+  width:auto;
+  margin-top:0;
+  padding:10px 14px;
+  font-size:15px;
+  background:#334155;
+}
+
+.tabs button.active{
+  background:#22c55e;
+}
 </style>
 </head>
 
@@ -138,10 +184,25 @@ button.logout{
 تسجيل الخروج
 </button>
 
-<input id="search" placeholder="🔎 ابحث بالاسم أو برقم الخدمة"
-  onkeydown="if(event.key==='Enter')loadServices()">
+<div class="bulk">
+<div class="status" style="margin-top:0">
+💹 زيادة كل الأسعار دفعة وحدة (تُحسب من سعر المزود)
+</div>
+<div class="bulkrow">
+<button onclick="bulkMarkup(25)">+25%</button>
+<button onclick="bulkMarkup(50)">+50%</button>
+<button onclick="bulkMarkup(100)">+100%</button>
+<button onclick="bulkMarkup(200)">+200%</button>
+<button class="reset" onclick="bulkMarkup(0)">السعر الأصلي</button>
+</div>
+</div>
 
-<button onclick="loadServices()">بحث</button>
+<div class="tabs" id="tabs"></div>
+
+<input id="search" placeholder="🔎 ابحث بالاسم أو برقم الخدمة"
+  onkeydown="if(event.key==='Enter')searchServices()">
+
+<button onclick="searchServices()">بحث</button>
 
 <button class="save" onclick="syncServices()">
 🔄 مزامنة الخدمات من drd3m
@@ -152,6 +213,11 @@ button.logout{
 </div>
 
 <div id="services"></div>
+
+<div class="row" id="pager">
+<button onclick="changePage(-1)">السابق</button>
+<button onclick="changePage(1)">التالي</button>
+</div>
 
 </div>
 
@@ -166,6 +232,23 @@ const ADMIN_API =
 let password = "";
 
 let services = [];
+
+const PAGE_SIZE = 100;
+let page = 0;
+let tab = "";
+
+const TABS = [
+  ["","الكل"],
+  ["cheap","💰 الأرخص"],
+  ["instagram","📸 انستقرام"],
+  ["tiktok","🎵 تيك توك"],
+  ["youtube","▶️ يوتيوب"],
+  ["facebook","👍 فيسبوك"],
+  ["twitter","🐦 تويتر"],
+  ["telegram","✈️ تيليجرام"],
+  ["snapchat","👻 سناب"]
+];
+let total = 0;
 
 
 async function api(action, extra = {}){
@@ -253,20 +336,33 @@ async function loadServices(){
     const result =
       await api("services",{
         search:document.getElementById("search").value.trim(),
-        limit:100
+        platform:(tab === "cheap" ? "" : tab),
+        sort:(tab === "cheap" ? "cheap" : ""),
+        limit:PAGE_SIZE,
+        offset:page*PAGE_SIZE
       });
 
     services =
       Array.isArray(result)
         ? result
-        : [];
+        : (result.items || []);
+
+    total =
+      Array.isArray(result)
+        ? result.length
+        : (result.total || 0);
 
     renderServices();
 
     status.textContent =
-      "تم عرض " +
-      services.length +
-      " خدمة (أول 100 نتيجة، استخدم البحث) ✅";
+      "عرض " +
+      (total ? page*PAGE_SIZE+1 : 0) +
+      " - " +
+      (page*PAGE_SIZE+services.length) +
+      " من " + total +
+      " خدمة (صفحة " + (page+1) +
+      " من " + Math.max(Math.ceil(total/PAGE_SIZE),1) +
+      ") ✅";
 
   }catch(error){
 
@@ -451,6 +547,96 @@ async function toggleService(
 }
 
 
+function renderTabs(){
+
+  const box =
+    document.getElementById("tabs");
+
+  box.innerHTML = "";
+
+  TABS.forEach(([key,label])=>{
+
+    const b =
+      document.createElement("button");
+
+    b.textContent = label;
+
+    if(key === tab)
+      b.className = "active";
+
+    b.onclick = ()=>{
+      tab = key;
+      page = 0;
+      renderTabs();
+      loadServices();
+    };
+
+    box.appendChild(b);
+
+  });
+
+}
+
+
+function searchServices(){
+
+  page = 0;
+
+  loadServices();
+
+}
+
+
+function changePage(step){
+
+  const last =
+    Math.max(Math.ceil(total/PAGE_SIZE)-1,0);
+
+  page =
+    Math.min(Math.max(page+step,0),last);
+
+  loadServices();
+
+  window.scrollTo({top:0,behavior:"smooth"});
+
+}
+
+
+async function bulkMarkup(percent){
+
+  const msg =
+    percent === 0
+      ? "إرجاع كل الأسعار لسعر المزود؟"
+      : "سعر البيع لكل الخدمات راح يصير: سعر المزود + " + percent + "%\n(هذا يمسح أي أسعار عدلتها يدوياً). متأكد؟";
+
+  if(!confirm(msg))
+    return;
+
+  const status =
+    document.getElementById("status");
+
+  try{
+
+    status.textContent =
+      "جاري تطبيق الزيادة...";
+
+    await api("bulk_markup",{percent});
+
+    await loadServices();
+
+    status.textContent =
+      "تم تطبيق " + percent + "% على كل الخدمات ✅";
+
+  }catch(error){
+
+    status.textContent =
+      error.message;
+
+  }
+
+}
+
+
 async function syncServices(){
 
   const status =
@@ -513,6 +699,8 @@ function escapeHtml(value){
     .replaceAll("'","&#039;");
 
 }
+
+renderTabs();
 
 </script>
 
