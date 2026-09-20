@@ -3,225 +3,598 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>Dopamine Store</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚀%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300..700&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --paper:#F5F3FF;
+  --surface:#FFFFFF;
+  --field:#FAF9FF;
+  --ink:#17123B;
+  --muted:#6A6690;
+  --line:#E3DFF6;
+  --primary:#5A3CF0;
+  --summary:#5A3CF0;
+  --hit:#FFD23F;
+  --on-hit:#17123B;
+  --danger:#D92D4A;
+  --shadow:0 1px 0 rgba(23,18,59,.04),0 28px 50px -30px rgba(90,60,240,.35);
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#0D0A22;
+    --surface:#171338;
+    --field:#110E2D;
+    --ink:#F2EFFF;
+    --muted:#A5A0CE;
+    --line:#2D2766;
+    --primary:#7B61FF;
+    --summary:#4A32D9;
+    --danger:#FF7A90;
+    --shadow:none;
+  }
+}
+
 *{box-sizing:border-box}
+
+html{-webkit-text-size-adjust:100%}
 
 body{
   margin:0;
-  font-family:Arial,Tahoma,sans-serif;
-  background:#0f172a;
-  color:white;
-  padding:20px;
-}
-
-.container{
-  max-width:800px;
-  margin:auto;
-}
-
-.card{
-  background:#1e293b;
-  padding:25px;
-  border-radius:18px;
-}
-
-h1{
-  text-align:center;
-}
-
-label{
-  display:block;
-  margin:15px 0 7px;
-}
-
-select,input,button{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:0;
+  min-height:100vh;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Readex Pro",Tahoma,Arial,sans-serif;
   font-size:16px;
+  line-height:1.6;
+  padding:20px 16px 48px;
 }
 
-select,input{
-  background:#334155;
-  color:white;
+.shell{
+  max-width:1040px;
+  margin:0 auto;
 }
 
-button{
-  margin-top:20px;
-  background:#22c55e;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.price{
-  margin-top:20px;
-  padding:18px;
-  background:#0f172a;
-  text-align:center;
-  font-size:25px;
-  font-weight:bold;
-  border-radius:10px;
-}
-
-.status{
-  margin-top:15px;
-  text-align:center;
-  color:#94a3b8;
-}
-
-.hint{
-  margin-top:8px;
-  color:#94a3b8;
-  font-size:14px;
-}
-
-/* الأقسام */
-.tabs{
+/* ---------- الرأس ---------- */
+.top{
   display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding-bottom:8px;
-  margin-bottom:5px;
-  scrollbar-width:thin;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  padding:8px 4px 24px;
 }
 
-.tabs button{
-  width:auto;
-  flex:0 0 auto;
-  margin-top:0;
-  padding:11px 16px;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:26px;
+  font-weight:700;
+  letter-spacing:-.01em;
+  direction:ltr;
+}
+
+.brand .mark{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:var(--hit);
+  color:var(--on-hit);
+  display:grid;
+  place-items:center;
+}
+
+.brand .mark svg{width:24px;height:24px}
+
+.brand small{
+  font-weight:300;
+  font-size:26px;
+  color:var(--muted);
+  margin-left:-6px;
+}
+
+.top p{
+  margin:0;
+  color:var(--muted);
   font-size:15px;
-  white-space:nowrap;
-  background:#334155;
-  color:#cbd5e1;
 }
 
-.tabs button.active{
-  background:#22c55e;
-  color:white;
+/* ---------- التخطيط ---------- */
+.layout{
+  display:grid;
+  gap:20px;
+  align-items:start;
 }
 
-.tabs button:focus-visible,
-select:focus-visible,
-input:focus-visible{
-  outline:2px solid #22c55e;
+@media(min-width:900px){
+  .layout{
+    grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);
+    gap:28px;
+  }
+  .summary{
+    position:sticky;
+    top:20px;
+  }
+}
+
+.steps{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:8px 24px;
+  box-shadow:var(--shadow);
+}
+
+.step{
+  padding:22px 0;
+}
+
+.step + .step{
+  border-top:1px solid var(--line);
+}
+
+.step h2{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 14px;
+  font-size:17px;
+  font-weight:600;
+}
+
+.step h2 b{
+  width:26px;
+  height:26px;
+  border-radius:9px;
+  background:var(--ink);
+  color:var(--surface);
+  display:grid;
+  place-items:center;
+  font-size:13px;
+  font-weight:600;
+}
+
+/* ---------- المنصات ---------- */
+.platforms{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:2px 2px 10px;
+  margin:0 -2px;
+  scroll-snap-type:x proximity;
+  scrollbar-width:none;
+}
+
+.platforms::-webkit-scrollbar{display:none}
+
+@media(min-width:720px){
+  .platforms{
+    flex-wrap:wrap;
+    overflow:visible;
+    padding-bottom:2px;
+  }
+}
+
+.plat{
+  flex:0 0 auto;
+  scroll-snap-align:start;
+  width:86px;
+  padding:12px 6px 10px;
+  border:1.5px solid var(--line);
+  border-radius:18px;
+  background:var(--field);
+  color:var(--ink);
+  font:inherit;
+  font-size:13px;
+  font-weight:500;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  transition:border-color .15s,background-color .15s;
+}
+
+.plat:hover{border-color:var(--primary)}
+
+.plat[aria-pressed="true"]{
+  border-color:var(--primary);
+  background:var(--surface);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 22%,transparent);
+  font-weight:600;
+}
+
+.plat .ico{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  line-height:1;
+  color:#fff;
+}
+
+/* ---------- الحقول ---------- */
+.field{margin-top:12px}
+.field:first-of-type{margin-top:0}
+
+.field label{
+  display:block;
+  margin-bottom:7px;
+  font-size:14px;
+  font-weight:500;
+  color:var(--muted);
+}
+
+input,select{
+  width:100%;
+  height:52px;
+  padding:0 16px;
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  background:var(--field);
+  color:var(--ink);
+  font:inherit;
+  font-size:16px;
+  transition:border-color .15s,box-shadow .15s;
+}
+
+input::placeholder{color:var(--muted);opacity:.7}
+
+input:focus-visible,
+select:focus-visible{
+  outline:0;
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 22%,transparent);
+}
+
+input[aria-invalid="true"],
+select[aria-invalid="true"]{
+  border-color:var(--danger);
+}
+
+.select-wrap{position:relative}
+
+.select-wrap select{
+  appearance:none;
+  -webkit-appearance:none;
+  padding-inline-end:16px;
+  padding-inline-start:44px;
+  text-overflow:ellipsis;
+}
+
+.select-wrap svg{
+  position:absolute;
+  left:16px;
+  top:50%;
+  width:18px;
+  height:18px;
+  margin-top:-9px;
+  color:var(--muted);
+  pointer-events:none;
+}
+
+optgroup{color:var(--muted);font-style:normal}
+option{background:var(--surface);color:var(--ink)}
+
+.note{
+  margin-top:8px;
+  min-height:22px;
+  font-size:13.5px;
+  color:var(--muted);
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+
+.chip{
+  padding:8px 14px;
+  border:1.5px solid var(--line);
+  border-radius:999px;
+  background:transparent;
+  color:var(--ink);
+  font:inherit;
+  font-size:14px;
+  cursor:pointer;
+  transition:border-color .15s,background-color .15s;
+}
+
+.chip:hover{border-color:var(--primary)}
+
+.chip:focus-visible,
+.plat:focus-visible,
+.order:focus-visible{
+  outline:3px solid var(--primary);
   outline-offset:2px;
 }
 
-optgroup{
-  background:#1e293b;
-  color:#94a3b8;
+/* ---------- ملخص الطلب ---------- */
+.summary{
+  background:var(--summary);
+  color:#fff;
+  border-radius:28px;
+  padding:26px 24px 24px;
 }
 
-option{
-  background:#334155;
-  color:white;
+.summary .label{
+  font-size:14px;
+  opacity:.8;
+}
+
+.price{
+  display:flex;
+  align-items:baseline;
+  gap:6px;
+  margin:4px 0 12px;
+  direction:ltr;
+  justify-content:flex-end;
+  font-variant-numeric:tabular-nums;
+}
+
+.price .cur{
+  font-size:28px;
+  font-weight:500;
+  opacity:.8;
+}
+
+.price #price{
+  font-size:clamp(44px,9vw,60px);
+  font-weight:700;
+  letter-spacing:-.02em;
+  line-height:1.05;
+  overflow-wrap:anywhere;
+}
+
+.rate{
+  display:inline-block;
+  padding:5px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.16);
+  font-size:13.5px;
+}
+
+.facts{
+  margin:20px 0 0;
+  padding:16px 0 0;
+  border-top:1px solid rgba(255,255,255,.22);
+  display:grid;
+  gap:10px;
+}
+
+.facts div{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  font-size:14px;
+}
+
+.facts dt{opacity:.75;flex:0 0 auto}
+
+.facts dd{
+  margin:0;
+  text-align:left;
+  font-weight:500;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+}
+
+.order{
+  width:100%;
+  height:56px;
+  margin-top:22px;
+  border:0;
+  border-radius:16px;
+  background:var(--hit);
+  color:var(--on-hit);
+  font:inherit;
+  font-size:17px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .12s;
+}
+
+.order:active{transform:scale(.985)}
+
+.order:focus-visible{outline-color:#fff}
+
+.msg{
+  min-height:24px;
+  margin-top:12px;
+  font-size:14px;
+  text-align:center;
+}
+
+.msg.error{color:#FFD1D8}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="shell">
 
-<div class="card">
+  <header class="top">
+    <div class="brand">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 1.5l2.6 7.4 7.4 2.6-7.4 2.6L12 21.5l-2.6-7.4L2 11.5l7.4-2.6z"/>
+        </svg>
+      </span>
+      Dopamine<small>Store</small>
+    </div>
+    <p>اختر المنصة، ثم الخدمة، ثم اكتب الرابط والكمية.</p>
+  </header>
 
-<h1>🚀 Dopamine Store</h1>
+  <main class="layout">
 
-<label>القسم</label>
+    <section class="steps">
 
-<div class="tabs" id="tabs"></div>
+      <div class="step">
+        <h2><b>1</b> المنصة</h2>
+        <div class="platforms" id="tabs"></div>
+      </div>
 
-<label>الخدمة</label>
+      <div class="step">
+        <h2><b>2</b> الخدمة</h2>
 
-<input
-  id="search"
-  placeholder="🔎 ابحث عن خدمة داخل القسم"
-  autocomplete="off">
+        <div class="field">
+          <label for="search">بحث</label>
+          <input
+            id="search"
+            type="search"
+            placeholder="ابحث باسم الخدمة"
+            autocomplete="off">
+        </div>
 
-<select id="service" style="margin-top:10px">
-  <option>جاري تحميل الخدمات...</option>
-</select>
+        <div class="field">
+          <label for="service">اختر الخدمة</label>
+          <div class="select-wrap">
+            <select id="service">
+              <option>جاري تحميل الخدمات...</option>
+            </select>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="note" id="status"></div>
+        </div>
+      </div>
 
-<div class="hint" id="rateHint"></div>
+      <div class="step">
+        <h2><b>3</b> الرابط والكمية</h2>
 
-<label>الرابط</label>
+        <div class="field">
+          <label for="link">الرابط</label>
+          <input
+            id="link"
+            type="url"
+            dir="ltr"
+            inputmode="url"
+            autocapitalize="off"
+            autocomplete="off"
+            placeholder="https://">
+        </div>
 
-<input
-  id="link"
-  placeholder="ضع الرابط هنا">
+        <div class="field">
+          <label for="quantity">الكمية</label>
+          <input
+            id="quantity"
+            type="number"
+            min="1"
+            inputmode="numeric"
+            placeholder="مثلاً 1000">
+          <div class="chips" id="chips"></div>
+        </div>
+      </div>
 
-<label>الكمية</label>
+    </section>
 
-<input
-  id="quantity"
-  type="number"
-  placeholder="مثلاً 1000">
+    <aside class="summary" aria-live="polite">
+      <div class="label">الإجمالي</div>
 
-<div class="price">
-  السعر:
-  <span id="price">0.0000</span> $
-</div>
+      <div class="price">
+        <span id="price">0.00</span>
+        <span class="cur">$</span>
+      </div>
 
-<button>
-  إتمام الطلب
-</button>
+      <span class="rate" id="rateHint">اختر خدمة لعرض السعر</span>
 
-<div class="status" id="status"></div>
+      <dl class="facts">
+        <div><dt>الخدمة</dt><dd id="sumService">—</dd></div>
+        <div><dt>الكمية</dt><dd id="sumQty">—</dd></div>
+      </dl>
 
-</div>
+      <button class="order" id="orderBtn" type="button">إتمام الطلب</button>
+
+      <div class="msg" id="orderMsg"></div>
+    </aside>
+
+  </main>
 
 </div>
 
 <script>
 
-/* الأقسام تجي من دالة admin-worker (إجراء عام يرجع الخدمات وأسعار البيع فقط) */
+/* الخدمات تجي من دالة admin-worker (إجراء عام يرجع الاسم والقسم وسعر البيع فقط) */
 const API =
   "https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/admin-worker";
 
+/* [المفتاح, الاسم, الأيقونة, لون الأيقونة] */
 const TABS = [
-  ["cheap","💰 الأرخص"],
-  ["instagram","📸 انستقرام"],
-  ["tiktok","🎵 تيك توك"],
-  ["youtube","▶️ يوتيوب"],
-  ["facebook","👍 فيسبوك"],
-  ["twitter","🐦 تويتر"],
-  ["telegram","✈️ تيليجرام"],
-  ["snapchat","👻 سناب"],
-  ["all","🔎 كل الخدمات"]
+  ["cheap","الأرخص","💰","#FFD23F"],
+  ["instagram","انستقرام","📸","linear-gradient(135deg,#F9A03F,#E1306C 55%,#833AB4)"],
+  ["tiktok","تيك توك","🎵","#111111"],
+  ["youtube","يوتيوب","▶","#F0243A"],
+  ["facebook","فيسبوك","👍","#1877F2"],
+  ["twitter","تويتر","🐦","#0F1419"],
+  ["telegram","تيليجرام","✈️","#229ED9"],
+  ["snapchat","سناب","👻","#FFFC00"],
+  ["all","كل الخدمات","🔎","#5A3CF0"]
 ];
+
+const QUICK = [100,500,1000,5000,10000];
 
 let tab = "cheap";
 let services = [];
 let requestId = 0;
 let searchTimer = null;
 
-const tabsBox     = document.getElementById("tabs");
-const searchBox   = document.getElementById("search");
-const serviceBox  = document.getElementById("service");
-const quantityBox = document.getElementById("quantity");
-const priceBox    = document.getElementById("price");
-const statusBox   = document.getElementById("status");
-const rateHint    = document.getElementById("rateHint");
+const $ = id => document.getElementById(id);
+
+const tabsBox     = $("tabs");
+const searchBox   = $("search");
+const serviceBox  = $("service");
+const linkBox     = $("link");
+const quantityBox = $("quantity");
+const priceBox    = $("price");
+const statusBox   = $("status");
+const rateHint    = $("rateHint");
+const sumService  = $("sumService");
+const sumQty      = $("sumQty");
+const orderMsg    = $("orderMsg");
 
 
 function renderTabs(){
 
   tabsBox.innerHTML = "";
 
-  TABS.forEach(([key,label])=>{
+  TABS.forEach(([key,label,icon,bg])=>{
 
     const b = document.createElement("button");
 
-    b.textContent = label;
+    b.type = "button";
+    b.className = "plat";
+    b.setAttribute("aria-pressed", String(key === tab));
 
-    if(key === tab){
-      b.className = "active";
+    const ico = document.createElement("span");
+    ico.className = "ico";
+    ico.style.background = bg;
+    ico.textContent = icon;
+
+    if(key === "snapchat" || key === "cheap"){
+      ico.style.color = "#17123B";
     }
+
+    const text = document.createElement("span");
+    text.textContent = label;
+
+    b.append(ico,text);
 
     b.onclick = ()=>{
       tab = key;
@@ -233,6 +606,31 @@ function renderTabs(){
     };
 
     tabsBox.appendChild(b);
+
+  });
+
+}
+
+
+function renderChips(){
+
+  const box = $("chips");
+
+  QUICK.forEach(n=>{
+
+    const b = document.createElement("button");
+
+    b.type = "button";
+    b.className = "chip";
+    b.textContent = n.toLocaleString("en-US");
+
+    b.onclick = ()=>{
+      quantityBox.value = n;
+      clearInvalid(quantityBox);
+      updatePrice();
+    };
+
+    box.appendChild(b);
 
   });
 
@@ -282,7 +680,7 @@ async function loadServices(){
       "<option>تعذر تحميل الخدمات</option>";
 
     statusBox.textContent =
-      "تعذر تحميل الخدمات، حدّث الصفحة وحاول مرة ثانية";
+      "تعذر تحميل الخدمات. حدّث الصفحة وحاول مرة ثانية.";
 
     updatePrice();
 
@@ -299,10 +697,13 @@ function renderServices(){
 
     const option = document.createElement("option");
 
+    const needSearch =
+      tab === "all" && searchBox.value.trim().length < 2;
+
     option.textContent =
-      (tab === "all" && searchBox.value.trim().length < 2)
+      needSearch
         ? "اكتب اسم الخدمة في خانة البحث"
-        : "لا توجد خدمات";
+        : "لا توجد خدمات مطابقة";
 
     serviceBox.appendChild(option);
 
@@ -355,7 +756,9 @@ function renderServices(){
   }
 
   statusBox.textContent =
-    "تم تحميل " + services.length + " خدمة ✅";
+    services.length.toLocaleString("en-US") + " خدمة متاحة";
+
+  clearInvalid(serviceBox);
 
   updatePrice();
 
@@ -385,6 +788,13 @@ function selectedService(){
 }
 
 
+function money(n){
+
+  return n < 1 ? n.toFixed(4) : n.toFixed(2);
+
+}
+
+
 function updatePrice(){
 
   const service = selectedService();
@@ -393,9 +803,15 @@ function updatePrice(){
 
   if(!service){
 
-    priceBox.textContent = "0.0000";
+    priceBox.textContent = "0.00";
 
-    rateHint.textContent = "";
+    rateHint.textContent = "اختر خدمة لعرض السعر";
+
+    sumService.textContent = "—";
+
+    sumQty.textContent = quantity
+      ? quantity.toLocaleString("en-US")
+      : "—";
 
     return;
 
@@ -406,28 +822,120 @@ function updatePrice(){
   /* السعر محسوب لكل 1000 */
   const total = rate * quantity / 1000;
 
-  priceBox.textContent = total.toFixed(4);
+  priceBox.textContent = money(total);
 
   rateHint.textContent =
-    "السعر لكل 1000: $" + rate;
+    "السعر لكل 1000: $" + Number(rate.toFixed(4));
+
+  sumService.textContent =
+    service.name || "خدمة بدون اسم";
+
+  sumQty.textContent = quantity
+    ? quantity.toLocaleString("en-US")
+    : "—";
 
 }
 
 
-serviceBox.addEventListener("change", updatePrice);
+function clearInvalid(el){
 
-quantityBox.addEventListener("input", updatePrice);
+  el.removeAttribute("aria-invalid");
 
-searchBox.addEventListener("input", ()=>{
+}
+
+
+function showMessage(text,isError){
+
+  orderMsg.textContent = text;
+
+  orderMsg.className = isError ? "msg error" : "msg";
+
+}
+
+
+function submitOrder(){
+
+  const service = selectedService();
+
+  const link = linkBox.value.trim();
+
+  const quantity = Number(quantityBox.value);
+
+  showMessage("",false);
+
+  if(!service){
+
+    serviceBox.setAttribute("aria-invalid","true");
+
+    serviceBox.focus();
+
+    showMessage("اختر الخدمة أولاً",true);
+
+    return;
+
+  }
+
+  if(!/^https?:\/\/\S+\.\S+/i.test(link)){
+
+    linkBox.setAttribute("aria-invalid","true");
+
+    linkBox.focus();
+
+    showMessage("اكتب رابطاً صحيحاً يبدأ بـ https://",true);
+
+    return;
+
+  }
+
+  if(!Number.isFinite(quantity) || quantity < 1){
+
+    quantityBox.setAttribute("aria-invalid","true");
+
+    quantityBox.focus();
+
+    showMessage("اكتب الكمية",true);
+
+    return;
+
+  }
+
+  /*
+    هنا يتم إرسال الطلب لدالة الدفع (create-order)
+    بعد ربط بوابة الدفع.
+  */
+  showMessage("بيانات الطلب صحيحة. الدفع غير مفعّل بعد، حاول لاحقاً.",false);
+
+}
+
+
+serviceBox.addEventListener("change",()=>{
+  clearInvalid(serviceBox);
+  updatePrice();
+});
+
+quantityBox.addEventListener("input",()=>{
+  clearInvalid(quantityBox);
+  updatePrice();
+});
+
+linkBox.addEventListener("input",()=>{
+  clearInvalid(linkBox);
+});
+
+searchBox.addEventListener("input",()=>{
 
   clearTimeout(searchTimer);
 
-  searchTimer = setTimeout(loadServices, 400);
+  searchTimer = setTimeout(loadServices,400);
 
 });
 
+$("orderBtn").addEventListener("click",submitOrder);
+
 
 renderTabs();
+
+renderChips();
 
 loadServices();
 
