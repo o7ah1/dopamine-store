@@ -138,6 +138,15 @@ button.logout{
 تسجيل الخروج
 </button>
 
+<input id="search" placeholder="🔎 ابحث بالاسم أو برقم الخدمة"
+  onkeydown="if(event.key==='Enter')loadServices()">
+
+<button onclick="loadServices()">بحث</button>
+
+<button class="save" onclick="syncServices()">
+🔄 مزامنة الخدمات من drd3m
+</button>
+
 <div class="status" id="status">
 جاري تحميل الخدمات...
 </div>
@@ -242,7 +251,10 @@ async function loadServices(){
       "جاري تحميل الخدمات...";
 
     const result =
-      await api("services");
+      await api("services",{
+        search:document.getElementById("search").value.trim(),
+        limit:100
+      });
 
     services =
       Array.isArray(result)
@@ -252,9 +264,9 @@ async function loadServices(){
     renderServices();
 
     status.textContent =
-      "تم تحميل " +
+      "تم عرض " +
       services.length +
-      " خدمة ✅";
+      " خدمة (أول 100 نتيجة، استخدم البحث) ✅";
 
   }catch(error){
 
@@ -433,6 +445,37 @@ async function toggleService(
   }catch(error){
 
     alert(error.message);
+
+  }
+
+}
+
+
+async function syncServices(){
+
+  const status =
+    document.getElementById("status");
+
+  if(!confirm("مزامنة الخدمات من drd3m؟ أسعار البيع الحالية ما تتغير."))
+    return;
+
+  try{
+
+    status.textContent =
+      "جاري المزامنة... انتظر";
+
+    const r =
+      await api("sync",{markup:1.3});
+
+    status.textContent =
+      "تمت مزامنة " + r.count + " خدمة ✅";
+
+    await loadServices();
+
+  }catch(error){
+
+    status.textContent =
+      error.message;
 
   }
 
