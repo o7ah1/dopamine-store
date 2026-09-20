@@ -6,150 +6,307 @@
 <title>Dopamine Store - Admin</title>
 
 <style>
+:root{
+  --bg:#0b1120;
+  --card:#152036;
+  --card2:#0f172a;
+  --line:#26344f;
+  --ink:#f1f5f9;
+  --muted:#94a3b8;
+  --green:#22c55e;
+  --blue:#3b82f6;
+  --violet:#8b5cf6;
+  --amber:#f59e0b;
+  --red:#ef4444;
+}
+
 *{box-sizing:border-box}
 
 body{
   margin:0;
   font-family:Arial,Tahoma,sans-serif;
-  background:#0f172a;
-  color:white;
-  padding:20px;
+  background:var(--bg);
+  color:var(--ink);
+  padding:16px;
 }
 
-.container{
-  max-width:1000px;
-  margin:auto;
-}
+.container{max-width:1240px;margin:auto}
 
 .card{
-  background:#1e293b;
-  padding:25px;
+  background:var(--card);
+  border:1px solid var(--line);
+  padding:20px;
   border-radius:18px;
-  margin-bottom:20px;
+  margin-bottom:16px;
 }
 
-h1{
-  text-align:center;
-}
+h1{text-align:center;margin:0 0 14px;font-size:24px}
+h3{margin:0 0 12px;font-size:16px}
 
-input,button{
-  width:100%;
-  padding:13px;
+input,select,button{
+  font:inherit;
+  font-size:15px;
   border:0;
   border-radius:10px;
-  font-size:16px;
+  padding:11px 12px;
 }
 
-input{
-  background:#334155;
-  color:white;
+input,select{
+  background:#26344f;
+  color:var(--ink);
+  min-width:0;
 }
+
+input[type=checkbox]{width:18px;height:18px;padding:0;accent-color:var(--green);cursor:pointer}
 
 button{
-  margin-top:10px;
-  background:#22c55e;
-  color:white;
+  background:var(--green);
+  color:#fff;
   font-weight:bold;
   cursor:pointer;
+  white-space:nowrap;
 }
 
-button.logout{
-  background:#ef4444;
-}
+button:hover{filter:brightness(1.08)}
+button:disabled{opacity:.5;cursor:wait}
 
-.status{
-  text-align:center;
-  margin-top:15px;
-  color:#94a3b8;
-}
+.b-red{background:var(--red)}
+.b-blue{background:var(--blue)}
+.b-violet{background:var(--violet)}
+.b-amber{background:var(--amber);color:#1c1300}
+.b-gray{background:#475569}
 
-.service{
-  background:#0f172a;
-  padding:18px;
-  border-radius:14px;
-  margin-top:15px;
-}
+.status{text-align:center;color:var(--muted);margin-top:10px;font-size:14px}
 
-.service-name{
-  font-size:18px;
-  font-weight:bold;
-  margin-bottom:10px;
-}
-
-.service-info{
-  color:#94a3b8;
-  font-size:14px;
-  margin-bottom:12px;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+/* ---------- الرأس والتبويبات ---------- */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
 }
 
-.save{
-  background:#3b82f6;
-}
+.topbar h1{margin:0;text-align:start}
 
-.hide{
-  background:#f59e0b;
-}
+.views{display:flex;gap:8px;flex-wrap:wrap}
 
-.show{
-  background:#22c55e;
-}
+.views button{background:#26344f;padding:11px 18px}
+.views button.active{background:var(--blue)}
 
-@media(max-width:600px){
-  .row{
-    grid-template-columns:1fr;
-  }
-}
-.bulk{
-  background:#0f172a;
-  padding:15px;
-  border-radius:14px;
-  margin-top:15px;
-}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
 
-.bulkrow{
+.chips button{background:#26344f;padding:9px 13px;font-size:14px}
+.chips button.active{background:var(--green)}
+
+/* ---------- بطاقات الإحصائيات ---------- */
+.stats{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:10px;
+  margin-bottom:14px;
 }
 
-.bulkrow button{
-  margin-top:8px;
-  padding:12px 4px;
-  background:#8b5cf6;
+.stat{
+  background:var(--card2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
 }
 
-.bulkrow button.reset{
-  background:#64748b;
+.stat small{display:block;color:var(--muted);font-size:13px;margin-bottom:4px}
+.stat b{font-size:24px}
+.stat .sub{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
+.g{color:var(--green)}
+.r{color:var(--red)}
+
+/* ---------- صندوق الزيادة ---------- */
+.markup{
+  background:var(--card2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:14px;
 }
 
-@media(max-width:600px){
-  .bulkrow{
-    grid-template-columns:repeat(2,1fr);
-  }
-}
-.tabs{
+.mrow{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
-  margin:15px 0 5px;
+  align-items:center;
 }
 
-.tabs button{
-  width:auto;
-  margin-top:0;
-  padding:10px 14px;
-  font-size:15px;
-  background:#334155;
+.mrow .pct{
+  position:relative;
+  width:130px;
 }
 
-.tabs button.active{
-  background:#22c55e;
+.mrow .pct input{width:100%;padding-left:34px;font-size:18px;font-weight:bold;text-align:center}
+.mrow .pct span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:bold}
+
+.mrow select{flex:1 1 220px}
+
+.quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.quick button{background:#26344f;padding:8px 12px;font-size:13.5px}
+
+/* ---------- شريط الأدوات ---------- */
+.tools{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:14px 0 10px;
+}
+
+.tools input{flex:1 1 240px}
+.tools select{flex:0 1 190px}
+
+.selbar{
+  display:none;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  background:#1d3a66;
+  border:1px solid var(--blue);
+  border-radius:12px;
+  padding:10px 12px;
+  margin-bottom:10px;
+  font-size:14px;
+}
+
+.selbar.show{display:flex}
+.selbar span{flex:1 1 auto;font-weight:bold}
+.selbar button{padding:8px 12px;font-size:13.5px}
+
+/* ---------- الجداول ---------- */
+.tablewrap{
+  overflow:auto;
+  max-height:72vh;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--card2);
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+
+th,td{
+  padding:9px 10px;
+  text-align:start;
+  border-bottom:1px solid var(--line);
+  vertical-align:middle;
+}
+
+th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#1b2942;
+  color:var(--muted);
+  font-size:13px;
+  white-space:nowrap;
+}
+
+tr.off td{opacity:.55}
+tr:hover td{background:rgba(59,130,246,.06)}
+
+td.nm{min-width:280px;max-width:520px}
+td.nm small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+
+td.num{white-space:nowrap;font-variant-numeric:tabular-nums;direction:ltr;text-align:right}
+
+.pin{
+  width:110px;
+  padding:8px;
+  font-variant-numeric:tabular-nums;
+  direction:ltr;
+  text-align:right;
+}
+
+.pin.ok{outline:2px solid var(--green)}
+.pin.bad{outline:2px solid var(--red)}
+
+.tog{padding:7px 11px;font-size:13px}
+
+.pill{
+  display:inline-block;
+  padding:2px 10px;
+  border-radius:999px;
+  font-size:12.5px;
+  background:#26344f;
+}
+
+.tbl-foot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.tbl-foot .row{display:flex;gap:8px}
+.tbl-foot button{background:#26344f}
+
+/* ---------- الطلبات ---------- */
+.period-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.period{
+  background:var(--card2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+}
+
+.period h4{margin:0 0 10px;font-size:14px;color:var(--muted)}
+.period .line{display:flex;justify-content:space-between;gap:8px;padding:3px 0;font-size:14px}
+.period .line b{font-variant-numeric:tabular-nums;direction:ltr}
+.period .big{font-size:22px}
+
+.ofilters{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 10px}
+.ofilters input{flex:1 1 220px}
+.ofilters input[type=date]{flex:0 1 150px}
+.ofilters select{flex:0 1 160px}
+
+.ost{padding:7px 8px;font-size:13px}
+
+td.lnk{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:right}
+td.lnk a{color:#7cb7ff}
+
+.hidden{display:none !important}
+
+/* ---------- إشعار صغير ---------- */
+#toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#0f172a;
+  border:1px solid var(--green);
+  color:#fff;
+  padding:11px 20px;
+  border-radius:12px;
+  font-size:14.5px;
+  z-index:50;
+  display:none;
+  max-width:92vw;
+}
+
+#toast.err{border-color:var(--red)}
+#toast.show{display:block}
+
+@media(max-width:700px){
+  body{padding:10px}
+  .card{padding:14px}
+  .mrow .pct{width:100%}
 }
 </style>
 </head>
@@ -158,70 +315,180 @@ button.logout{
 
 <div class="container">
 
-<div class="card" id="loginBox">
+<!-- ================= تسجيل الدخول ================= -->
+<div class="card" id="loginBox" style="max-width:460px;margin:60px auto">
 
-<h1>🔐 لوحة الإدارة</h1>
+  <h1>🔐 لوحة الإدارة</h1>
 
-<input
-  id="password"
-  type="password"
-  placeholder="كلمة مرور الأدمن">
+  <input
+    id="password"
+    type="password"
+    style="width:100%"
+    placeholder="كلمة مرور الأدمن"
+    onkeydown="if(event.key==='Enter')login()">
 
-<button onclick="login()">
-دخول
-</button>
+  <button style="width:100%;margin-top:10px" onclick="login()">دخول</button>
 
-<div class="status" id="loginStatus"></div>
-
-</div>
-
-
-<div class="card" id="adminBox" style="display:none">
-
-<h1>⚙️ إدارة الخدمات</h1>
-
-<button class="logout" onclick="logout()">
-تسجيل الخروج
-</button>
-
-<div class="bulk">
-<div class="status" style="margin-top:0">
-💹 زيادة كل الأسعار دفعة وحدة (تُحسب من سعر المزود)
-</div>
-<div class="bulkrow">
-<button onclick="bulkMarkup(25)">+25%</button>
-<button onclick="bulkMarkup(50)">+50%</button>
-<button onclick="bulkMarkup(100)">+100%</button>
-<button onclick="bulkMarkup(200)">+200%</button>
-<button class="reset" onclick="bulkMarkup(0)">السعر الأصلي</button>
-</div>
-</div>
-
-<div class="tabs" id="tabs"></div>
-
-<input id="search" placeholder="🔎 ابحث بالاسم أو برقم الخدمة"
-  onkeydown="if(event.key==='Enter')searchServices()">
-
-<button onclick="searchServices()">بحث</button>
-
-<button class="save" onclick="syncServices()">
-🔄 مزامنة الخدمات من drd3m
-</button>
-
-<div class="status" id="status">
-جاري تحميل الخدمات...
-</div>
-
-<div id="services"></div>
-
-<div class="row" id="pager">
-<button onclick="changePage(-1)">السابق</button>
-<button onclick="changePage(1)">التالي</button>
-</div>
+  <div class="status" id="loginStatus"></div>
 
 </div>
 
+
+<!-- ================= اللوحة ================= -->
+<div id="adminBox" class="hidden">
+
+  <div class="card">
+
+    <div class="topbar">
+      <h1>⚙️ لوحة إدارة Dopamine</h1>
+
+      <div class="views">
+        <button id="vbServices" class="active" onclick="switchView('services')">📦 الخدمات</button>
+        <button id="vbOrders" onclick="switchView('orders')">🧾 الطلبات والأرباح</button>
+        <button class="b-red" onclick="logout()">خروج</button>
+      </div>
+    </div>
+
+
+    <!-- ============ قسم الخدمات ============ -->
+    <div id="viewServices">
+
+      <div class="stats">
+        <div class="stat"><small>كل الخدمات</small><b id="stTotal">0</b></div>
+        <div class="stat"><small>ظاهرة</small><b class="g" id="stOn">0</b></div>
+        <div class="stat"><small>مخفية</small><b class="r" id="stOff">0</b></div>
+        <div class="stat"><small>المعروضة الآن</small><b id="stView">0</b></div>
+        <div class="stat"><small>متوسط الهامش (المعروضة)</small><b id="stMargin">—</b></div>
+      </div>
+
+      <div class="markup">
+        <h3>💹 زيادة الأسعار (تُحسب من سعر المزود)</h3>
+
+        <div class="mrow">
+          <div class="pct">
+            <input id="pct" type="number" min="0" max="1000" step="any" value="50"
+              onkeydown="if(event.key==='Enter')applyMarkup()">
+            <span>%</span>
+          </div>
+
+          <select id="scope"></select>
+
+          <button class="b-violet" id="applyBtn" onclick="applyMarkup()">تطبيق النسبة</button>
+          <button class="b-gray" onclick="resetOriginal()">السعر الأصلي</button>
+        </div>
+
+        <div class="quick" id="quick"></div>
+      </div>
+
+      <div class="chips" id="tabs"></div>
+
+      <div class="tools">
+        <input id="search" placeholder="🔎 ابحث بالاسم أو القسم أو برقم الخدمة" oninput="onSearch()">
+
+        <select id="statusF" onchange="applyView()">
+          <option value="all">كل الحالات</option>
+          <option value="on">الظاهرة فقط</option>
+          <option value="off">المخفية فقط</option>
+        </select>
+
+        <select id="sortF" onchange="applyView()">
+          <option value="id">ترتيب: رقم الخدمة</option>
+          <option value="sell_asc">الأرخص أولاً</option>
+          <option value="sell_desc">الأغلى أولاً</option>
+          <option value="margin_desc">أعلى هامش</option>
+          <option value="margin_asc">أقل هامش</option>
+          <option value="name">الاسم</option>
+        </select>
+
+        <button class="b-blue" onclick="syncServices()">🔄 مزامنة من drd3m</button>
+        <button class="b-gray" onclick="loadAll()">↻ تحديث</button>
+      </div>
+
+      <div class="selbar" id="selbar">
+        <span id="selCount">0 محددة</span>
+        <button class="b-amber" onclick="bulkToggle(false)">👁️ إخفاء المحدد</button>
+        <button onclick="bulkToggle(true)">👁️ إظهار المحدد</button>
+        <button class="b-gray" onclick="clearSel()">إلغاء التحديد</button>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:42px"><input type="checkbox" id="selAll" onchange="toggleAll(this.checked)"></th>
+              <th>ID</th>
+              <th>الخدمة</th>
+              <th>سعر المزود</th>
+              <th>سعر البيع (لكل 1000)</th>
+              <th>الهامش</th>
+              <th>الحالة</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+
+      <div class="status" id="status">جاري تحميل الخدمات...</div>
+
+    </div>
+
+
+    <!-- ============ قسم الطلبات ============ -->
+    <div id="viewOrders" class="hidden">
+
+      <div class="period-grid" id="periods"></div>
+
+      <div class="chips" id="stChips"></div>
+
+      <div class="ofilters">
+        <input id="oSearch" placeholder="🔎 اسم الخدمة أو الرابط أو رقم الطلب"
+          onkeydown="if(event.key==='Enter')searchOrders()">
+
+        <select id="oStatus" onchange="searchOrders()"></select>
+
+        <input id="oFrom" type="date" title="من تاريخ" onchange="searchOrders()">
+        <input id="oTo" type="date" title="إلى تاريخ" onchange="searchOrders()">
+
+        <button class="b-blue" onclick="searchOrders()">بحث</button>
+        <button class="b-gray" onclick="refreshOrders()">↻ تحديث</button>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>التاريخ</th>
+              <th>الخدمة</th>
+              <th>الرابط</th>
+              <th>الكمية</th>
+              <th>المبلغ</th>
+              <th>التكلفة</th>
+              <th>الربح</th>
+              <th>الحالة</th>
+            </tr>
+          </thead>
+          <tbody id="orderRows"></tbody>
+        </table>
+      </div>
+
+      <div class="tbl-foot">
+        <div class="status" id="oStatusLine" style="margin:0">—</div>
+        <div class="row">
+          <button onclick="orderPage(-1)">السابق</button>
+          <button onclick="orderPage(1)">التالي</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
+
+</div>
+
+<div id="toast"></div>
 
 
 <script>
@@ -229,13 +496,166 @@ button.logout{
 const ADMIN_API =
 "https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/admin-worker";
 
+const $ = id => document.getElementById(id);
+
 let password = "";
 
-let services = [];
 
-const PAGE_SIZE = 100;
-let page = 0;
-let tab = "";
+/* ========== أدوات عامة ========== */
+
+async function api(action, extra = {}){
+
+  const response = await fetch(ADMIN_API,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({ action, password, ...extra })
+  });
+
+  const data = await response.json();
+
+  if(!response.ok){
+    throw new Error(data.error || "حدث خطأ");
+  }
+
+  return data;
+}
+
+
+let toastTimer = null;
+
+function toast(text,isError){
+
+  const t = $("toast");
+
+  t.textContent = text;
+  t.className = "show" + (isError ? " err" : "");
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(()=>{ t.className = ""; },2600);
+
+}
+
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function fmtRate(n){
+
+  n = Number(n) || 0;
+
+  return n >= 1 ? n.toFixed(2) : String(Number(n.toFixed(6)));
+
+}
+
+
+function fmtMoney(n){
+
+  n = Number(n) || 0;
+
+  return "$" + (Math.abs(n) >= 1 ? n.toFixed(2) : String(Number(n.toFixed(4))));
+
+}
+
+
+function fmtInt(n){
+
+  return Number(n || 0).toLocaleString("en-US");
+
+}
+
+
+/* ========== الدخول والخروج ========== */
+
+async function login(){
+
+  const status = $("loginStatus");
+
+  password = $("password").value.trim();
+
+  if(!password){
+    status.textContent = "اكتب كلمة المرور";
+    return;
+  }
+
+  status.textContent = "جاري التحقق...";
+
+  try{
+
+    await api("services",{limit:1});
+
+    $("loginBox").classList.add("hidden");
+    $("adminBox").classList.remove("hidden");
+
+    renderTabs();
+    renderQuick();
+    loadAll();
+
+  }catch(error){
+
+    password = "";
+    status.textContent = error.message;
+
+  }
+
+}
+
+
+function logout(){
+
+  password = "";
+  all = [];
+  view = [];
+  selected.clear();
+
+  $("rows").innerHTML = "";
+
+  $("adminBox").classList.add("hidden");
+  $("loginBox").classList.remove("hidden");
+
+  $("password").value = "";
+  $("loginStatus").textContent = "";
+
+}
+
+
+function switchView(name){
+
+  $("viewServices").classList.toggle("hidden",name !== "services");
+  $("viewOrders").classList.toggle("hidden",name !== "orders");
+
+  $("vbServices").classList.toggle("active",name === "services");
+  $("vbOrders").classList.toggle("active",name === "orders");
+
+  if(name === "orders" && !ordersLoaded){
+    initOrders();
+  }
+
+}
+
+
+/* =====================================================
+   الخدمات: تحميل الكل دفعة وحدة والفلترة داخل المتصفح
+   ===================================================== */
+
+const PLATFORM_WORDS = {
+  instagram:["instagram","انستقرام","انستغرام","إنستقرام","انستا"],
+  tiktok:["tiktok","تيك"],
+  youtube:["youtube","يوتيوب"],
+  facebook:["facebook","فيسبوك"],
+  twitter:["twitter","تويتر"],
+  telegram:["telegram","تيليجرام","تلجرام","تلغرام"],
+  snapchat:["snapchat","سناب"]
+};
 
 const TABS = [
   ["","الكل"],
@@ -248,299 +668,52 @@ const TABS = [
   ["telegram","✈️ تيليجرام"],
   ["snapchat","👻 سناب"]
 ];
-let total = 0;
+
+let all = [];               /* كل الخدمات */
+let view = [];              /* المعروضة بعد الفلتر */
+let byId = new Map();
+let selected = new Set();
+let tab = "";
+let searchTimer = null;
+let renderToken = 0;
 
 
-async function api(action, extra = {}){
+const providerOf = s => Number(s.provider_rate ?? s.base_price ?? 0);
 
-  const response = await fetch(ADMIN_API,{
-    method:"POST",
+const sellOf = s => Number(s.sell_rate ?? providerOf(s));
 
-    headers:{
-      "Content-Type":"application/json"
-    },
+const isActive = s => s.active !== false;
 
-    body:JSON.stringify({
-      action,
-      password,
-      ...extra
-    })
-  });
+function marginOf(s){
 
-  const data = await response.json();
+  const p = providerOf(s);
 
-  if(!response.ok){
-    throw new Error(
-      data.error || "حدث خطأ"
-    );
-  }
+  return p > 0 ? (sellOf(s) / p - 1) * 100 : null;
 
-  return data;
 }
 
 
-async function login(){
+async function loadAll(){
 
-  const input =
-    document.getElementById("password");
-
-  const status =
-    document.getElementById("loginStatus");
-
-  password =
-    input.value.trim();
-
-  if(!password){
-    status.textContent =
-      "اكتب كلمة المرور";
-    return;
-  }
-
-  status.textContent =
-    "جاري التحقق...";
+  const status = $("status");
 
   try{
 
-    await api("services");
+    status.textContent = "جاري تحميل كل الخدمات...";
 
-    document.getElementById("loginBox")
-      .style.display="none";
+    const result = await api("all_services");
 
-    document.getElementById("adminBox")
-      .style.display="block";
+    all = Array.isArray(result.items) ? result.items : [];
 
-    loadServices();
+    byId = new Map(all.map(s => [Number(s.id),s]));
 
-  }catch(error){
+    selected.clear();
 
-    password="";
-
-    status.textContent =
-      error.message;
-
-  }
-
-}
-
-
-async function loadServices(){
-
-  const status =
-    document.getElementById("status");
-
-  try{
-
-    status.textContent =
-      "جاري تحميل الخدمات...";
-
-    const result =
-      await api("services",{
-        search:document.getElementById("search").value.trim(),
-        platform:(tab === "cheap" ? "" : tab),
-        sort:(tab === "cheap" ? "cheap" : ""),
-        limit:PAGE_SIZE,
-        offset:page*PAGE_SIZE
-      });
-
-    services =
-      Array.isArray(result)
-        ? result
-        : (result.items || []);
-
-    total =
-      Array.isArray(result)
-        ? result.length
-        : (result.total || 0);
-
-    renderServices();
-
-    status.textContent =
-      "عرض " +
-      (total ? page*PAGE_SIZE+1 : 0) +
-      " - " +
-      (page*PAGE_SIZE+services.length) +
-      " من " + total +
-      " خدمة (صفحة " + (page+1) +
-      " من " + Math.max(Math.ceil(total/PAGE_SIZE),1) +
-      ") ✅";
+    applyView();
 
   }catch(error){
 
-    status.textContent =
-      error.message;
-
-  }
-
-}
-
-
-function renderServices(){
-
-  const box =
-    document.getElementById("services");
-
-  box.innerHTML="";
-
-
-  if(!services.length){
-
-    box.innerHTML =
-      "<div class='status'>لا توجد خدمات</div>";
-
-    return;
-
-  }
-
-
-  services.forEach(service=>{
-
-    const id =
-      service.id;
-
-    const name =
-      service.name || "بدون اسم";
-
-    const providerRate =
-      Number(
-        service.provider_rate ??
-        service.base_price ??
-        0
-      );
-
-    const sellRate =
-      Number(
-        service.sell_rate ??
-        providerRate ??
-        0
-      );
-
-    const active =
-      service.active !== false;
-
-
-    const div =
-      document.createElement("div");
-
-    div.className="service";
-
-
-    div.innerHTML=`
-
-      <div class="service-name">
-        ${escapeHtml(name)}
-      </div>
-
-      <div class="service-info">
-        ID: ${id}
-        &nbsp; | &nbsp;
-        سعر المزود: ${providerRate}
-        &nbsp; | &nbsp;
-        الحالة:
-        ${active ? "🟢 ظاهرة" : "🔴 مخفية"}
-      </div>
-
-      <div class="row">
-
-        <input
-          id="price-${id}"
-          type="number"
-          step="0.000001"
-          min="0"
-          value="${sellRate}"
-          placeholder="سعر البيع">
-
-        <button
-          class="save"
-          onclick="savePrice(${id})">
-          💰 حفظ سعر البيع
-        </button>
-
-      </div>
-
-      <button
-        class="${active ? "hide" : "show"}"
-        onclick="toggleService(${id},${!active})">
-
-        ${active
-          ? "👁️ إخفاء الخدمة"
-          : "👁️ إظهار الخدمة"}
-
-      </button>
-
-    `;
-
-    box.appendChild(div);
-
-  });
-
-}
-
-
-async function savePrice(id){
-
-  const input =
-    document.getElementById(
-      "price-" + id
-    );
-
-  const value =
-    Number(input.value);
-
-
-  if(!Number.isFinite(value) || value < 0){
-
-    alert("السعر غير صحيح");
-
-    return;
-
-  }
-
-
-  try{
-
-    await api(
-      "update_price",
-      {
-        id:id,
-        sell_rate:value
-      }
-    );
-
-    alert(
-      "تم حفظ السعر ✅"
-    );
-
-    await loadServices();
-
-  }catch(error){
-
-    alert(error.message);
-
-  }
-
-}
-
-
-async function toggleService(
-  id,
-  active
-){
-
-  try{
-
-    await api(
-      "toggle_service",
-      {
-        id:id,
-        active:active
-      }
-    );
-
-    await loadServices();
-
-  }catch(error){
-
-    alert(error.message);
+    status.textContent = error.message;
 
   }
 
@@ -549,26 +722,28 @@ async function toggleService(
 
 function renderTabs(){
 
-  const box =
-    document.getElementById("tabs");
+  const box = $("tabs");
 
   box.innerHTML = "";
 
   TABS.forEach(([key,label])=>{
 
-    const b =
-      document.createElement("button");
+    const b = document.createElement("button");
 
     b.textContent = label;
 
-    if(key === tab)
-      b.className = "active";
+    if(key === tab) b.className = "active";
 
     b.onclick = ()=>{
+
       tab = key;
-      page = 0;
+
+      if(key === "cheap") $("sortF").value = "sell_asc";
+
       renderTabs();
-      loadServices();
+
+      applyView();
+
     };
 
     box.appendChild(b);
@@ -578,129 +753,843 @@ function renderTabs(){
 }
 
 
-function searchServices(){
+function renderQuick(){
 
-  page = 0;
+  const box = $("quick");
 
-  loadServices();
+  [25,50,75,100,150,200].forEach(n=>{
 
-}
+    const b = document.createElement("button");
 
+    b.textContent = "+" + n + "%";
 
-function changePage(step){
+    b.onclick = ()=>{ $("pct").value = n; };
 
-  const last =
-    Math.max(Math.ceil(total/PAGE_SIZE)-1,0);
+    box.appendChild(b);
 
-  page =
-    Math.min(Math.max(page+step,0),last);
-
-  loadServices();
-
-  window.scrollTo({top:0,behavior:"smooth"});
+  });
 
 }
 
 
-async function bulkMarkup(percent){
+function onSearch(){
 
-  const msg =
-    percent === 0
-      ? "إرجاع كل الأسعار لسعر المزود؟"
-      : "سعر البيع لكل الخدمات راح يصير: سعر المزود + " + percent + "%\n(هذا يمسح أي أسعار عدلتها يدوياً). متأكد؟";
+  clearTimeout(searchTimer);
 
-  if(!confirm(msg))
+  searchTimer = setTimeout(applyView,180);
+
+}
+
+
+function matchPlatform(s,key){
+
+  const words = PLATFORM_WORDS[key];
+
+  if(!words) return true;
+
+  const text = ((s.name || "") + " " + (s.category || "")).toLowerCase();
+
+  return words.some(w => text.includes(w));
+
+}
+
+
+function applyView(){
+
+  const q = $("search").value.trim().toLowerCase();
+
+  const st = $("statusF").value;
+
+  const sort = $("sortF").value;
+
+  view = all.filter(s=>{
+
+    if(tab === "cheap"){
+      if(!(sellOf(s) > 0)) return false;
+    }else if(tab && !matchPlatform(s,tab)){
+      return false;
+    }
+
+    if(st === "on" && !isActive(s)) return false;
+    if(st === "off" && isActive(s)) return false;
+
+    if(q){
+
+      if(/^\d+$/.test(q)) return String(s.id) === q;
+
+      const text =
+        ((s.name || "") + " " + (s.category || "")).toLowerCase();
+
+      if(!text.includes(q)) return false;
+
+    }
+
+    return true;
+
+  });
+
+  const cmp = {
+    id:(a,b)=>a.id - b.id,
+    sell_asc:(a,b)=>sellOf(a) - sellOf(b) || a.id - b.id,
+    sell_desc:(a,b)=>sellOf(b) - sellOf(a) || a.id - b.id,
+    margin_desc:(a,b)=>(marginOf(b) ?? -1e9) - (marginOf(a) ?? -1e9),
+    margin_asc:(a,b)=>(marginOf(a) ?? 1e9) - (marginOf(b) ?? 1e9),
+    name:(a,b)=>String(a.name || "").localeCompare(String(b.name || ""),"ar")
+  }[sort];
+
+  view.sort(cmp);
+
+  renderRows();
+
+  updateCounts();
+
+}
+
+
+function rowHtml(s){
+
+  const id = Number(s.id);
+
+  const active = isActive(s);
+
+  const m = marginOf(s);
+
+  return `
+  <tr data-id="${id}" class="${active ? "" : "off"}">
+    <td><input type="checkbox" class="sel" data-id="${id}" ${selected.has(id) ? "checked" : ""}></td>
+    <td class="num">${id}</td>
+    <td class="nm">${escapeHtml(s.name || "بدون اسم")}<small>${escapeHtml(s.category || "")}</small></td>
+    <td class="num">${fmtRate(providerOf(s))}</td>
+    <td><input class="pin" data-id="${id}" type="number" step="any" min="0" value="${sellOf(s)}"></td>
+    <td class="num mg ${m !== null && m < 0 ? "r" : "g"}">${m === null ? "—" : (m >= 0 ? "+" : "") + m.toFixed(1) + "%"}</td>
+    <td><button class="tog ${active ? "b-amber" : ""}" data-id="${id}" data-on="${active ? 1 : 0}">${active ? "🟢 إخفاء" : "🔴 إظهار"}</button></td>
+  </tr>`;
+
+}
+
+
+/* نرسم على دفعات صغيرة حتى الصفحة ما تنجمد وتظهر كل الخدمات بدون صفحات */
+function renderRows(){
+
+  const token = ++renderToken;
+
+  const body = $("rows");
+
+  body.innerHTML = "";
+
+  if(!view.length){
+
+    body.innerHTML =
+      "<tr><td colspan='7' class='status'>لا توجد خدمات مطابقة</td></tr>";
+
     return;
 
-  const status =
-    document.getElementById("status");
+  }
+
+  let i = 0;
+
+  const CHUNK = 250;
+
+  (function step(){
+
+    if(token !== renderToken) return;
+
+    let html = "";
+
+    const end = Math.min(i + CHUNK,view.length);
+
+    for(; i < end; i++) html += rowHtml(view[i]);
+
+    body.insertAdjacentHTML("beforeend",html);
+
+    if(i < view.length) requestAnimationFrame(step);
+
+  })();
+
+}
+
+
+function updateCounts(){
+
+  const on = all.filter(isActive).length;
+
+  $("stTotal").textContent = fmtInt(all.length);
+  $("stOn").textContent = fmtInt(on);
+  $("stOff").textContent = fmtInt(all.length - on);
+  $("stView").textContent = fmtInt(view.length);
+
+  const ms = view.map(marginOf).filter(v => v !== null);
+
+  $("stMargin").textContent =
+    ms.length
+      ? (ms.reduce((a,b)=>a+b,0) / ms.length).toFixed(1) + "%"
+      : "—";
+
+  $("status").textContent =
+    "تم عرض " + fmtInt(view.length) + " من " + fmtInt(all.length) + " خدمة ✅";
+
+  /* خيارات نطاق الزيادة */
+  const scope = $("scope");
+
+  const keep = scope.value || "view";
+
+  scope.innerHTML =
+    `<option value="view">على الخدمات المعروضة الآن (${fmtInt(view.length)})</option>` +
+    `<option value="selected">على المحددة فقط (${fmtInt(selected.size)})</option>` +
+    `<option value="all">على كل الخدمات (${fmtInt(all.length)})</option>`;
+
+  scope.value = keep;
+
+  /* شريط التحديد */
+  $("selbar").classList.toggle("show",selected.size > 0);
+
+  $("selCount").textContent = fmtInt(selected.size) + " خدمة محددة";
+
+  $("selAll").checked =
+    view.length > 0 && view.every(s => selected.has(Number(s.id)));
+
+}
+
+
+/* ---------- أحداث الجدول (تفويض واحد لكل الصفوف) ---------- */
+
+$("rows").addEventListener("change",e=>{
+
+  const t = e.target;
+
+  if(t.classList.contains("sel")){
+
+    const id = Number(t.dataset.id);
+
+    t.checked ? selected.add(id) : selected.delete(id);
+
+    updateCounts();
+
+  }else if(t.classList.contains("pin")){
+
+    savePrice(t);
+
+  }
+
+});
+
+$("rows").addEventListener("keydown",e=>{
+
+  if(e.key === "Enter" && e.target.classList.contains("pin")){
+    e.target.blur();
+  }
+
+});
+
+$("rows").addEventListener("click",e=>{
+
+  const b = e.target.closest("button.tog");
+
+  if(b) toggleOne(b);
+
+});
+
+
+async function savePrice(input){
+
+  const id = Number(input.dataset.id);
+
+  const s = byId.get(id);
+
+  const value = Number(input.value);
+
+  if(input.value.trim() === "" || !Number.isFinite(value) || value < 0){
+
+    input.value = sellOf(s);
+
+    toast("السعر غير صحيح",true);
+
+    return;
+
+  }
+
+  if(value === sellOf(s)) return;
+
+  input.disabled = true;
 
   try{
 
-    status.textContent =
-      "جاري تطبيق الزيادة...";
+    await api("update_price",{id,sell_rate:value});
 
-    await api("bulk_markup",{percent});
+    s.sell_rate = value;
 
-    await loadServices();
+    input.classList.add("ok");
 
-    status.textContent =
-      "تم تطبيق " + percent + "% على كل الخدمات ✅";
+    setTimeout(()=>input.classList.remove("ok"),900);
+
+    const m = marginOf(s);
+
+    const cell = input.closest("tr").querySelector(".mg");
+
+    cell.textContent =
+      m === null ? "—" : (m >= 0 ? "+" : "") + m.toFixed(1) + "%";
+
+    cell.className = "num mg " + (m !== null && m < 0 ? "r" : "g");
+
+    updateCounts();
 
   }catch(error){
 
-    status.textContent =
-      error.message;
+    input.value = sellOf(s);
+
+    input.classList.add("bad");
+
+    setTimeout(()=>input.classList.remove("bad"),1200);
+
+    toast(error.message,true);
+
+  }finally{
+
+    input.disabled = false;
 
   }
+
+}
+
+
+async function toggleOne(btn){
+
+  const id = Number(btn.dataset.id);
+
+  const s = byId.get(id);
+
+  const next = !isActive(s);
+
+  btn.disabled = true;
+
+  try{
+
+    await api("toggle_service",{id,active:next});
+
+    s.active = next;
+
+    const tr = btn.closest("tr");
+
+    tr.classList.toggle("off",!next);
+
+    btn.className = "tog " + (next ? "b-amber" : "");
+
+    btn.textContent = next ? "🟢 إخفاء" : "🔴 إظهار";
+
+    updateCounts();
+
+  }catch(error){
+
+    toast(error.message,true);
+
+  }finally{
+
+    btn.disabled = false;
+
+  }
+
+}
+
+
+/* ---------- التحديد الجماعي ---------- */
+
+function toggleAll(checked){
+
+  view.forEach(s=>{
+
+    const id = Number(s.id);
+
+    checked ? selected.add(id) : selected.delete(id);
+
+  });
+
+  document.querySelectorAll("#rows input.sel").forEach(c=>{
+    c.checked = checked;
+  });
+
+  updateCounts();
+
+}
+
+
+function clearSel(){
+
+  selected.clear();
+
+  document.querySelectorAll("#rows input.sel").forEach(c=>{
+    c.checked = false;
+  });
+
+  updateCounts();
+
+}
+
+
+async function bulkToggle(active){
+
+  const ids = [...selected];
+
+  if(!ids.length) return;
+
+  if(!confirm((active ? "إظهار " : "إخفاء ") + ids.length + " خدمة؟")) return;
+
+  try{
+
+    $("status").textContent = "جاري التطبيق...";
+
+    await api("bulk_toggle",{ids,active});
+
+    ids.forEach(id=>{
+      const s = byId.get(id);
+      if(s) s.active = active;
+    });
+
+    selected.clear();
+
+    applyView();
+
+    toast("تم " + (active ? "إظهار " : "إخفاء ") + fmtInt(ids.length) + " خدمة ✅");
+
+  }catch(error){
+
+    toast(error.message,true);
+
+    updateCounts();
+
+  }
+
+}
+
+
+/* ---------- الزيادة بنسبة ---------- */
+
+function scopeIds(){
+
+  const scope = $("scope").value;
+
+  if(scope === "all") return null;   /* null = كل الخدمات */
+
+  if(scope === "selected") return [...selected];
+
+  return view.map(s => Number(s.id));
+
+}
+
+
+async function runMarkup(percent){
+
+  const ids = scopeIds();
+
+  const btn = $("applyBtn");
+
+  btn.disabled = true;
+
+  try{
+
+    $("status").textContent = "جاري تطبيق الزيادة...";
+
+    if(ids === null){
+
+      await api("bulk_markup",{percent});
+
+    }else{
+
+      /* نقسم الطلب لدفعات حتى ما يكبر */
+      for(let i = 0; i < ids.length; i += 1500){
+
+        await api("bulk_markup_ids",{
+          ids:ids.slice(i,i + 1500),
+          percent
+        });
+
+        $("status").textContent =
+          "جاري التطبيق... " + Math.min(i + 1500,ids.length) + " / " + ids.length;
+
+      }
+
+    }
+
+    await loadAll();
+
+    toast("تم تطبيق " + percent + "% ✅");
+
+  }catch(error){
+
+    toast(error.message,true);
+
+    $("status").textContent = error.message;
+
+  }finally{
+
+    btn.disabled = false;
+
+  }
+
+}
+
+
+function applyMarkup(){
+
+  const percent = Number($("pct").value);
+
+  if(!Number.isFinite(percent) || percent < 0 || percent > 1000){
+
+    toast("اكتب نسبة بين 0 و 1000",true);
+
+    return;
+
+  }
+
+  const ids = scopeIds();
+
+  const count = ids === null ? all.length : ids.length;
+
+  if(!count){
+
+    toast("ما في خدمات ضمن النطاق المختار",true);
+
+    return;
+
+  }
+
+  const label = $("scope").selectedOptions[0].textContent.replace(/\s*\(.*\)/,"");
+
+  if(!confirm(
+    "سعر البيع لـ " + fmtInt(count) + " خدمة (" + label + ") راح يصير:\n" +
+    "سعر المزود + " + percent + "%\n\n" +
+    "هذا يمسح أي أسعار عدّلتها يدوياً لهذي الخدمات. متأكد؟"
+  )) return;
+
+  runMarkup(percent);
+
+}
+
+
+function resetOriginal(){
+
+  const ids = scopeIds();
+
+  const count = ids === null ? all.length : ids.length;
+
+  if(!count){
+
+    toast("ما في خدمات ضمن النطاق المختار",true);
+
+    return;
+
+  }
+
+  if(!confirm("إرجاع " + fmtInt(count) + " خدمة لسعر المزود الأصلي؟")) return;
+
+  $("pct").value = 0;
+
+  runMarkup(0);
 
 }
 
 
 async function syncServices(){
 
-  const status =
-    document.getElementById("status");
-
   if(!confirm("مزامنة الخدمات من drd3m؟ أسعار البيع الحالية ما تتغير."))
     return;
 
   try{
 
-    status.textContent =
-      "جاري المزامنة... انتظر";
+    $("status").textContent = "جاري المزامنة... انتظر";
 
-    const r =
-      await api("sync",{markup:1.3});
+    const r = await api("sync",{markup:1.3});
 
-    status.textContent =
-      "تمت مزامنة " + r.count + " خدمة ✅";
+    toast("تمت مزامنة " + fmtInt(r.count) + " خدمة ✅");
 
-    await loadServices();
+    await loadAll();
 
   }catch(error){
 
-    status.textContent =
-      error.message;
+    $("status").textContent = error.message;
+
+    toast(error.message,true);
 
   }
 
 }
 
 
-function logout(){
+/* =====================================================
+   الطلبات والأرباح
+   ===================================================== */
 
-  password="";
+const ST = {
+  pending:"قيد الانتظار",
+  processing:"قيد التنفيذ",
+  completed:"مكتمل",
+  partial:"جزئي",
+  canceled:"ملغي",
+  refunded:"مسترجع"
+};
 
-  services=[];
+const O_SIZE = 50;
 
-  document.getElementById("adminBox")
-    .style.display="none";
+let ordersLoaded = false;
+let oPage = 0;
+let oTotal = 0;
+let oStatusFilter = "";
 
-  document.getElementById("loginBox")
-    .style.display="block";
 
-  document.getElementById("password")
-    .value="";
+function initOrders(){
 
-  document.getElementById("loginStatus")
-    .textContent="";
+  ordersLoaded = true;
+
+  $("oStatus").innerHTML =
+    `<option value="">كل الحالات</option>` +
+    Object.entries(ST).map(([k,v]) =>
+      `<option value="${k}">${v}</option>`
+    ).join("");
+
+  refreshOrders();
 
 }
 
 
-function escapeHtml(value){
+function refreshOrders(){
 
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  loadOrderStats();
+
+  loadOrders();
 
 }
 
-renderTabs();
+
+async function loadOrderStats(){
+
+  try{
+
+    const r = await api("orders_stats");
+
+    const P = [
+      ["today","اليوم"],
+      ["week","آخر 7 أيام"],
+      ["month","هذا الشهر"],
+      ["all","الإجمالي"]
+    ];
+
+    $("periods").innerHTML = P.map(([k,label])=>{
+
+      const x = r.periods[k];
+
+      return `
+      <div class="period">
+        <h4>${label}</h4>
+        <div class="line"><span>عدد الطلبات</span><b>${fmtInt(x.count)}</b></div>
+        <div class="line"><span>المبيعات</span><b>${fmtMoney(x.revenue)}</b></div>
+        <div class="line"><span>الربح</span><b class="big ${x.profit < 0 ? "r" : "g"}">${fmtMoney(x.profit)}</b></div>
+      </div>`;
+
+    }).join("");
+
+    window.__lastStats = r;
+
+    loadOrderStatsChips(r);
+
+  }catch(error){
+
+    $("periods").innerHTML =
+      `<div class="status" style="grid-column:1/-1">${escapeHtml(error.message)}</div>`;
+
+  }
+
+}
+
+
+/* نعيد رسم أزرار الحالات فقط بدون طلب جديد */
+function loadOrderStatsChips(r){
+
+  const box = $("stChips");
+
+  box.innerHTML = "";
+
+  const mk = (key,label,n)=>{
+
+    const b = document.createElement("button");
+
+    b.textContent = label + " (" + fmtInt(n) + ")";
+
+    if(key === oStatusFilter) b.className = "active";
+
+    b.onclick = ()=>{
+      oStatusFilter = key;
+      $("oStatus").value = key;
+      oPage = 0;
+      loadOrderStatsChips(r);
+      loadOrders();
+    };
+
+    box.appendChild(b);
+
+  };
+
+  mk("","الكل",r.periods.all.count);
+
+  Object.entries(ST).forEach(([k,label])=>{
+    mk(k,label,r.by_status[k] || 0);
+  });
+
+}
+
+
+function searchOrders(){
+
+  oStatusFilter = $("oStatus").value;
+
+  oPage = 0;
+
+  if(window.__lastStats) loadOrderStatsChips(window.__lastStats);
+
+  loadOrders();
+
+}
+
+
+async function loadOrders(){
+
+  const line = $("oStatusLine");
+
+  try{
+
+    line.textContent = "جاري تحميل الطلبات...";
+
+    const r = await api("orders",{
+      status:oStatusFilter,
+      search:$("oSearch").value.trim(),
+      from:$("oFrom").value,
+      to:$("oTo").value,
+      limit:O_SIZE,
+      offset:oPage * O_SIZE
+    });
+
+    const items = r.items || [];
+
+    oTotal = r.total || 0;
+
+    renderOrders(items);
+
+    const last = Math.max(Math.ceil(oTotal / O_SIZE),1);
+
+    line.textContent =
+      "عرض " + fmtInt(items.length) + " من " + fmtInt(oTotal) +
+      " طلب (صفحة " + (oPage + 1) + " من " + last + ")";
+
+  }catch(error){
+
+    $("orderRows").innerHTML = "";
+
+    line.textContent = error.message;
+
+  }
+
+}
+
+
+function fmtDate(iso){
+
+  try{
+
+    return new Date(iso).toLocaleString("en-GB",{
+      timeZone:"Asia/Baghdad",
+      dateStyle:"short",
+      timeStyle:"short"
+    });
+
+  }catch(e){
+
+    return iso || "";
+
+  }
+
+}
+
+
+function renderOrders(items){
+
+  const body = $("orderRows");
+
+  if(!items.length){
+
+    body.innerHTML =
+      "<tr><td colspan='9' class='status'>لا توجد طلبات</td></tr>";
+
+    return;
+
+  }
+
+  body.innerHTML = items.map(o=>{
+
+    const link = String(o.link || "");
+
+    const linkCell =
+      /^https?:\/\//i.test(link)
+        ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener">${escapeHtml(link)}</a>`
+        : escapeHtml(link);
+
+    const profit = Number(o.profit) || 0;
+
+    const opts = Object.entries(ST).map(([k,v]) =>
+      `<option value="${k}" ${k === o.status ? "selected" : ""}>${v}</option>`
+    ).join("");
+
+    return `
+    <tr>
+      <td class="num">${o.id}</td>
+      <td class="num">${escapeHtml(fmtDate(o.created_at))}</td>
+      <td class="nm">${escapeHtml(o.service_name || "")}<small>ID: ${o.service_id ?? "—"}</small></td>
+      <td class="lnk">${linkCell}</td>
+      <td class="num">${fmtInt(o.quantity)}</td>
+      <td class="num">${fmtMoney(o.price)}</td>
+      <td class="num">${fmtMoney(o.cost)}</td>
+      <td class="num ${profit < 0 ? "r" : "g"}">${fmtMoney(profit)}</td>
+      <td><select class="ost" data-id="${o.id}" data-old="${o.status}">${opts}</select></td>
+    </tr>`;
+
+  }).join("");
+
+}
+
+
+$("orderRows").addEventListener("change",async e=>{
+
+  const sel = e.target;
+
+  if(!sel.classList.contains("ost")) return;
+
+  try{
+
+    await api("update_order",{id:Number(sel.dataset.id),status:sel.value});
+
+    sel.dataset.old = sel.value;
+
+    toast("تم تحديث حالة الطلب ✅");
+
+    loadOrderStats();
+
+  }catch(error){
+
+    sel.value = sel.dataset.old;
+
+    toast(error.message,true);
+
+  }
+
+});
+
+
+function orderPage(step){
+
+  const last = Math.max(Math.ceil(oTotal / O_SIZE) - 1,0);
+
+  oPage = Math.min(Math.max(oPage + step,0),last);
+
+  loadOrders();
+
+}
 
 </script>
 
