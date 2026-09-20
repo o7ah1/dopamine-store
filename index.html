@@ -6,71 +6,56 @@
 <title>Dopamine Store</title>
 
 <style>
-*{box-sizing:border-box}
-
 body{
 margin:0;
-font-family:Arial,Tahoma,sans-serif;
+font-family:Arial;
 background:#0f172a;
 color:white;
-padding:20px;
+padding:20px
 }
-
 .container{
-max-width:800px;
-margin:auto;
+max-width:700px;
+margin:auto
 }
-
 .card{
 background:#1e293b;
-padding:25px;
-border-radius:18px;
+padding:20px;
+border-radius:15px
 }
-
-h1{
-text-align:center;
-}
-
+h1{text-align:center}
 label{
 display:block;
-margin:15px 0 7px;
+margin:15px 0 7px
 }
-
 select,input,button{
 width:100%;
-padding:14px;
-border-radius:10px;
+padding:13px;
+border-radius:8px;
 border:0;
-font-size:16px;
+box-sizing:border-box;
+font-size:16px
 }
-
 select,input{
 background:#334155;
-color:white;
+color:white
 }
-
 button{
 margin-top:20px;
 background:#22c55e;
 color:white;
-font-weight:bold;
-cursor:pointer;
+font-weight:bold
 }
-
-.price{
+#price{
 margin-top:20px;
-padding:18px;
+padding:15px;
 background:#0f172a;
 text-align:center;
-font-size:25px;
-font-weight:bold;
-border-radius:10px;
+font-size:22px
 }
-
-.status{
+#error{
 margin-top:15px;
-text-align:center;
-color:#94a3b8;
+color:#fca5a5;
+text-align:center
 }
 </style>
 </head>
@@ -102,18 +87,15 @@ id="quantity"
 type="number"
 placeholder="مثلاً 1000">
 
-<div class="price">
-السعر:
-<span id="price">0.0000</span> $
+<div id="price">
+السعر: 0.0000 $
 </div>
 
 <button>
 إتمام الطلب
 </button>
 
-<div class="status"
-id="status">
-</div>
+<div id="error"></div>
 
 </div>
 
@@ -124,7 +106,7 @@ id="status">
 const API =
 "https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/hyper-worker";
 
-let services = [];
+let services=[];
 
 const serviceBox =
 document.getElementById("service");
@@ -135,8 +117,8 @@ document.getElementById("quantity");
 const priceBox =
 document.getElementById("price");
 
-const statusBox =
-document.getElementById("status");
+const errorBox =
+document.getElementById("error");
 
 
 async function loadServices(){
@@ -146,26 +128,40 @@ try{
 const response =
 await fetch(API,{
 method:"POST",
+
 headers:{
-"Content-Type":
-"application/json"
+"Content-Type":"application/json"
 },
+
 body:JSON.stringify({
 action:"services"
 })
+
 });
 
 const result =
 await response.json();
 
+console.log(result);
+
 if(!result.success){
 throw new Error(
-result.error
+result.error || "API Error"
 );
 }
 
 services =
-result.services || [];
+Array.isArray(result.data)
+? result.data
+: [];
+
+if(services.length===0){
+
+throw new Error(
+"لم يتم العثور على خدمات"
+);
+
+}
 
 serviceBox.innerHTML="";
 
@@ -175,10 +171,13 @@ const option =
 document.createElement("option");
 
 option.value =
-service.provider_service_id;
+service.service;
 
 option.textContent =
-service.name;
+service.name +
+" — " +
+service.rate +
+" $ / 1000";
 
 serviceBox.appendChild(option);
 
@@ -186,68 +185,47 @@ serviceBox.appendChild(option);
 
 updatePrice();
 
-statusBox.textContent =
-"الخدمات محدثة";
-
 }catch(error){
 
 console.error(error);
 
-statusBox.textContent =
-"تعذر تحميل الخدمات";
+serviceBox.innerHTML =
+"<option>تعذر تحميل الخدمات</option>";
+
+errorBox.textContent =
+error.message;
 
 }
-
-}
-
-
-function selectedService(){
-
-return services.find(
-x =>
-String(
-x.provider_service_id
-) ===
-String(
-serviceBox.value
-)
-);
 
 }
 
 
 function updatePrice(){
 
-const service =
-selectedService();
+const selected =
+services.find(
+x =>
+String(x.service) ===
+String(serviceBox.value)
+);
+
+if(!selected)return;
 
 const quantity =
 Number(
 quantityBox.value || 0
 );
 
-if(!service){
-priceBox.textContent =
-"0.0000";
-return;
-}
-
 const rate =
-Number(
-service.sell_rate || 0
-);
-
-/*
-  السعر محسوب لكل 1000
-*/
+Number(selected.rate || 0);
 
 const total =
-rate *
-quantity /
-1000;
+rate * quantity / 1000;
 
 priceBox.textContent =
-total.toFixed(4);
+"السعر: " +
+total.toFixed(4) +
+" $";
 
 }
 
@@ -260,16 +238,6 @@ updatePrice
 quantityBox.addEventListener(
 "input",
 updatePrice
-);
-
-
-/*
-  تحديث تلقائي كل 3 ثواني
-*/
-
-setInterval(
-loadServices,
-3000
 );
 
 loadServices();
