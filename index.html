@@ -756,7 +756,8 @@ function renderServices(){
   }
 
   statusBox.textContent =
-    services.length.toLocaleString("en-US") + " خدمة متاحة";
+    services.length.toLocaleString("en-US") +
+    " خدمة متاحة، والسعر بجانب كل خدمة لكل 1000";
 
   clearInvalid(serviceBox);
 
@@ -771,8 +772,17 @@ function makeOption(service){
 
   option.value = service.id;
 
+  const rate = Number(service.sell_rate || 0);
+
+  const shown =
+    rate >= 1
+      ? rate.toFixed(2)
+      : String(Number(rate.toFixed(4)));
+
+  /* السعر أول السطر (داخل عزل ثنائي الاتجاه عشان ما ينقلب مع العربي) */
   option.textContent =
-    service.name || "خدمة بدون اسم";
+    "\u2066$" + shown + "\u2069  —  " +
+    (service.name || "خدمة بدون اسم");
 
   return option;
 
