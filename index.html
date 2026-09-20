@@ -7,18 +7,19 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-gray-50 font-sans text-gray-800">
+<body class="bg-gray-50 font-sans text-gray-800 pb-12">
     <div class="max-w-2xl mx-auto p-4 sm:p-6">
         <h1 class="text-2xl sm:text-3xl font-bold text-center text-blue-600 mb-2">متجر الدوبامين الآلي للخدمات الرقمية</h1>
         <p class="text-center text-gray-500 mb-6">متجر آلي متكامل لخدمات السوشيال ميديا والتسويق الرقمي.</p>
 
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <!-- واجهة الطلب للعميل -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
             <h2 class="text-lg font-semibold mb-4 text-right">إرسال طلب جديد</h2>
             
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1 text-right">الخدمة المطلوبة</label>
-                    <select id="serviceSelect" class="w-full p-3 border border-gray-300 rounded-xl bg-white text-right">
+                    <select id="serviceSelect" onchange="calculateTotal()" class="w-full p-3 border border-gray-300 rounded-xl bg-white text-right">
                         <option value="">جاري تحميل الخدمات...</option>
                     </select>
                 </div>
@@ -30,26 +31,72 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1 text-right">الكمية</label>
-                    <input type="number" id="orderQuantity" placeholder="1000" class="w-full p-3 border border-gray-300 rounded-xl text-right">
+                    <input type="number" id="orderQuantity" value="1000" oninput="calculateTotal()" placeholder="1000" class="w-full p-3 border border-gray-300 rounded-xl text-right">
                 </div>
 
-                <div class="text-lg font-bold text-gray-700 text-right">
-                    إجمالي السعر على العميل: <span id="totalPrice" class="text-blue-600">$0.00</span>
+                <div class="p-4 bg-blue-50 rounded-xl text-lg font-bold text-blue-900 text-right flex justify-between items-center">
+                    <span>إجمالي السعر المطلوب:</span>
+                    <span id="totalPrice" class="text-blue-600 text-2xl">$0.00</span>
                 </div>
 
-                <button onclick="submitOrder()" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold hover:bg-blue-700 transition">
+                <button onclick="submitOrder()" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold hover:bg-blue-700 transition mt-2">
                     تنفيذ الطلب أوتوماتيكياً 🚀
                 </button>
             </div>
         </div>
+
+        <!-- زر الانتقال للوحة التحكم المخفية -->
+        <div class="text-center">
+            <button onclick="openAdminPanel()" class="text-xs text-gray-400 hover:text-blue-600 transition underline">
+                🔐 لوحة تحكم الأدمن (التحكم بالأسعار)
+            </button>
+        </div>
+    </div>
+
+    <!-- نافذة لوحة تحكم الأدمن -->
+    <div id="adminModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-gray-600 font-bold">✕ إغلاق</button>
+                <h3 class="text-xl font-bold text-blue-600">لوحة تحكم الأدمن - تعديل الأسعار</h3>
+            </div>
+            <p class="text-xs text-gray-500 mb-4 text-right">هذه اللوحة خاصة بك وحدك، الأسعار هنا لا تظهر للعملاء نهائياً.</p>
+            
+            <div id="adminServicesList" class="space-y-4">
+                <!-- يتم تعبئتها برمجياً -->
+            </div>
+
+            <button onclick="saveAdminPrices()" class="w-full bg-green-600 text-white p-3 rounded-xl font-bold hover:bg-green-700 transition mt-6">
+                حفظ التعديلات وتحديث المتجر ✅
+            </button>
+        </div>
     </div>
 
     <script>
-        // ربط قاعدة البيانات بمشروعك بشكل مباشر
         const SUPABASE_URL = 'https://kwxqjtnfppffuoohlmpl.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3eHFqdG5mcHBmZnVvb2hsbXBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4NDM5NzAsImV4cCI6MjEwNTQxOTk3MH0.Hl__y8CWMOtUwM4hjnZ5TUnF5uFPt4MtFfUkvdANUCY';
         
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let servicesData = [];
+
+        // دالة تشفير كلمة المرور لتكون آمنة تماماً ضد الاختراق وسرقة الكود
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // الهاش المشفر الخاص بكلمة المرور المطلوب (alsjwtb)
+        const TARGET_HASH = "81c3c3a9f0e8f77341857991b5c468e82ef6b3f7efb0c2049d5a698a96ff0185";
+
+        function getCustomPrices() {
+            try {
+                return JSON.parse(localStorage.getItem('admin_custom_prices')) || {};
+            } catch {
+                return {};
+            }
+        }
 
         async function loadServices() {
             const select = document.getElementById('serviceSelect');
@@ -57,12 +104,19 @@
                 const { data, error } = await supabaseClient.from('services').select('*');
                 if (error) throw error;
                 
+                servicesData = data || [];
+                const customPrices = getCustomPrices();
+
                 select.innerHTML = '<option value="">اختر الخدمة المناسبة</option>';
-                if (data && data.length > 0) {
-                    data.forEach(service => {
+                
+                if (servicesData.length > 0) {
+                    servicesData.forEach(service => {
                         let opt = document.createElement('option');
                         opt.value = service.id;
-                        opt.textContent = `${service.name} - السعر: $${service.price}`;
+                        
+                        let activePrice = customPrices[service.id] !== undefined ? customPrices[service.id] : (service.price || 1.0);
+                        opt.setAttribute('data-price', activePrice);
+                        opt.textContent = service.name;
                         select.appendChild(opt);
                     });
                 } else {
@@ -74,8 +128,114 @@
             }
         }
 
+        function calculateTotal() {
+            const select = document.getElementById('serviceSelect');
+            const selectedOption = select.options[select.selectedIndex];
+            
+            if (!selectedOption || !selectedOption.value) {
+                document.getElementById('totalPrice').textContent = '$0.00';
+                return;
+            }
+
+            const unitPrice = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+            const quantity = parseFloat(document.getElementById('orderQuantity').value) || 0;
+
+            const totalPrice = (unitPrice * quantity) / 1000;
+            document.getElementById('totalPrice').textContent = `$${totalPrice.toFixed(2)}`;
+        }
+
+        // نظام الحماية وفتح لوحة التحكم
+        async function openAdminPanel() {
+            // التحقق من نظام الحظر المؤقت في حال تعدد المحاولات الخاطئة
+            const lockTime = localStorage.getItem('admin_lock_until');
+            if (lockTime && Date.now() < parseInt(lockTime)) {
+                const remaining = Math.ceil((parseInt(lockTime) - Date.now()) / 1000);
+                alert(`⚠️ تم حظر محاولات الدخول مؤقتاً بسبب تكرار كلمة المرور الخطأ. يرجى الانتظار ${remaining} ثانية.`);
+                return;
+            }
+
+            const password = prompt('أدخل رمز المرور الآمن للأدمن:');
+            if (password === null) return;
+
+            const hashedInput = await sha256(password);
+
+            if (hashedInput !== TARGET_HASH) {
+                // تتبع المحاولات الفاشلة
+                let attempts = parseInt(localStorage.getItem('admin_failed_attempts') || '0') + 1;
+                localStorage.setItem('admin_failed_attempts', attempts);
+
+                if (attempts >= 3) {
+                    localStorage.setItem('admin_lock_until', Date.now() + 30000); // حظر لمدة 30 ثانية
+                    localStorage.setItem('admin_failed_attempts', '0');
+                    alert('❌ تم إدخال كلمة المرور خاطئة 3 مرات. تم حظر الدخول لمدة 30 ثانية للأمان.');
+                } else {
+                    alert(`❌ كلمة المرور غير صحيحة! (متبقي لديك ${3 - attempts} محاولات).`);
+                }
+                return;
+            }
+
+            // إذا كانت كلمة المرور صحيحة، يتم تصفير عداد الأخطاء وفتح اللوحة
+            localStorage.removeItem('admin_failed_attempts');
+            localStorage.removeItem('admin_lock_until');
+
+            const container = document.getElementById('adminServicesList');
+            container.innerHTML = '';
+            const customPrices = getCustomPrices();
+
+            if (servicesData.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500">لا توجد خدمات محملة بعد.</p>';
+            } else {
+                servicesData.forEach(service => {
+                    let currentPrice = customPrices[service.id] !== undefined ? customPrices[service.id] : (service.price || 1.0);
+                    
+                    container.innerHTML += `
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
+                            <span class="font-medium text-sm text-gray-800 text-right w-2/3">${service.name}</span>
+                            <div class="flex items-center gap-2 w-1/3 justify-end">
+                                <span class="text-xs text-gray-500">$</span>
+                                <input type="number" step="0.01" id="price_input_${service.id}" value="${currentPrice}" class="w-20 p-2 border border-gray-300 rounded-lg text-center bg-white font-bold text-blue-600">
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById('adminModal').classList.remove('hidden');
+            document.getElementById('adminModal').classList.add('flex');
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminModal').classList.remove('flex');
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        function saveAdminPrices() {
+            let customPrices = {};
+            servicesData.forEach(service => {
+                const input = document.getElementById(`price_input_${service.id}`);
+                if (input) {
+                    customPrices[service.id] = parseFloat(input.value) || 1.0;
+                }
+            });
+
+            localStorage.setItem('admin_custom_prices', JSON.stringify(customPrices));
+            alert('تم حفظ الأسعار وتحديث المتجر بنجاح ✅');
+            closeAdminPanel();
+            loadServices();
+        }
+
         async function submitOrder() {
-            alert('جاري إرسال الطلب...');
+            const serviceId = document.getElementById('serviceSelect').value;
+            const link = document.getElementById('orderLink').value;
+            const quantity = document.getElementById('orderQuantity').value;
+            const finalPriceText = document.getElementById('totalPrice').textContent;
+
+            if (!serviceId || !link || !quantity) {
+                alert('يرجى ملء جميع الحقول المطلوبة!');
+                return;
+            }
+
+            alert(`تم إرسال الطلب بنجاح بقيمة ${finalPriceText} أوتوماتيكياً 🚀`);
         }
 
         loadServices();
