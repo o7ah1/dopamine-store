@@ -2,117 +2,60 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Dopamine Store</title>
 
 <style>
-*{box-sizing:border-box}
 body{
-    margin:0;
-    font-family:Arial,Tahoma,sans-serif;
-    background:#0f172a;
-    color:#fff;
+margin:0;
+font-family:Arial;
+background:#0f172a;
+color:white;
+padding:20px
 }
 .container{
-    width:95%;
-    max-width:900px;
-    margin:30px auto;
-}
-.header{
-    text-align:center;
-    margin-bottom:25px;
-}
-.header h1{
-    margin:0;
-    font-size:32px;
-}
-.header p{
-    color:#94a3b8;
+max-width:700px;
+margin:auto
 }
 .card{
-    background:#1e293b;
-    padding:22px;
-    border-radius:18px;
-    margin-bottom:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
+background:#1e293b;
+padding:20px;
+border-radius:15px
 }
+h1{text-align:center}
 label{
-    display:block;
-    margin:15px 0 7px;
+display:block;
+margin:15px 0 7px
+}
+select,input,button{
+width:100%;
+padding:13px;
+border-radius:8px;
+border:0;
+box-sizing:border-box;
+font-size:16px
 }
 select,input{
-    width:100%;
-    padding:14px;
-    border:0;
-    border-radius:10px;
-    background:#334155;
-    color:#fff;
-    font-size:16px;
-    outline:none;
-}
-select option{
-    background:#1e293b;
-}
-.info{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-top:15px;
-}
-.box{
-    background:#334155;
-    padding:15px;
-    border-radius:10px;
-    text-align:center;
-}
-.box small{
-    color:#94a3b8;
-}
-.box strong{
-    display:block;
-    margin-top:6px;
-}
-.price{
-    margin-top:20px;
-    padding:20px;
-    border-radius:12px;
-    background:#0f172a;
-    text-align:center;
-    font-size:26px;
-    font-weight:bold;
+background:#334155;
+color:white
 }
 button{
-    width:100%;
-    padding:15px;
-    margin-top:20px;
-    border:0;
-    border-radius:10px;
-    background:#22c55e;
-    color:white;
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
+margin-top:20px;
+background:#22c55e;
+color:white;
+font-weight:bold
 }
-button:disabled{
-    background:#64748b;
-    cursor:not-allowed;
+#price{
+margin-top:20px;
+padding:15px;
+background:#0f172a;
+text-align:center;
+font-size:22px
 }
-.message{
-    margin-top:15px;
-    text-align:center;
-    padding:12px;
-    border-radius:10px;
-    display:none;
-}
-.loading{
-    text-align:center;
-    padding:20px;
-    color:#94a3b8;
-}
-@media(max-width:600px){
-    .info{
-        grid-template-columns:1fr;
-    }
+#error{
+margin-top:15px;
+color:#fca5a5;
+text-align:center
 }
 </style>
 </head>
@@ -121,72 +64,40 @@ button:disabled{
 
 <div class="container">
 
-    <div class="header">
-        <h1>🚀 Dopamine Store</h1>
-        <p>خدمات السوشيال ميديا</p>
-    </div>
+<div class="card">
 
-    <div class="card">
+<h1>🚀 Dopamine Store</h1>
 
-        <div id="loading" class="loading">
-            جاري تحميل الخدمات...
-        </div>
+<label>الخدمة</label>
 
-        <div id="form" style="display:none">
+<select id="service">
+<option>جاري تحميل الخدمات...</option>
+</select>
 
-            <label>اختر الخدمة</label>
+<label>الرابط</label>
 
-            <select id="service"></select>
+<input
+id="link"
+placeholder="ضع الرابط هنا">
 
-            <div class="info">
+<label>الكمية</label>
 
-                <div class="box">
-                    <small>الحد الأدنى</small>
-                    <strong id="min">-</strong>
-                </div>
+<input
+id="quantity"
+type="number"
+placeholder="مثلاً 1000">
 
-                <div class="box">
-                    <small>الحد الأقصى</small>
-                    <strong id="max">-</strong>
-                </div>
+<div id="price">
+السعر: 0.0000 $
+</div>
 
-                <div class="box">
-                    <small>السعر / 1000</small>
-                    <strong id="rate">-</strong>
-                </div>
+<button>
+إتمام الطلب
+</button>
 
-            </div>
+<div id="error"></div>
 
-            <label>الرابط</label>
-
-            <input
-                id="link"
-                type="url"
-                placeholder="ضع رابط الحساب أو المنشور"
-            >
-
-            <label>الكمية</label>
-
-            <input
-                id="quantity"
-                type="number"
-                placeholder="مثلاً 1000"
-            >
-
-            <div class="price">
-                السعر:
-                <span id="price">0.0000</span> $
-            </div>
-
-            <button id="orderButton">
-                إتمام الطلب
-            </button>
-
-            <div id="message" class="message"></div>
-
-        </div>
-
-    </div>
+</div>
 
 </div>
 
@@ -195,272 +106,139 @@ button:disabled{
 const API =
 "https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/hyper-worker";
 
-let services = [];
+let services=[];
 
-const serviceSelect =
+const serviceBox =
 document.getElementById("service");
 
-const quantityInput =
+const quantityBox =
 document.getElementById("quantity");
 
-const linkInput =
-document.getElementById("link");
-
-const priceElement =
+const priceBox =
 document.getElementById("price");
 
-const minElement =
-document.getElementById("min");
+const errorBox =
+document.getElementById("error");
 
-const maxElement =
-document.getElementById("max");
-
-const rateElement =
-document.getElementById("rate");
-
-const messageElement =
-document.getElementById("message");
-
-function showMessage(text, type="normal") {
-
-    messageElement.style.display = "block";
-    messageElement.textContent = text;
-
-    if(type === "error"){
-        messageElement.style.background = "#7f1d1d";
-    }else if(type === "success"){
-        messageElement.style.background = "#166534";
-    }else{
-        messageElement.style.background = "#334155";
-    }
-}
 
 async function loadServices(){
 
-    try{
+try{
 
-        const response = await fetch(API,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                action:"services"
-            })
-        });
+const response =
+await fetch(API,{
+method:"POST",
 
-        const data = await response.json();
+headers:{
+"Content-Type":"application/json"
+},
 
-        if(!data.success){
-            throw new Error(data.error || "فشل تحميل الخدمات");
-        }
+body:JSON.stringify({
+action:"services"
+})
 
-        services =
-            Array.isArray(data.services)
-            ? data.services
-            : [];
+});
 
-        serviceSelect.innerHTML = "";
+const result =
+await response.json();
 
-        services.forEach(service => {
+console.log(result);
 
-            const option =
-            document.createElement("option");
-
-            option.value = service.service;
-
-            option.textContent =
-                service.name;
-
-            serviceSelect.appendChild(option);
-
-        });
-
-        document.getElementById("loading")
-            .style.display = "none";
-
-        document.getElementById("form")
-            .style.display = "block";
-
-        updateService();
-
-    }catch(error){
-
-        document.getElementById("loading")
-            .textContent =
-            "تعذر تحميل الخدمات. حاول تحديث الصفحة.";
-
-        console.error(error);
-
-    }
+if(!result.success){
+throw new Error(
+result.error || "API Error"
+);
 }
 
-function getSelectedService(){
+services =
+Array.isArray(result.data)
+? result.data
+: [];
 
-    const id =
-        String(serviceSelect.value);
+if(services.length===0){
 
-    return services.find(
-        service =>
-        String(service.service) === id
-    );
+throw new Error(
+"لم يتم العثور على خدمات"
+);
 
 }
 
-function updateService(){
+serviceBox.innerHTML="";
 
-    const service =
-        getSelectedService();
+services.forEach(service=>{
 
-    if(!service) return;
+const option =
+document.createElement("option");
 
-    const rate =
-        Number(
-            service.sell_rate ??
-            service.rate ??
-            0
-        );
+option.value =
+service.service;
 
-    minElement.textContent =
-        Number(service.min || 0).toLocaleString();
+option.textContent =
+service.name +
+" — " +
+service.rate +
+" $ / 1000";
 
-    maxElement.textContent =
-        Number(service.max || 0).toLocaleString();
+serviceBox.appendChild(option);
 
-    rateElement.textContent =
-        rate.toFixed(6) + " $";
+});
 
-    updatePrice();
+updatePrice();
+
+}catch(error){
+
+console.error(error);
+
+serviceBox.innerHTML =
+"<option>تعذر تحميل الخدمات</option>";
+
+errorBox.textContent =
+error.message;
+
 }
+
+}
+
 
 function updatePrice(){
 
-    const service =
-        getSelectedService();
+const selected =
+services.find(
+x =>
+String(x.service) ===
+String(serviceBox.value)
+);
 
-    if(!service){
+if(!selected)return;
 
-        priceElement.textContent =
-            "0.0000";
+const quantity =
+Number(
+quantityBox.value || 0
+);
 
-        return;
-    }
+const rate =
+Number(selected.rate || 0);
 
-    const quantity =
-        Number(quantityInput.value || 0);
+const total =
+rate * quantity / 1000;
 
-    const rate =
-        Number(
-            service.sell_rate ??
-            service.rate ??
-            0
-        );
+priceBox.textContent =
+"السعر: " +
+total.toFixed(4) +
+" $";
 
-    const total =
-        rate * quantity / 1000;
-
-    priceElement.textContent =
-        total.toFixed(4);
 }
 
-serviceSelect.addEventListener(
-    "change",
-    updateService
+
+serviceBox.addEventListener(
+"change",
+updatePrice
 );
 
-quantityInput.addEventListener(
-    "input",
-    updatePrice
+quantityBox.addEventListener(
+"input",
+updatePrice
 );
-
-document
-.getElementById("orderButton")
-.addEventListener("click", async function(){
-
-    const service =
-        getSelectedService();
-
-    const link =
-        linkInput.value.trim();
-
-    const quantity =
-        Number(quantityInput.value);
-
-    if(!service){
-        showMessage(
-            "اختر الخدمة أولاً",
-            "error"
-        );
-        return;
-    }
-
-    if(!link){
-        showMessage(
-            "أدخل الرابط",
-            "error"
-        );
-        return;
-    }
-
-    if(!quantity || quantity <= 0){
-        showMessage(
-            "أدخل كمية صحيحة",
-            "error"
-        );
-        return;
-    }
-
-    const min =
-        Number(service.min || 0);
-
-    const max =
-        Number(service.max || 999999999);
-
-    if(quantity < min){
-
-        showMessage(
-            "الكمية أقل من الحد الأدنى: " +
-            min.toLocaleString(),
-            "error"
-        );
-
-        return;
-    }
-
-    if(quantity > max){
-
-        showMessage(
-            "الكمية أكبر من الحد الأقصى: " +
-            max.toLocaleString(),
-            "error"
-        );
-
-        return;
-    }
-
-    const rate =
-        Number(
-            service.sell_rate ??
-            service.rate ??
-            0
-        );
-
-    const total =
-        rate * quantity / 1000;
-
-    showMessage(
-        "السعر النهائي: " +
-        total.toFixed(4) +
-        " $",
-        "normal"
-    );
-
-    /*
-      الدفع سيتم ربطه هنا.
-      لا يتم إرسال طلب DrD3M قبل تأكيد الدفع.
-    */
-
-});
 
 loadServices();
 
