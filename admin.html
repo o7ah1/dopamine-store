@@ -1,226 +1,148 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width,initial-scale=1">
-
-<title>Dopamine Admin</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dopamine Store - Admin</title>
 
 <style>
-
-*{
-box-sizing:border-box
-}
+*{box-sizing:border-box}
 
 body{
-margin:0;
-font-family:Arial,Tahoma,sans-serif;
-background:#0f172a;
-color:white;
-padding:20px;
+  margin:0;
+  font-family:Arial,Tahoma,sans-serif;
+  background:#0f172a;
+  color:white;
+  padding:20px;
 }
 
 .container{
-max-width:1100px;
-margin:auto;
+  max-width:1000px;
+  margin:auto;
 }
 
 .card{
-background:#1e293b;
-padding:22px;
-border-radius:18px;
-margin-bottom:20px;
+  background:#1e293b;
+  padding:25px;
+  border-radius:18px;
+  margin-bottom:20px;
+}
+
+h1{
+  text-align:center;
 }
 
 input,button{
-padding:12px;
-border:0;
-border-radius:9px;
-font-size:15px;
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
 }
 
 input{
-background:#334155;
-color:white;
+  background:#334155;
+  color:white;
 }
 
 button{
-background:#22c55e;
-color:white;
-font-weight:bold;
-cursor:pointer;
+  margin-top:10px;
+  background:#22c55e;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-.login{
-max-width:450px;
-margin:80px auto;
+button.logout{
+  background:#ef4444;
 }
 
-.login input{
-width:100%;
-margin-bottom:12px;
+.status{
+  text-align:center;
+  margin-top:15px;
+  color:#94a3b8;
 }
 
-.login button{
-width:100%;
+.service{
+  background:#0f172a;
+  padding:18px;
+  border-radius:14px;
+  margin-top:15px;
 }
 
-table{
-width:100%;
-border-collapse:collapse;
+.service-name{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:10px;
 }
 
-th,td{
-padding:12px;
-border-bottom:1px solid #334155;
-text-align:right;
+.service-info{
+  color:#94a3b8;
+  font-size:14px;
+  margin-bottom:12px;
 }
 
-.priceInput{
-width:130px;
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
 .save{
-background:#3b82f6;
+  background:#3b82f6;
 }
 
-.off{
-background:#ef4444;
+.hide{
+  background:#f59e0b;
 }
 
-.on{
-background:#22c55e;
+.show{
+  background:#22c55e;
 }
 
-.search{
-width:100%;
-margin-bottom:20px;
+@media(max-width:600px){
+  .row{
+    grid-template-columns:1fr;
+  }
 }
-
-.message{
-margin-top:15px;
-padding:12px;
-border-radius:9px;
-}
-
-@media(max-width:700px){
-
-table{
-font-size:13px;
-}
-
-th:nth-child(2),
-td:nth-child(2){
-display:none;
-}
-
-.priceInput{
-width:100px;
-}
-
-}
-
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-<div
-id="login"
-class="card login">
+<div class="card" id="loginBox">
 
-<h2>
-🔐 لوحة التحكم
-</h2>
+<h1>🔐 لوحة الإدارة</h1>
 
 <input
-id="password"
-type="password"
-placeholder="كلمة مرور الأدمن">
+  id="password"
+  type="password"
+  placeholder="كلمة مرور الأدمن">
 
-<button
-id="loginButton">
+<button onclick="login()">
 دخول
 </button>
 
-<div id="loginMessage"></div>
+<div class="status" id="loginStatus"></div>
 
 </div>
 
 
-<div
-id="dashboard"
-style="display:none">
+<div class="card" id="adminBox" style="display:none">
 
-<div class="card">
+<h1>⚙️ إدارة الخدمات</h1>
 
-<h1>
-⚙️ إدارة الأسعار
-</h1>
-
-<p>
-غيّر سعر البيع واضغط حفظ.
-</p>
-
-<input
-class="search"
-id="search"
-placeholder="بحث عن خدمة...">
-
-<button
-id="sync">
-🔄 تحديث الخدمات من DrD3M
+<button class="logout" onclick="logout()">
+تسجيل الخروج
 </button>
 
-<div
-id="message">
+<div class="status" id="status">
+جاري تحميل الخدمات...
 </div>
 
-</div>
-
-
-<div class="card">
-
-<div
-style="overflow-x:auto">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>الخدمة</th>
-
-<th>سعر DrD3M</th>
-
-<th>سعر البيع</th>
-
-<th>الحالة</th>
-
-<th>حفظ</th>
-
-</tr>
-
-</thead>
-
-<tbody
-id="services">
-</tbody>
-
-</table>
-
-</div>
-
-</div>
+<div id="services"></div>
 
 </div>
 
@@ -229,386 +151,327 @@ id="services">
 
 <script>
 
-const API =
-"https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/hyper-worker";
+const ADMIN_API =
+"https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/admin-worker";
 
 let password = "";
 
 let services = [];
 
 
-const login =
-document.getElementById("login");
+async function api(action, extra = {}){
 
-const dashboard =
-document.getElementById("dashboard");
+  const response = await fetch(ADMIN_API,{
+    method:"POST",
 
-const passwordInput =
-document.getElementById("password");
+    headers:{
+      "Content-Type":"application/json"
+    },
 
-const loginMessage =
-document.getElementById("loginMessage");
+    body:JSON.stringify({
+      action,
+      password,
+      ...extra
+    })
+  });
 
+  const data = await response.json();
 
-async function request(
-action,
-extra={}
-){
+  if(!response.ok){
+    throw new Error(
+      data.error || "حدث خطأ"
+    );
+  }
 
-const response =
-await fetch(API,{
-
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify({
-
-action,
-
-password,
-
-...extra
-
-})
-
-});
-
-return await response.json();
-
+  return data;
 }
 
 
-document
-.getElementById("loginButton")
-.addEventListener(
-"click",
-async()=>{
+async function login(){
 
-password =
-passwordInput.value.trim();
+  const input =
+    document.getElementById("password");
 
-if(!password){
+  const status =
+    document.getElementById("loginStatus");
 
-loginMessage.textContent =
-"أدخل كلمة المرور";
+  password =
+    input.value.trim();
 
-return;
+  if(!password){
+    status.textContent =
+      "اكتب كلمة المرور";
+    return;
+  }
+
+  status.textContent =
+    "جاري التحقق...";
+
+  try{
+
+    await api("services");
+
+    document.getElementById("loginBox")
+      .style.display="none";
+
+    document.getElementById("adminBox")
+      .style.display="block";
+
+    loadServices();
+
+  }catch(error){
+
+    password="";
+
+    status.textContent =
+      error.message;
+
+  }
 
 }
-
-const result =
-await request("sync");
-
-if(!result.success){
-
-loginMessage.textContent =
-"كلمة المرور غير صحيحة";
-
-return;
-
-}
-
-login.style.display =
-"none";
-
-dashboard.style.display =
-"block";
-
-await loadServices();
-
-}
-);
 
 
 async function loadServices(){
 
-const result =
-await request("services");
+  const status =
+    document.getElementById("status");
 
-if(!result.success){
+  try{
 
-showMessage(
-"تعذر تحميل الخدمات"
-);
+    status.textContent =
+      "جاري تحميل الخدمات...";
 
-return;
+    const result =
+      await api("services");
 
-}
+    services =
+      Array.isArray(result)
+        ? result
+        : [];
 
-services =
-result.services || [];
+    renderServices();
 
-render();
+    status.textContent =
+      "تم تحميل " +
+      services.length +
+      " خدمة ✅";
 
-}
+  }catch(error){
 
+    status.textContent =
+      error.message;
 
-function render(){
-
-const search =
-document
-.getElementById("search")
-.value
-.toLowerCase();
-
-const tbody =
-document
-.getElementById("services");
-
-tbody.innerHTML = "";
-
-services
-.filter(service =>
-String(service.name)
-.toLowerCase()
-.includes(search)
-)
-.forEach(service=>{
-
-const tr =
-document.createElement("tr");
-
-tr.innerHTML = `
-
-<td>
-${escapeHtml(service.name)}
-<br>
-<small>
-ID: ${service.provider_service_id}
-</small>
-</td>
-
-<td>
-${Number(
-service.provider_rate
-).toFixed(6)}
-$
-</td>
-
-<td>
-
-<input
-class="priceInput"
-type="number"
-step="0.000001"
-min="0"
-value="${service.sell_rate}"
-data-price="${service.provider_service_id}">
-
-</td>
-
-<td>
-
-<button
-class="${service.active ? "on":"off"}"
-data-toggle="${service.provider_service_id}"
-data-active="${service.active}">
-
-${service.active ? "مفعلة":"متوقفة"}
-
-</button>
-
-</td>
-
-<td>
-
-<button
-class="save"
-data-save="${service.provider_service_id}">
-
-حفظ
-
-</button>
-
-</td>
-`;
-
-tbody.appendChild(tr);
-
-});
-
-
-document
-.querySelectorAll("[data-save]")
-.forEach(button=>{
-
-button.addEventListener(
-"click",
-async()=>{
-
-const id =
-button.dataset.save;
-
-const input =
-document.querySelector(
-`[data-price="${id}"]`
-);
-
-const value =
-Number(input.value);
-
-if(!Number.isFinite(value)
-|| value < 0){
-
-showMessage(
-"السعر غير صحيح"
-);
-
-return;
+  }
 
 }
 
-button.disabled = true;
 
-const result =
-await request(
-"update_price",
-{
-service_id:id,
-sell_rate:value
-}
-);
+function renderServices(){
 
-button.disabled = false;
+  const box =
+    document.getElementById("services");
 
-if(!result.success){
-
-showMessage(
-result.error ||
-"فشل الحفظ"
-);
-
-return;
-
-}
-
-showMessage(
-"تم حفظ السعر بنجاح ✅"
-);
-
-await loadServices();
-
-}
-);
-
-});
+  box.innerHTML="";
 
 
-document
-.querySelectorAll("[data-toggle]")
-.forEach(button=>{
+  if(!services.length){
 
-button.addEventListener(
-"click",
-async()=>{
+    box.innerHTML =
+      "<div class='status'>لا توجد خدمات</div>";
 
-const id =
-button.dataset.toggle;
+    return;
 
-const active =
-button.dataset.active !== "true";
+  }
 
-const result =
-await request(
-"toggle_service",
-{
-service_id:id,
-active
-}
-);
 
-if(!result.success){
+  services.forEach(service=>{
 
-showMessage(
-result.error ||
-"فشل التعديل"
-);
+    const id =
+      service.id;
 
-return;
+    const name =
+      service.name || "بدون اسم";
 
-}
+    const providerRate =
+      Number(
+        service.provider_rate ??
+        service.base_price ??
+        0
+      );
 
-await loadServices();
+    const sellRate =
+      Number(
+        service.sell_rate ??
+        providerRate ??
+        0
+      );
 
-}
-);
+    const active =
+      service.active !== false;
 
-});
+
+    const div =
+      document.createElement("div");
+
+    div.className="service";
+
+
+    div.innerHTML=`
+
+      <div class="service-name">
+        ${escapeHtml(name)}
+      </div>
+
+      <div class="service-info">
+        ID: ${id}
+        &nbsp; | &nbsp;
+        سعر المزود: ${providerRate}
+        &nbsp; | &nbsp;
+        الحالة:
+        ${active ? "🟢 ظاهرة" : "🔴 مخفية"}
+      </div>
+
+      <div class="row">
+
+        <input
+          id="price-${id}"
+          type="number"
+          step="0.000001"
+          min="0"
+          value="${sellRate}"
+          placeholder="سعر البيع">
+
+        <button
+          class="save"
+          onclick="savePrice(${id})">
+          💰 حفظ سعر البيع
+        </button>
+
+      </div>
+
+      <button
+        class="${active ? "hide" : "show"}"
+        onclick="toggleService(${id},${!active})">
+
+        ${active
+          ? "👁️ إخفاء الخدمة"
+          : "👁️ إظهار الخدمة"}
+
+      </button>
+
+    `;
+
+    box.appendChild(div);
+
+  });
 
 }
 
 
-document
-.getElementById("search")
-.addEventListener(
-"input",
-render
-);
+async function savePrice(id){
+
+  const input =
+    document.getElementById(
+      "price-" + id
+    );
+
+  const value =
+    Number(input.value);
 
 
-document
-.getElementById("sync")
-.addEventListener(
-"click",
-async()=>{
+  if(!Number.isFinite(value) || value < 0){
 
-const result =
-await request("sync");
+    alert("السعر غير صحيح");
 
-if(!result.success){
+    return;
 
-showMessage(
-result.error ||
-"فشل تحديث DrD3M"
-);
+  }
 
-return;
+
+  try{
+
+    await api(
+      "update_price",
+      {
+        id:id,
+        sell_rate:value
+      }
+    );
+
+    alert(
+      "تم حفظ السعر ✅"
+    );
+
+    await loadServices();
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
 
 }
 
-showMessage(
-"تم تحديث الخدمات من DrD3M ✅"
-);
 
-await loadServices();
+async function toggleService(
+  id,
+  active
+){
+
+  try{
+
+    await api(
+      "toggle_service",
+      {
+        id:id,
+        active:active
+      }
+    );
+
+    await loadServices();
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
 
 }
-);
 
 
-function showMessage(text){
+function logout(){
 
-const box =
-document.getElementById(
-"message"
-);
+  password="";
 
-box.className =
-"message";
+  services=[];
 
-box.textContent =
-text;
+  document.getElementById("adminBox")
+    .style.display="none";
+
+  document.getElementById("loginBox")
+    .style.display="block";
+
+  document.getElementById("password")
+    .value="";
+
+  document.getElementById("loginStatus")
+    .textContent="";
 
 }
 
 
 function escapeHtml(value){
 
-return String(value)
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
 }
 
 </script>
 
 </body>
-
 </html>
