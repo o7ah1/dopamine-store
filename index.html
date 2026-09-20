@@ -410,6 +410,45 @@ select[aria-invalid="true"]{
 
 .chip:hover{border-color:var(--primary)}
 
+/* ---------- نوع الخدمة ---------- */
+.types{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:0 0 4px;
+}
+
+.types .chip{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 13px;
+  background:var(--field);
+  font-size:14px;
+}
+
+.types .chip .c{
+  padding:0 7px;
+  border-radius:999px;
+  background:color-mix(in srgb,var(--ink) 9%,transparent);
+  color:var(--muted);
+  font-size:12px;
+  font-weight:600;
+  direction:ltr;
+  font-variant-numeric:tabular-nums;
+}
+
+.types .chip[aria-pressed="true"]{
+  border-color:var(--primary);
+  background:color-mix(in srgb,var(--primary) 14%,transparent);
+  font-weight:600;
+}
+
+.types .chip[aria-pressed="true"] .c{
+  background:var(--primary);
+  color:#fff;
+}
+
 .chip:focus-visible,
 .plat:focus-visible,
 .order:focus-visible{
@@ -536,7 +575,7 @@ select[aria-invalid="true"]{
       </span>
       Dopamine<small>Store</small>
     </div>
-    <p>اختر المنصة، ثم الخدمة، ثم اكتب الرابط والكمية.</p>
+    <p>اختر المنصة، ثم نوع الخدمة، ثم الخدمة والرابط والكمية.</p>
   </header>
 
   <main class="layout">
@@ -552,12 +591,33 @@ select[aria-invalid="true"]{
         <h2><b>2</b> الخدمة</h2>
 
         <div class="field">
+          <label>نوع الخدمة</label>
+          <div class="types" id="types" role="group" aria-label="نوع الخدمة"></div>
+        </div>
+
+        <div class="field" id="searchField" hidden>
           <label for="search">بحث</label>
           <input
             id="search"
             type="search"
             placeholder="ابحث باسم الخدمة"
             autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label for="catBtn">القسم</label>
+          <div class="combo" id="catCombo">
+            <button
+              type="button"
+              class="combo-btn"
+              id="catBtn"
+              aria-haspopup="listbox"
+              aria-expanded="false">
+              <span class="combo-text" id="catText">كل الأقسام</span>
+            </button>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            <div class="combo-panel" id="catPanel" role="listbox" hidden></div>
+          </div>
         </div>
 
         <div class="field">
@@ -653,7 +713,24 @@ const TABS = [
 
 const QUICK = [100,500,1000,5000,10000];
 
+/* أنواع الخدمات: يتم التعرف عليها من اسم الخدمة أو اسم القسم */
+const TYPES = [
+  ["followers","متابعين","👥",/متابع|فولو|follow|subscriber|مشترك|اشتراك|عضو|أعضاء|اعضاء|member/i],
+  ["likes","لايكات","❤️",/لايك|إعجاب|اعجاب|like|reaction|تفاعل/i],
+  ["views","مشاهدات","👁",/مشاهد|شاهد|view|بلاي|play|impression|ظهور|وصول|reach/i],
+  ["comments","تعليقات","💬",/تعليق|كومنت|comment/i],
+  ["shares","مشاركات","🔁",/مشارك|share|ريتويت|retweet|إعادة نشر|repost|حفظ|save|story|ستوري/i],
+  ["votes","تصويت","📊",/تصويت|فوت|vote|poll|استطلاع/i]
+];
+
+const QUICK_TYPE_FALLBACK = ["other","أخرى","✨",null];
+
 let tab = "cheap";
+let selectedType = "all";
+let selectedCat = "all";
+let catOptionEls = [];
+let catOpen = false;
+let allServices = [];
 let services = [];
 let requestId = 0;
 let searchTimer = null;
@@ -665,7 +742,13 @@ let isOpen = false;
 const $ = id => document.getElementById(id);
 
 const tabsBox     = $("tabs");
+const typesBox    = $("types");
 const searchBox   = $("search");
+const searchField = $("searchField");
+const catBtn      = $("catBtn");
+const catText     = $("catText");
+const catPanel    = $("catPanel");
+const catCombo    = $("catCombo");
 const serviceBtn   = $("serviceBtn");
 const serviceText  = $("serviceText");
 const servicePrice = $("servicePrice");
@@ -682,6 +765,9 @@ const orderMsg    = $("orderMsg");
 
 
 function renderTabs(){
+
+  /* البحث بالاسم يظهر فقط في قسم "كل الخدمات" */
+  searchField.hidden = tab !== "all";
 
   tabsBox.innerHTML = "";
 
@@ -709,6 +795,7 @@ function renderTabs(){
 
     b.onclick = ()=>{
       tab = key;
+      selectedCat = "all";
       renderTabs();
       loadServices();
       if(key === "all"){
@@ -719,6 +806,255 @@ function renderTabs(){
     tabsBox.appendChild(b);
 
   });
+
+}
+
+
+/* نحدد نوع الخدمة من اسمها (ومن اسم القسم إذا الاسم ما وضّح) */
+function typeOf(service){
+
+  const text =
+    (service.name || "") + " " + (service.category || "");
+
+  const found = TYPES.find(([,,,re]) => re.test(text));
+
+  return found ? found[0] : "other";
+
+}
+
+
+function typeLabel(key){
+
+  const found = TYPES.find(([k]) => k === key);
+
+  return found || QUICK_TYPE_FALLBACK;
+
+}
+
+
+function renderTypes(){
+
+  typesBox.innerHTML = "";
+
+  /* نعد كم خدمة بكل نوع حسب القسم المفتوح حالياً */
+  const counts = new Map();
+
+  allServices.forEach(service=>{
+
+    const key = typeOf(service);
+
+    counts.set(key,(counts.get(key) || 0) + 1);
+
+  });
+
+  if(!allServices.length){
+
+    selectedType = "all";
+
+    return;
+
+  }
+
+  /* إذا النوع المختار ما عنده خدمات بهذا القسم نرجع للكل */
+  if(selectedType !== "all" && !counts.has(selectedType)){
+    selectedType = "all";
+  }
+
+  const list = [["all","الكل","✳️",allServices.length]];
+
+  TYPES.forEach(([key,label,icon])=>{
+    if(counts.has(key)){
+      list.push([key,label,icon,counts.get(key)]);
+    }
+  });
+
+  if(counts.has("other")){
+    list.push([
+      "other",
+      QUICK_TYPE_FALLBACK[1],
+      QUICK_TYPE_FALLBACK[2],
+      counts.get("other")
+    ]);
+  }
+
+  list.forEach(([key,label,icon,count])=>{
+
+    const b = document.createElement("button");
+
+    b.type = "button";
+    b.className = "chip";
+    b.setAttribute("aria-pressed", String(key === selectedType));
+
+    const t = document.createElement("span");
+    t.textContent = icon + " " + label;
+
+    const c = document.createElement("span");
+    c.className = "c";
+    c.textContent = count.toLocaleString("en-US");
+
+    b.append(t,c);
+
+    b.onclick = ()=>{
+
+      selectedType = key;
+
+      renderTypes();
+
+      applyFilters();
+
+    };
+
+    typesBox.appendChild(b);
+
+  });
+
+}
+
+
+/* الخدمات المطابقة للنوع المختار فقط (قبل فلتر القسم) */
+function byType(){
+
+  return selectedType === "all"
+    ? allServices.slice()
+    : allServices.filter(s => typeOf(s) === selectedType);
+
+}
+
+
+function catOf(service){
+
+  return service.category || "أخرى";
+
+}
+
+
+/* قائمة الأقسام تُبنى من الخدمات نفسها */
+function renderCats(list){
+
+  catPanel.innerHTML = "";
+
+  catOptionEls = [];
+
+  closeCatPanel();
+
+  const counts = new Map();
+
+  list.forEach(service=>{
+
+    const name = catOf(service);
+
+    counts.set(name,(counts.get(name) || 0) + 1);
+
+  });
+
+  /* إذا القسم المختار ما عاد موجود نرجع للكل */
+  if(selectedCat !== "all" && !counts.has(selectedCat)){
+    selectedCat = "all";
+  }
+
+  if(!counts.size){
+
+    catText.textContent = "لا توجد أقسام";
+
+    return;
+
+  }
+
+  const rows = [["all","كل الأقسام",list.length]];
+
+  [...counts.keys()]
+    .sort((a,b)=>a.localeCompare(b,"ar"))
+    .forEach(name=>{
+      rows.push([name,name,counts.get(name)]);
+    });
+
+  rows.forEach(([value,label,count])=>{
+
+    const el = document.createElement("div");
+
+    el.className = "opt";
+    el.dataset.value = value;
+    el.setAttribute("role","option");
+    el.setAttribute("aria-selected",String(value === selectedCat));
+
+    const c = document.createElement("span");
+    c.className = "p";
+    c.textContent = count.toLocaleString("en-US");
+
+    const n = document.createElement("span");
+    n.className = "n";
+    n.textContent = label;
+
+    el.append(c,n);
+
+    catPanel.appendChild(el);
+
+    catOptionEls.push(el);
+
+  });
+
+  catText.textContent =
+    selectedCat === "all" ? "كل الأقسام" : selectedCat;
+
+}
+
+
+function openCatPanel(){
+
+  if(!catOptionEls.length) return;
+
+  catOpen = true;
+
+  catPanel.hidden = false;
+
+  catBtn.setAttribute("aria-expanded","true");
+
+  const el = catOptionEls.find(
+    e => e.dataset.value === selectedCat
+  );
+
+  if(el) el.scrollIntoView({block:"nearest"});
+
+}
+
+
+function closeCatPanel(){
+
+  catOpen = false;
+
+  catPanel.hidden = true;
+
+  catBtn.setAttribute("aria-expanded","false");
+
+}
+
+
+function chooseCat(value){
+
+  selectedCat = value;
+
+  closeCatPanel();
+
+  applyFilters();
+
+  catBtn.focus();
+
+}
+
+
+/* نطبّق فلتر النوع ثم القسم على الخدمات القادمة من الخادم */
+function applyFilters(){
+
+  const list = byType();
+
+  renderCats(list);
+
+  services =
+    selectedCat === "all"
+      ? list
+      : list.filter(s => catOf(s) === selectedCat);
+
+  renderServices();
 
 }
 
@@ -777,9 +1113,11 @@ async function loadServices(){
       throw new Error(result.error || ("HTTP " + response.status));
     }
 
-    services = Array.isArray(result.items) ? result.items : [];
+    allServices = Array.isArray(result.items) ? result.items : [];
 
-    renderServices();
+    renderTypes();
+
+    applyFilters();
 
   }catch(error){
 
@@ -787,7 +1125,13 @@ async function loadServices(){
 
     console.error("LOAD SERVICES ERROR:", error);
 
+    allServices = [];
+
     services = [];
+
+    renderTypes();
+
+    renderCats([]);
 
     setMessage("تعذر تحميل الخدمات");
 
@@ -968,7 +1312,11 @@ function renderServices(){
     setMessage(
       needSearch
         ? "اكتب اسم الخدمة في خانة البحث"
-        : "لا توجد خدمات مطابقة"
+        : (
+          selectedType !== "all" && allServices.length
+            ? "لا توجد " + typeLabel(selectedType)[1] + " في هذا القسم"
+            : "لا توجد خدمات مطابقة"
+          )
     );
 
     statusBox.textContent = "";
@@ -1153,6 +1501,42 @@ function submitOrder(){
 
 }
 
+
+catBtn.addEventListener("click",()=>{
+  catOpen ? closeCatPanel() : openCatPanel();
+});
+
+catBtn.addEventListener("keydown",e=>{
+
+  if(e.key === "ArrowDown" && !catOpen){
+    e.preventDefault();
+    openCatPanel();
+  }else if(e.key === "Escape" && catOpen){
+    e.preventDefault();
+    closeCatPanel();
+  }
+
+});
+
+catPanel.addEventListener("mousedown",e=>{
+  e.preventDefault();
+});
+
+catPanel.addEventListener("click",e=>{
+
+  const el = e.target.closest(".opt");
+
+  if(el) chooseCat(el.dataset.value);
+
+});
+
+document.addEventListener("click",e=>{
+
+  if(catOpen && !catCombo.contains(e.target)){
+    closeCatPanel();
+  }
+
+});
 
 serviceBtn.addEventListener("click",()=>{
   isOpen ? closePanel() : openPanel();
