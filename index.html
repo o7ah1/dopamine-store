@@ -559,6 +559,111 @@ select[aria-invalid="true"]{
 @media (prefers-reduced-motion: reduce){
   *{transition:none !important}
 }
+
+/* ---------- من نحن ---------- */
+.about{
+  max-width:1040px;
+  margin:20px auto 0;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:26px 24px;
+  box-shadow:var(--shadow);
+}
+
+.about h2{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 12px;
+  font-size:19px;
+  font-weight:700;
+}
+
+.about h2 span{
+  width:30px;
+  height:30px;
+  border-radius:10px;
+  background:var(--hit);
+  color:var(--on-hit);
+  display:grid;
+  place-items:center;
+  font-size:15px;
+}
+
+.about p{
+  margin:0 0 12px;
+  color:var(--muted);
+  font-size:15px;
+}
+
+.about p b{color:var(--ink);font-weight:600}
+
+.contacts{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:16px;
+}
+
+.contact{
+  flex:1 1 220px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 16px;
+  border:1.5px solid var(--line);
+  border-radius:16px;
+  background:var(--field);
+  color:var(--ink);
+  text-decoration:none;
+  font-size:15px;
+  font-weight:500;
+  transition:border-color .15s,transform .12s;
+}
+
+.contact:hover{border-color:var(--primary)}
+
+.contact:active{transform:scale(.99)}
+
+.contact:focus-visible{
+  outline:3px solid var(--primary);
+  outline-offset:2px;
+}
+
+.contact .ci{
+  flex:0 0 auto;
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+}
+
+.contact .ci svg{width:21px;height:21px}
+
+.contact .wa{background:#25D366}
+
+.contact .em{background:var(--primary)}
+
+.contact small{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:400;
+  direction:ltr;
+  text-align:start;
+  overflow-wrap:anywhere;
+}
+
+.foot{
+  max-width:1040px;
+  margin:18px auto 0;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
 </style>
 </head>
 
@@ -690,6 +795,40 @@ select[aria-invalid="true"]{
 
   </main>
 
+  <section class="about" id="about">
+    <h2><span>👋</span> من نحن</h2>
+
+    <p>أهلاً بك! أنا <b>علي رضا مهند</b>، مؤسس هذا المشروع التقني. نقدم لك حلولاً سريعة ومضمونة لتعزيز حضورك الرقمي وتنشيط حساباتك على منصات التواصل الاجتماعي بأفضل الأسعار وأعلى معايير الجودة.</p>
+
+    <p>نضمن لك سرعة التنفيذ، الأمان التام، والدعم المستمر على مدار الساعة.</p>
+
+    <div class="contacts">
+
+      <a class="contact" id="waLink" href="#" target="_blank" rel="noopener">
+        <span class="ci wa">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.06c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.12-.96-.3-1.66-.6-2.92-1.26-4.82-4.2-4.97-4.4-.14-.2-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.26-.29.57-.36.76-.36l.55.01c.17.01.41-.07.64.49.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.2-.14.32-.28.49l-.42.49c-.14.14-.28.29-.12.57.16.29.71 1.17 1.53 1.9 1.05.93 1.93 1.22 2.21 1.36.27.15.43.12.59-.07.16-.2.68-.79.86-1.07.18-.29.36-.24.61-.14.24.1 1.56.73 1.83.87.27.14.45.2.51.31.07.12.07.68-.17 1.35z"/></svg>
+        </span>
+        <span>
+          واتساب: راسلنا مباشرة
+          <small id="waNum"></small>
+        </span>
+      </a>
+
+      <a class="contact" href="mailto:ye19cm@gmail.com?subject=%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20-%20Dopamine%20Store">
+        <span class="ci em">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="M3 7l9 6 9-6"/></svg>
+        </span>
+        <span>
+          البريد الإلكتروني
+          <small>ye19cm@gmail.com</small>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <p class="foot">© Dopamine Store — جميع الحقوق محفوظة</p>
+
 </div>
 
 <script>
@@ -712,6 +851,12 @@ const TABS = [
 ];
 
 const QUICK = [100,500,1000,5000,10000];
+
+/* ===== رقم الواتساب: بدّل الرقم هنا فقط (بصيغة دولية بدون + وبدون أصفار) =====
+   مثال العراق: 9647701234567   */
+const WHATSAPP = "9647717885719";
+
+const WHATSAPP_TEXT = "السلام عليكم، عندي استفسار عن خدمات Dopamine Store";
 
 /* أنواع الخدمات: يتم التعرف عليها من اسم الخدمة أو اسم القسم */
 const TYPES = [
@@ -1612,6 +1757,20 @@ searchBox.addEventListener("input",()=>{
 });
 
 $("orderBtn").addEventListener("click",submitOrder);
+
+
+/* تجهيز رابط الواتساب: يفتح تطبيق واتساب مع رسالة جاهزة */
+(function setupWhatsApp(){
+
+  const link = $("waLink");
+
+  link.href =
+    "https://wa.me/" + WHATSAPP +
+    "?text=" + encodeURIComponent(WHATSAPP_TEXT);
+
+  $("waNum").textContent = "+" + WHATSAPP;
+
+})();
 
 
 renderTabs();
