@@ -541,6 +541,38 @@ select[aria-invalid="true"]{
   *{transition:none !important}
 }
 
+/* ---------- قسم التجريبي المجاني ---------- */
+.trial{margin-top:48px}
+.trial-card{max-width:640px;margin:0 auto}
+.trial-free{
+  display:inline-block;
+  margin-inline-start:8px;
+  padding:2px 10px;
+  border-radius:999px;
+  background:var(--hit);
+  color:var(--on-hit);
+  font-size:13px;
+  font-weight:700;
+  vertical-align:middle;
+}
+.trial-hint{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.trial-msg{min-height:22px;margin-top:12px;font-size:14px;text-align:center;color:var(--muted)}
+.trial-msg.error{color:var(--danger)}
+.trial-msg.ok{color:#128A4B}
+.trial-list{margin:0;padding:0;list-style:none}
+.trial-list li{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:10px 0;
+  border-top:1px solid var(--line);
+  font-size:14px;
+}
+.trial-list li:first-child{border-top:0}
+.trial-list .t-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trial-list .t-st{flex:none;color:var(--muted)}
+
 /* ---------- من نحن ---------- */
 .about{
   max-width:1040px;
@@ -1300,6 +1332,7 @@ body{
 
     <nav class="links" aria-label="التنقل">
       <a href="#order">المتجر</a>
+      <a href="#trial">🎁 تجريبي</a>
       <a href="#features">المميزات</a>
       <a href="#faq">الأسئلة الشائعة</a>
       <a href="#about">من نحن</a>
@@ -1471,6 +1504,66 @@ body{
 
 </div>
 
+
+<section class="shell trial" id="trial">
+
+  <div class="sec-head reveal">
+    <h2>🎁 جرّب مجاناً <span class="trial-free">$0</span></h2>
+    <p id="trialSub">خدمات تجريبية مجانية بالكامل، بدون أي رصيد. سجّل دخولك وجرّب.</p>
+  </div>
+
+  <div class="steps trial-card">
+
+    <div class="step" id="trialForm">
+
+      <div class="field">
+        <label for="trialService">الخدمة التجريبية</label>
+        <select id="trialService" disabled>
+          <option>جاري تحميل الخدمات...</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="trialLink">الرابط</label>
+        <input
+          id="trialLink"
+          type="url"
+          dir="ltr"
+          inputmode="url"
+          autocapitalize="off"
+          autocomplete="off"
+          placeholder="https://">
+      </div>
+
+      <div class="field">
+        <label for="trialQty">الكمية</label>
+        <input
+          id="trialQty"
+          type="number"
+          min="1"
+          inputmode="numeric"
+          placeholder="الكمية">
+        <p class="trial-hint" id="trialRange"></p>
+      </div>
+
+      <button class="order" id="trialBtn" type="button" disabled>اطلب مجاناً</button>
+
+      <p class="login-hint" id="trialLoginHint" hidden>
+        🔒 لازم <button class="auth-link" id="trialLogin" type="button">تسجّل دخولك</button> حتى تجرّب
+      </p>
+
+      <div class="trial-msg" id="trialMsg" role="status" aria-live="polite"></div>
+
+    </div>
+
+    <div class="step" id="trialMine" hidden>
+      <h2>طلباتي التجريبية</h2>
+      <ul class="trial-list" id="trialList"></ul>
+    </div>
+
+  </div>
+
+</section>
 
 <section class="band" id="stats">
   <div class="band-in">
@@ -3995,6 +4088,239 @@ document.addEventListener("keydown",e=>{
   els.forEach(el => io.observe(el));
 
 })();
+
+
+/* =====================================================
+   قسم التجريبي المجاني
+   يستخدم دالة Supabase منفصلة اسمها free-trial
+   (تعرض وتنفذ فقط الخدمات اللي سعرها $0 عند المزود)
+   ===================================================== */
+
+const TRIAL_API =
+  "https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/free-trial";
+
+const TRIAL_ST = {
+  "pending":"قيد الانتظار",
+  "in progress":"قيد التنفيذ",
+  "processing":"قيد التنفيذ",
+  "completed":"مكتمل",
+  "partial":"جزئي",
+  "canceled":"ملغي",
+  "cancelled":"ملغي",
+  "refunded":"مسترجع",
+  "failed":"فشل"
+};
+
+let trialItems = [];
+
+const trialSel   = $("trialService");
+const trialLink  = $("trialLink");
+const trialQty   = $("trialQty");
+const trialBtn   = $("trialBtn");
+const trialMsg   = $("trialMsg");
+const trialRange = $("trialRange");
+
+async function trialCall(body){
+
+  const r = await fetch(TRIAL_API,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(body)
+  });
+
+  const d = await r.json().catch(()=>({}));
+
+  if(!r.ok) throw new Error(d.error || "حدث خطأ، حاول مرة ثانية");
+
+  return d;
+
+}
+
+function trialSay(text,kind){
+
+  trialMsg.textContent = text || "";
+  trialMsg.className = "trial-msg" + (kind ? " " + kind : "");
+
+}
+
+function trialPicked(){
+
+  return trialItems.find(x => String(x.id) === trialSel.value) || null;
+
+}
+
+function trialSyncRange(){
+
+  const s = trialPicked();
+
+  if(!s){
+    trialRange.textContent = "";
+    return;
+  }
+
+  trialQty.min = s.min;
+  trialQty.max = s.max;
+  trialQty.placeholder = String(s.min);
+
+  trialRange.textContent =
+    "الكمية من " + s.min.toLocaleString("en-US") +
+    " إلى " + s.max.toLocaleString("en-US");
+
+}
+
+async function loadTrial(){
+
+  try{
+
+    const d = await trialCall({action:"list"});
+
+    trialItems = d.items || [];
+
+    if(d.per_day){
+      $("trialSub").textContent =
+        "خدمات تجريبية مجانية بالكامل، بدون أي رصيد. " +
+        "سجّل دخولك وجرّب (لغاية " + d.per_day + " طلبات باليوم).";
+    }
+
+    trialSel.innerHTML = "";
+
+    if(!trialItems.length){
+      trialSel.innerHTML = "<option>ما في خدمات تجريبية حالياً</option>";
+      trialSel.disabled = true;
+      trialBtn.disabled = true;
+      return;
+    }
+
+    trialItems.forEach(s=>{
+      const o = document.createElement("option");
+      o.value = s.id;
+      o.textContent = s.name;
+      trialSel.appendChild(o);
+    });
+
+    trialSel.disabled = false;
+    trialBtn.disabled = false;
+
+    trialSyncRange();
+
+  }catch(e){
+
+    trialSel.innerHTML = "<option>تعذر تحميل الخدمات</option>";
+    trialSel.disabled = true;
+    trialBtn.disabled = true;
+
+  }
+
+}
+
+async function loadTrialMine(){
+
+  const box = $("trialMine");
+
+  if(!session){
+    box.hidden = true;
+    return;
+  }
+
+  try{
+
+    const d = await trialCall({action:"my",access_token:session.access_token});
+
+    const list = $("trialList");
+
+    list.innerHTML = "";
+
+    (d.items || []).forEach(o=>{
+      const li = document.createElement("li");
+      const st = TRIAL_ST[String(o.status).toLowerCase()] || o.status;
+      li.innerHTML =
+        '<span class="t-name">#' + esc(o.id) + " · " + esc(o.service_name) +
+        " · " + esc(o.quantity) + '</span><span class="t-st">' + esc(st) + "</span>";
+      list.appendChild(li);
+    });
+
+    box.hidden = !list.children.length;
+
+  }catch(e){
+    box.hidden = true;
+  }
+
+}
+
+function trialSessionChanged(){
+
+  $("trialLoginHint").hidden = !!session;
+
+  loadTrialMine();
+
+}
+
+async function submitTrial(){
+
+  if(!session){
+    openAuth("login");
+    return;
+  }
+
+  const s = trialPicked();
+  const link = trialLink.value.trim();
+  const qty = Math.floor(Number(trialQty.value));
+
+  if(!s) return trialSay("اختر خدمة","error");
+
+  if(!/^https?:\/\/\S+\.\S+/i.test(link)){
+    return trialSay("اكتب رابط صحيح يبدأ بـ https://","error");
+  }
+
+  if(!Number.isFinite(qty) || qty < s.min || qty > s.max){
+    return trialSay("الكمية لازم بين " + s.min + " و " + s.max,"error");
+  }
+
+  trialBtn.disabled = true;
+  trialSay("جاري إرسال الطلب...");
+
+  try{
+
+    const d = await trialCall({
+      action:"order",
+      service_id:s.id,
+      link:link,
+      quantity:qty,
+      access_token:session.access_token
+    });
+
+    trialSay("✅ تم إرسال طلبك التجريبي رقم #" + d.order_id,"ok");
+
+    trialLink.value = "";
+
+    loadTrialMine();
+
+  }catch(e){
+
+    trialSay(e.message,"error");
+
+  }
+
+  trialBtn.disabled = false;
+
+}
+
+trialSel.addEventListener("change",trialSyncRange);
+trialBtn.addEventListener("click",submitTrial);
+$("trialLogin").addEventListener("click",()=>openAuth("login"));
+
+/* نربط تحديث حالة الدخول: كل ما تتغير الجلسة نحدّث القسم */
+(function(){
+  const base = updateAcctBtn;
+  updateAcctBtn = function(){
+    base();
+    trialSessionChanged();
+  };
+})();
+
+trialSessionChanged();
+
+loadTrial();
 
 
 renderTabs();
