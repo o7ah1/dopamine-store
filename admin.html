@@ -324,6 +324,18 @@ td.lnk a{color:#7cb7ff}
   .card{padding:14px}
   .mrow .pct{width:100%}
 }
+
+.ovl{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px;z-index:60}
+.ovl.hidden{display:none}
+.ovl .box{width:100%;max-width:660px;max-height:90vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+.dl{display:grid;gap:8px;margin:12px 0}
+.dl div{display:flex;justify-content:space-between;gap:14px;font-size:14px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.dl span{color:var(--muted);flex:0 0 auto}
+.dl b{text-align:end;overflow-wrap:anywhere}
+.tlx{border-inline-start:2px solid var(--line);padding-inline-start:12px;display:grid;gap:10px;margin-top:8px}
+.tlx b{display:block;font-size:14px}
+.tlx b.adm{color:var(--amber)}
+.tlx small{display:block;color:var(--muted)}
 </style>
 </head>
 
@@ -367,6 +379,14 @@ td.lnk a{color:#7cb7ff}
       </div>
     </div>
 
+
+    <div class="markup" style="margin-bottom:14px">
+      <div class="mrow">
+        <div class="status" id="provBal" style="margin:0;font-weight:bold">💵 رصيدك عند دكتور دعم: —</div>
+        <div class="status" id="pendBox" style="margin:0"></div>
+        <button class="b-gray" onclick="loadHeader()">↻ تحديث</button>
+      </div>
+    </div>
 
     <!-- ============ قسم الخدمات ============ -->
     <div id="viewServices">
@@ -454,12 +474,8 @@ td.lnk a{color:#7cb7ff}
     <!-- ============ قسم الطلبات ============ -->
     <div id="viewOrders" class="hidden">
 
-      <div class="markup" style="margin-bottom:12px">
-        <div class="mrow">
-          <div class="status" id="provBal" style="margin:0">رصيدك عند المزود: —</div>
-          <button class="b-gray" onclick="loadProviderBalance()">💵 تحديث الرصيد</button>
-          <button class="b-blue" onclick="syncOrders()">🔄 تحديث حالات الطلبات من المزود</button>
-        </div>
+      <div style="margin-bottom:12px">
+        <button class="b-blue" onclick="syncOrders()">🔄 تحديث حالات الطلبات من المزود</button>
       </div>
 
       <div class="period-grid" id="periods"></div>
@@ -492,6 +508,7 @@ td.lnk a{color:#7cb7ff}
               <th>التكلفة</th>
               <th>الربح</th>
               <th>الحالة</th>
+              <th>إجراء</th>
             </tr>
           </thead>
           <tbody id="orderRows"></tbody>
@@ -647,6 +664,8 @@ td.lnk a{color:#7cb7ff}
 
 </div>
 
+<div class="ovl hidden" id="ordModal"><div class="box" id="ordBox"></div></div>
+
 <div id="toast"></div>
 
 
@@ -759,6 +778,7 @@ async function login(){
     renderQuick();
     loadAll();
     loadTopups();
+    loadHeader();
 
   }catch(error){
 
@@ -1528,27 +1548,56 @@ function initOrders(){
 
   refreshOrders();
 
-  loadProviderBalance();
-
 }
 
 
-async function loadProviderBalance(){
+async function loadHeader(){
 
-  const el = $("provBal");
+  const bal = $("provBal");
+  const pend = $("pendBox");
+
+  let balance = NaN;
 
   try{
 
-    el.textContent = "رصيدك عند المزود: جاري التحميل...";
+    bal.textContent = "💵 رصيدك عند دكتور دعم: جاري التحميل...";
 
     const r = await api("provider_balance");
 
-    el.textContent =
-      "رصيدك عند المزود: " + (r.balance ?? "—") + " " + (r.currency || "");
+    balance = Number(r.balance);
+
+    bal.textContent = "💵 رصيدك عند دكتور دعم: " + (r.balance ?? "—") + " " + (r.currency || "USD");
 
   }catch(error){
 
-    el.textContent = "رصيد المزود: " + error.message;
+    bal.textContent = "💵 رصيد دكتور دعم: " + error.message;
+
+  }
+
+  try{
+
+    const s = await api("admin_summary");
+
+    let t = "⏳ طلبات لم تصل للمزود: " + fmtInt(s.pending_orders) + " طلب";
+
+    if(s.pending_orders){
+
+      t += " (تكلفتها " + fmtMoney(s.pending_cost) + ")";
+
+      if(Number.isFinite(balance) && balance < s.pending_cost){
+        t += " ⚠️ رصيدك عند المزود ما يكفيها";
+      }
+
+    }
+
+    pend.textContent = t;
+
+    $("vbOrders").textContent =
+      "🧾 الطلبات والأرباح" + (s.pending_orders ? " (" + s.pending_orders + ")" : "");
+
+  }catch(error){
+
+    pend.textContent = "";
 
   }
 
@@ -1582,6 +1631,8 @@ async function syncOrders(){
 
 
 function refreshOrders(){
+
+  loadHeader();
 
   loadOrderStats();
 
@@ -1746,7 +1797,7 @@ function renderOrders(items){
   if(!items.length){
 
     body.innerHTML =
-      "<tr><td colspan='9' class='status'>لا توجد طلبات</td></tr>";
+      "<tr><td colspan='10' class='status'>لا توجد طلبات</td></tr>";
 
     return;
 
@@ -1763,6 +1814,14 @@ function renderOrders(items){
 
     const profit = Number(o.profit) || 0;
 
+    const waiting = o.status === "pending" && !o.provider_order_id;
+
+    const acts =
+      (waiting
+        ? `<button class="tog" data-oa="approve" data-id="${o.id}">📤 إرسال للمزود</button> <button class="b-red tog" data-oa="reject" data-id="${o.id}">✖ إلغاء وإرجاع المبلغ</button> `
+        : "") +
+      `<button class="b-gray tog" data-oa="details" data-id="${o.id}">🔍 تفاصيل</button>`;
+
     const opts = Object.entries(ST).map(([k,v]) =>
       `<option value="${k}" ${k === o.status ? "selected" : ""}>${v}</option>`
     ).join("");
@@ -1778,6 +1837,7 @@ function renderOrders(items){
       <td class="num">${fmtMoney(o.cost)}</td>
       <td class="num ${profit < 0 ? "r" : "g"}">${fmtMoney(profit)}</td>
       <td><select class="ost" data-id="${o.id}" data-old="${o.status}">${opts}</select></td>
+      <td>${acts}</td>
     </tr>`;
 
   }).join("");
@@ -1816,6 +1876,177 @@ $("orderRows").addEventListener("change",async e=>{
   }
 
 });
+
+
+$("orderRows").addEventListener("click",e=>{
+
+  const b = e.target.closest("button[data-oa]");
+
+  if(!b) return;
+
+  const id = Number(b.dataset.id);
+
+  if(b.dataset.oa === "approve") approveOrder(id);
+  if(b.dataset.oa === "reject") rejectOrder(id);
+  if(b.dataset.oa === "details") showOrder(id);
+
+});
+
+
+async function approveOrder(id){
+
+  if(!confirm(
+    "إرسال الطلب #" + id + " لدكتور دعم الآن؟\n" +
+    "إذا عليه تحذير ⚠️ تأكد من لوحة المزود أنه ما انسجل عنده حتى ما ينرسل مرتين."
+  )) return;
+
+  try{
+
+    toast("جاري الإرسال للمزود...");
+
+    const r = await api("approve_order",{id});
+
+    toast("تم الإرسال ✅ رقم الطلب عند المزود: " + r.provider_order_id);
+
+  }catch(error){
+
+    toast(error.message,true);
+
+  }
+
+  refreshOrders();
+
+  if(!$("ordModal").classList.contains("hidden")) showOrder(id);
+
+}
+
+
+async function rejectOrder(id){
+
+  if(!confirm("إلغاء الطلب #" + id + " وإرجاع مبلغه لمحفظة الزبون؟")) return;
+
+  try{
+
+    const r = await api("update_order",{id,status:"canceled"});
+
+    toast(
+      r.refunded
+        ? "تم الرفض ✅ ورجعنا " + fmtInt(r.refunded) + " د.ع للزبون"
+        : "تم الرفض"
+    );
+
+  }catch(error){
+
+    toast(error.message,true);
+
+  }
+
+  refreshOrders();
+
+  closeOrder();
+
+}
+
+
+function closeOrder(){
+
+  $("ordModal").classList.add("hidden");
+
+}
+
+$("ordModal").addEventListener("click",e=>{
+  if(e.target === e.currentTarget) closeOrder();
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key === "Escape") closeOrder();
+});
+
+
+/* تفاصيل الطلب كاملة: الزبون، المبالغ، حالة المزود الحية، وسجل شنو صار */
+async function showOrder(id){
+
+  const box = $("ordBox");
+
+  box.innerHTML = "<p class='status'>جاري التحميل...</p>";
+
+  $("ordModal").classList.remove("hidden");
+
+  try{
+
+    const d = await api("order_details",{id});
+
+    const o = d.order;
+    const c = d.customer || {};
+    const p = d.provider;
+
+    const line = (k,v) => `<div><span>${k}</span><b>${v}</b></div>`;
+
+    const link = /^https?:\/\//i.test(o.link || "")
+      ? `<a href="${escapeHtml(o.link)}" target="_blank" rel="noopener" dir="ltr">${escapeHtml(o.link)}</a>`
+      : escapeHtml(o.link || "");
+
+    let provLines = line("رقم الطلب عند المزود", o.provider_order_id ? escapeHtml(String(o.provider_order_id)) : "لم يُرسل بعد");
+
+    if(p && p.error){
+
+      provLines += line("حالة المزود", escapeHtml(String(p.error)));
+
+    }else if(p){
+
+      provLines +=
+        line("حالة المزود", escapeHtml(String(p.status ?? "—"))) +
+        line("العداد عند البدء", escapeHtml(String(p.start_count ?? "—"))) +
+        line("المتبقي", escapeHtml(String(p.remains ?? "—"))) +
+        line("المخصوم عند المزود", escapeHtml(String(p.charge ?? "—")) + " " + escapeHtml(String(p.currency || "")));
+
+    }
+
+    const tl = (d.events || []).map(e =>
+      `<div><b class="${e.visible ? "" : "adm"}">${escapeHtml(e.detail || "")}${e.visible ? "" : " (للإدارة فقط)"}</b><small>${escapeHtml(fmtDate(e.created_at))}</small></div>`
+    ).join("") || "<div class='status' style='margin:0'>ما في أحداث مسجّلة</div>";
+
+    const waiting = o.status === "pending" && !o.provider_order_id;
+
+    box.innerHTML = `
+      <h3 style="margin:0 0 4px">🧾 طلب #${o.id} — ${escapeHtml(ST[o.status] || o.status)}</h3>
+
+      <div class="dl">
+        ${line("الزبون", escapeHtml(c.full_name || "—") + " • " + escapeHtml(c.email || ""))}
+        ${line("الهاتف", escapeHtml(c.phone || "—"))}
+        ${line("الخدمة", escapeHtml(o.service_name || "") + " (ID " + (o.service_id ?? "—") + ")")}
+        ${line("الرابط", link)}
+        ${line("الكمية", fmtInt(o.quantity))}
+        ${line("المخصوم من الزبون", fmtInt(o.amount_iqd) + " د.ع")}
+        ${line("سعر البيع / التكلفة / الربح", fmtMoney(o.price) + " / " + fmtMoney(o.cost) + " / " + fmtMoney(o.profit))}
+        ${line("التاريخ", escapeHtml(fmtDate(o.created_at)))}
+        ${provLines}
+        ${o.note ? line("ملاحظة", escapeHtml(o.note)) : ""}
+      </div>
+
+      <h3 style="margin:14px 0 0">شنو صار</h3>
+      <div class="tlx">${tl}</div>
+
+      <div class="mrow" style="margin-top:16px">
+        ${waiting ? `<button data-oa2="approve">📤 إرسال للمزود</button><button class="b-red" data-oa2="reject">✖ إلغاء وإرجاع المبلغ</button>` : ""}
+        <button class="b-gray" data-oa2="close">إغلاق</button>
+      </div>`;
+
+    box.querySelectorAll("button[data-oa2]").forEach(b =>{
+      b.onclick = ()=>{
+        if(b.dataset.oa2 === "approve") approveOrder(id);
+        if(b.dataset.oa2 === "reject") rejectOrder(id);
+        if(b.dataset.oa2 === "close") closeOrder();
+      };
+    });
+
+  }catch(error){
+
+    box.innerHTML = `<p class="status">${escapeHtml(error.message)}</p><div class="mrow"><button class="b-gray" onclick="closeOrder()">إغلاق</button></div>`;
+
+  }
+
+}
 
 
 function orderPage(step){
