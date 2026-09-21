@@ -1268,6 +1268,15 @@ body{
 .wallet-card small{display:block;font-size:13px;opacity:.85}
 .wallet-card b{display:block;margin:2px 0 4px;font-size:30px;line-height:1.3;direction:ltr}
 .wallet-card .btn{width:100%;height:44px;margin-top:8px;background:var(--hit);color:var(--on-hit)}
+.modal-card{max-height:92vh;overflow:auto}
+.od{margin:12px 0;display:grid;gap:8px;text-align:start}
+.od div{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.od .k{color:var(--muted);flex:0 0 auto}
+.od .v{font-weight:600;text-align:end;overflow-wrap:anywhere}
+.tl-h{margin:16px 0 8px!important;font-size:16px!important;text-align:start}
+.tl{display:grid;gap:10px;text-align:start;border-inline-start:2px solid var(--line);padding-inline-start:12px}
+.tl-i b{display:block;font-size:14px;font-weight:600}
+.tl-i small{color:var(--muted);font-size:12px}
 .tp-chips{justify-content:center}
 .tp-chips .chip.on{background:var(--primary);border-color:var(--primary);color:#fff}
 .tp-err{min-height:20px;margin:0 0 4px;color:var(--danger);font-size:13.5px}
@@ -2731,12 +2740,16 @@ function showOrderDone(r){
   openModal(
     test +
     '<div class="big">✅</div>' +
-    "<h3>تم إرسال طلبك</h3>" +
+    "<h3>" + (r.review ? "تم استلام طلبك" : "تم إرسال طلبك") + "</h3>" +
     "<p>رقم طلبك: <b>#" + r.order_id + "</b></p>" +
     "<p>انخصم <b>" + fmtIqd(r.amount_iqd) + "</b> من رصيدك.</p>" +
+    (r.review ? "<p>راح نراجعه ونبدأ تنفيذه بأقرب وقت، وتتابعه من حسابي ← طلباتي.</p>" : "") +
     '<div class="amt">' + fmtIqd(r.balance) + "</div>" +
     "<p>رصيدك المتبقي</p>" +
-    '<div class="row"><button class="btn primary" type="button" onclick="closeModal()">تمام</button></div>'
+    '<div class="row">' +
+      '<button class="btn ghost" type="button" onclick="openOrder(' + Number(r.order_id) + ')">تفاصيل الطلب</button>' +
+      '<button class="btn primary" type="button" onclick="closeModal()">تمام</button>' +
+    "</div>"
   );
 
 }
@@ -3087,6 +3100,60 @@ const ORDER_ST = {
 const esc = v => String(v ?? "").replace(/[&<>"']/g,c => ({
   "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
 }[c]));
+
+/* تفاصيل طلب + شنو صار به (من سجل الأحداث) */
+async function openOrder(id){
+
+  closeAuth();
+
+  payBody.dataset.lock = "";
+
+  openModal("<p>جاري التحميل...</p>");
+
+  try{
+
+    const d = await callApi({action:"my_order",id:Number(id),access_token:session.access_token});
+
+    const o = d.order;
+
+    const fmtD = iso => new Date(iso).toLocaleString("en-GB",{dateStyle:"short",timeStyle:"short"});
+
+    const kv = (k,v) => '<div><span class="k">' + k + '</span><span class="v">' + v + "</span></div>";
+
+    const tl = (d.events || []).map(e =>
+      '<div class="tl-i"><b>' + esc(e.detail) + "</b><small>" + esc(fmtD(e.created_at)) + "</small></div>"
+    ).join("") || '<p class="lead-s" style="margin:6px 0">ما في تفاصيل بعد.</p>';
+
+    openModal(
+      "<h3>طلب #" + o.id + "</h3>" +
+      '<span class="modal-tag">' + esc(ORDER_ST[o.status] || o.status) + "</span>" +
+      '<div class="od">' +
+        kv("الخدمة",esc(o.service_name || "")) +
+        kv("الكمية",Number(o.quantity).toLocaleString("en-US")) +
+        kv("المبلغ",fmtIqd(o.amount_iqd)) +
+        kv("الرابط",'<span dir="ltr">' + esc(o.link || "") + "</span>") +
+        kv("التاريخ",esc(fmtD(o.created_at))) +
+      "</div>" +
+      '<h3 class="tl-h">شنو صار بطلبي</h3>' +
+      '<div class="tl">' + tl + "</div>" +
+      '<div class="row">' +
+        '<button class="btn ghost" type="button" id="odBack">رجوع</button>' +
+        '<button class="btn primary" type="button" onclick="closeModal()">إغلاق</button>' +
+      "</div>"
+    );
+
+    $("odBack").onclick = ()=>{ closeModal(); openAuth("account"); };
+
+  }catch(e){
+
+    openModal(
+      '<div class="big">⚠️</div><h3>ما گدرنا نعرض الطلب</h3><p>' + esc(e.message) + "</p>" +
+      '<div class="row"><button class="btn primary" type="button" onclick="closeModal()">إغلاق</button></div>'
+    );
+
+  }
+
+}
 
 const TX_T = {
   topup:"شحن رصيد",
@@ -3474,7 +3541,7 @@ async function renderAccount(){
 
   const list = orders.length
     ? orders.map(o =>
-        '<div class="ord"><div><b>' + esc(o.service_name || "") + "</b>" +
+        '<div class="ord" data-oid="' + o.id + '" style="cursor:pointer"><div><b>' + esc(o.service_name || "") + "</b>" +
         "<small>#" + o.id + " • " + Number(o.quantity).toLocaleString("en-US") + " • " +
         esc(new Date(o.created_at).toLocaleDateString("en-GB")) + "</small></div>" +
         '<div class="r"><b>$' + Number(o.price || 0).toFixed(2) + "</b>" +
@@ -3498,6 +3565,10 @@ async function renderAccount(){
     '<div class="ord-list">' + walletTxHtml(wal) + "</div>" +
     '<button class="btn ghost" style="width:100%;margin-top:16px" id="pOut" type="button">تسجيل الخروج</button>'
   );
+
+  authBody.querySelectorAll(".ord[data-oid]").forEach(el =>{
+    el.onclick = ()=>openOrder(el.dataset.oid);
+  });
 
   $("wTopup").onclick = ()=>{
 
