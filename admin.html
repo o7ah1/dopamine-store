@@ -454,6 +454,14 @@ td.lnk a{color:#7cb7ff}
     <!-- ============ قسم الطلبات ============ -->
     <div id="viewOrders" class="hidden">
 
+      <div class="markup" style="margin-bottom:12px">
+        <div class="mrow">
+          <div class="status" id="provBal" style="margin:0">رصيدك عند المزود: —</div>
+          <button class="b-gray" onclick="loadProviderBalance()">💵 تحديث الرصيد</button>
+          <button class="b-blue" onclick="syncOrders()">🔄 تحديث حالات الطلبات من المزود</button>
+        </div>
+      </div>
+
       <div class="period-grid" id="periods"></div>
 
       <div class="chips" id="stChips"></div>
@@ -504,6 +512,25 @@ td.lnk a{color:#7cb7ff}
     <!-- ============ قسم الحسابات ============ -->
     <div id="viewUsers" class="hidden">
 
+      <div class="markup" style="margin-bottom:12px">
+        <h3>💵 طلبات الشحن المعلّقة <button class="b-gray tog" onclick="loadTopups()">↻ تحديث</button></h3>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>التاريخ</th>
+                <th>الحساب</th>
+                <th>الهاتف</th>
+                <th>المبلغ = النقاط</th>
+                <th>إجراء</th>
+              </tr>
+            </thead>
+            <tbody id="topupRows"></tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="stats" id="uStats"></div>
 
       <div class="ofilters">
@@ -529,6 +556,7 @@ td.lnk a{color:#7cb7ff}
               <th>آخر دخول</th>
               <th>الطلبات</th>
               <th>إجمالي المشتريات</th>
+              <th>الرصيد (د.ع)</th>
               <th>إجراء</th>
             </tr>
           </thead>
@@ -730,6 +758,7 @@ async function login(){
     renderTabs();
     renderQuick();
     loadAll();
+    loadTopups();
 
   }catch(error){
 
@@ -781,8 +810,9 @@ function switchView(name){
     initOrders();
   }
 
-  if(name === "users" && !usersLoaded){
-    initUsers();
+  if(name === "users"){
+    if(!usersLoaded) initUsers();
+    else loadTopups();
   }
 
   if(name === "notifs" && !sentLoaded){
@@ -1498,6 +1528,56 @@ function initOrders(){
 
   refreshOrders();
 
+  loadProviderBalance();
+
+}
+
+
+async function loadProviderBalance(){
+
+  const el = $("provBal");
+
+  try{
+
+    el.textContent = "رصيدك عند المزود: جاري التحميل...";
+
+    const r = await api("provider_balance");
+
+    el.textContent =
+      "رصيدك عند المزود: " + (r.balance ?? "—") + " " + (r.currency || "");
+
+  }catch(error){
+
+    el.textContent = "رصيد المزود: " + error.message;
+
+  }
+
+}
+
+
+async function syncOrders(){
+
+  if(!confirm("نسأل المزود عن حالة الطلبات الجارية؟\nالملغي يرجع مبلغه للزبون تلقائياً، والجزئي يرجع المتبقي.")) return;
+
+  toast("جاري التحديث من المزود...");
+
+  try{
+
+    const r = await api("sync_orders");
+
+    toast(
+      "فحصنا " + fmtInt(r.checked) + " طلب، تحدّث " + fmtInt(r.updated) +
+      (r.refunded ? "، ورجعنا " + fmtInt(r.refunded) + " د.ع للزبائن" : "") + " ✅"
+    );
+
+    refreshOrders();
+
+  }catch(error){
+
+    toast(error.message,true);
+
+  }
+
 }
 
 
@@ -1691,7 +1771,7 @@ function renderOrders(items){
     <tr>
       <td class="num">${o.id}</td>
       <td class="num">${escapeHtml(fmtDate(o.created_at))}</td>
-      <td class="nm">${escapeHtml(o.service_name || "")}<small>ID: ${o.service_id ?? "—"}</small></td>
+      <td class="nm">${escapeHtml(o.service_name || "")}<small>ID: ${o.service_id ?? "—"}</small>${o.note ? `<small>${escapeHtml(o.note)}</small>` : ""}</td>
       <td class="lnk">${linkCell}</td>
       <td class="num">${fmtInt(o.quantity)}</td>
       <td class="num">${fmtMoney(o.price)}</td>
@@ -1713,11 +1793,17 @@ $("orderRows").addEventListener("change",async e=>{
 
   try{
 
-    await api("update_order",{id:Number(sel.dataset.id),status:sel.value});
+    const r = await api("update_order",{id:Number(sel.dataset.id),status:sel.value});
 
     sel.dataset.old = sel.value;
 
-    toast("تم تحديث حالة الطلب ✅");
+    toast(
+      r.refunded
+        ? "تم التحديث ✅ ورجعنا " + fmtInt(r.refunded) + " د.ع لمحفظة الزبون"
+        : "تم تحديث حالة الطلب ✅"
+    );
+
+    if(r.refunded) loadOrders();
 
     loadOrderStats();
 
@@ -1758,7 +1844,93 @@ function initUsers(){
 
   usersLoaded = true;
 
+  loadTopups();
+
   loadUsers();
+
+}
+
+
+/* ---------- طلبات الشحن ---------- */
+
+async function loadTopups(){
+
+  const body = $("topupRows");
+
+  try{
+
+    const r = await api("topups");
+
+    const items = r.items || [];
+
+    $("vbUsers").textContent = "👥 الحسابات" + (items.length ? " (" + items.length + ")" : "");
+
+    if(!items.length){
+
+      body.innerHTML =
+        "<tr><td colspan='6' class='status'>ما في طلبات شحن معلّقة</td></tr>";
+
+      return;
+
+    }
+
+    body.innerHTML = items.map(t => `
+    <tr>
+      <td class="num">${t.id}</td>
+      <td class="num">${escapeHtml(fmtDate(t.created_at))}</td>
+      <td class="nm">${escapeHtml(t.full_name || "—")}<small dir="ltr">${escapeHtml(t.user_email || "")}</small></td>
+      <td class="num">${escapeHtml(t.phone || "—")}</td>
+      <td class="num g">${fmtInt(t.amount)}</td>
+      <td>
+        <button class="tog" data-tp="1" data-id="${t.id}">✅ استلمت، اشحن</button>
+        <button class="b-red tog" data-tp="0" data-id="${t.id}">✖ رفض</button>
+      </td>
+    </tr>`).join("");
+
+  }catch(error){
+
+    body.innerHTML =
+      "<tr><td colspan='6' class='status'>" + escapeHtml(error.message) + " — نفّذ topup.sql وحدّث الدالة</td></tr>";
+
+  }
+
+}
+
+
+$("topupRows").addEventListener("click",e=>{
+
+  const b = e.target.closest("button[data-tp]");
+
+  if(b) decideTopup(Number(b.dataset.id),b.dataset.tp === "1");
+
+});
+
+
+async function decideTopup(id,approve){
+
+  if(!confirm(
+    approve
+      ? "تأكد أنك استلمت المبلغ. نضيف الرصيد للزبون الآن؟"
+      : "رفض طلب الشحن #" + id + "؟"
+  )) return;
+
+  try{
+
+    const r = await api("topup_decide",{id,approve});
+
+    toast(approve ? "تم الشحن ✅ الرصيد الجديد: " + fmtInt(r.balance) + " د.ع" : "تم الرفض");
+
+    loadTopups();
+
+    loadUsers();
+
+  }catch(error){
+
+    toast(error.message,true);
+
+    loadTopups();
+
+  }
 
 }
 
@@ -1837,6 +2009,7 @@ function renderUserStats(st,total){
   if(st.today !== undefined) html += card("سجّلوا اليوم",st.today,"g");
   if(st.week !== undefined) html += card("آخر 7 أيام",st.week);
   if(st.buyers !== undefined) html += card("اشتروا فعلاً",st.buyers,"g");
+  if(st.wallets_total !== undefined) html += card("إجمالي الأرصدة (د.ع)",st.wallets_total);
 
   $("uStats").innerHTML = html;
 
@@ -1850,7 +2023,7 @@ function renderUsers(items){
   if(!items.length){
 
     body.innerHTML =
-      "<tr><td colspan='12' class='status'>لا توجد حسابات</td></tr>";
+      "<tr><td colspan='13' class='status'>لا توجد حسابات</td></tr>";
 
     return;
 
@@ -1877,7 +2050,9 @@ function renderUsers(items){
       <td class="num">${u.last_sign_in_at ? escapeHtml(fmtDate(u.last_sign_in_at)) : "—"}</td>
       <td class="num">${fmtInt(u.orders_count)}</td>
       <td class="num ${spent > 0 ? "g" : ""}">${fmtMoney(spent)}</td>
-      <td><button class="b-amber tog" data-act="pass" data-id="${escapeHtml(u.id)}" data-email="${escapeHtml(u.email || "")}">🔑 كلمة مرور</button></td>
+      <td class="num ${Number(u.balance) > 0 ? "g" : ""}">${fmtInt(u.balance)}</td>
+      <td><button class="b-blue tog" data-act="wallet" data-id="${escapeHtml(u.id)}" data-email="${escapeHtml(u.email || "")}">💰 رصيد</button>
+        <button class="b-amber tog" data-act="pass" data-id="${escapeHtml(u.id)}" data-email="${escapeHtml(u.email || "")}">🔑 كلمة مرور</button></td>
     </tr>`;
 
   }).join("");
@@ -1912,7 +2087,56 @@ $("userRows").addEventListener("click",e=>{
 
   if(b.dataset.act === "pass") setUserPass(b.dataset.id,b.dataset.email);
 
+  if(b.dataset.act === "wallet") adjustWallet(b.dataset.id,b.dataset.email);
+
 });
+
+
+/* شحن أو خصم رصيد زبون (موجب = شحن، سالب = خصم). يقبل الأرقام العربية ١٢٣ */
+async function adjustWallet(id,email){
+
+  const raw = prompt(
+    "شحن / خصم رصيد للحساب:\n" + email +
+    "\n\nاكتب المبلغ بالدينار.\nموجب = شحن (مثال: 10000)\nسالب = خصم (مثال: -5000)"
+  );
+
+  if(raw === null) return;
+
+  const amount = Math.trunc(Number(
+    String(raw)
+      .replace(/[٠-٩]/g,d => d.charCodeAt(0) - 1632)
+      .replace(/[,\s٬]/g,"")
+  ));
+
+  if(!Number.isFinite(amount) || amount === 0){
+    toast("اكتب مبلغاً صحيحاً",true);
+    return;
+  }
+
+  const note = prompt("ملاحظة (اختياري)، مثلاً: كاش استلمته","");
+
+  if(note === null) return;
+
+  if(!confirm(
+    (amount > 0 ? "شحن " : "خصم ") + fmtInt(Math.abs(amount)) + " د.ع " +
+    (amount > 0 ? "إلى " : "من ") + email + "؟"
+  )) return;
+
+  try{
+
+    const r = await api("wallet_adjust",{id,amount,note:note.trim()});
+
+    toast("تم ✅ الرصيد الجديد: " + fmtInt(r.balance) + " د.ع");
+
+    loadUsers();
+
+  }catch(error){
+
+    toast(error.message,true);
+
+  }
+
+}
 
 
 function randomPassword(){
@@ -1948,7 +2172,7 @@ async function setUserPass(id,email){
 
   try{
 
-    await api("set_user_password",{id,password:pw});
+    await api("set_user_password",{id,new_password:pw});
 
     toast("تم تغيير كلمة المرور ✅");
 
