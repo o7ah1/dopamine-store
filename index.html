@@ -1,868 +1,3938 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F7F8FC">
+<meta name="description" content="Dopamine Store: خدمات تعزيز الحضور الرقمي على انستقرام وتيك توك ويوتيوب وفيسبوك وتويتر وتيليجرام وسناب بأسعار مناسبة وتنفيذ سريع.">
+<title>Dopamine Store | خدمات السوشيال ميديا</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚀%3C/text%3E%3C/svg%3E">
 
-const cors = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300..700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#F7F8FC;
+  --surface:#FFFFFF;
+  --field:#F3F4FA;
+  --ink:#141A33;
+  --muted:#667091;
+  --line:#E5E8F3;
+  --primary:#5A3CF0;
+  --summary:linear-gradient(150deg,#5A3CF0 0%,#7A5CFF 100%);
+  --hit:#FFD23F;
+  --on-hit:#141A33;
+  --danger:#D92D4A;
+  --shadow:0 1px 0 rgba(20,26,51,.03),0 24px 48px -32px rgba(90,60,240,.30);
+}
+
+*{box-sizing:border-box}
+
+html{-webkit-text-size-adjust:100%}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Readex Pro",Tahoma,Arial,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  padding:0;
+}
+
+.shell{
+  max-width:1040px;
+  margin:0 auto;
+}
+
+/* ---------- الرأس ---------- */
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  padding:8px 4px 24px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:26px;
+  font-weight:700;
+  letter-spacing:-.01em;
+  direction:ltr;
+}
+
+.brand .mark{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:var(--hit);
+  color:var(--on-hit);
+  display:grid;
+  place-items:center;
+}
+
+.brand .mark svg{width:24px;height:24px}
+
+.brand small{
+  font-weight:300;
+  font-size:26px;
+  color:var(--muted);
+  margin-left:-6px;
+}
+
+.top p{
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+}
+
+/* ---------- التخطيط ---------- */
+.layout{
+  display:grid;
+  gap:20px;
+  align-items:start;
+}
+
+@media(min-width:900px){
+  .layout{
+    grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);
+    gap:28px;
+  }
+  .summary{
+    position:sticky;
+    top:20px;
+  }
+}
+
+.steps{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:8px 24px;
+  box-shadow:var(--shadow);
+}
+
+.step{
+  padding:22px 0;
+}
+
+.step + .step{
+  border-top:1px solid var(--line);
+}
+
+.step h2{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 14px;
+  font-size:17px;
+  font-weight:600;
+}
+
+.step h2 b{
+  width:26px;
+  height:26px;
+  border-radius:9px;
+  background:var(--ink);
+  color:var(--surface);
+  display:grid;
+  place-items:center;
+  font-size:13px;
+  font-weight:600;
+}
+
+/* ---------- المنصات ---------- */
+.platforms{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(84px,1fr));
+  gap:10px;
+  padding:2px;
+}
+
+.plat{
+  min-width:0;
+  padding:12px 4px 10px;
+  border:1.5px solid var(--line);
+  border-radius:20px;
+  background:var(--field);
+  color:var(--ink);
+  font:inherit;
+  font-size:12.5px;
+  font-weight:500;
+  line-height:1.3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  transition:border-color .15s,background-color .15s,transform .12s;
+}
+
+.plat:active{transform:scale(.96)}
+
+.plat:hover{border-color:var(--primary)}
+
+.plat[aria-pressed="true"]{
+  border-color:var(--primary);
+  background:var(--surface);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 22%,transparent);
+  font-weight:600;
+}
+
+.plat .ico{
+  width:56px;
+  height:56px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  font-size:26px;
+  line-height:1;
+  color:#fff;
+}
+
+.plat .ico img{
+  width:32px;
+  height:32px;
+  display:block;
+}
+
+/* ---------- الحقول ---------- */
+.field{margin-top:12px}
+.field:first-of-type{margin-top:0}
+
+.field label{
+  display:block;
+  margin-bottom:7px;
+  font-size:14px;
+  font-weight:500;
+  color:var(--muted);
+}
+
+input,select{
+  width:100%;
+  height:52px;
+  padding:0 16px;
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  background:var(--field);
+  color:var(--ink);
+  font:inherit;
+  font-size:16px;
+  transition:border-color .15s,box-shadow .15s;
+}
+
+input::placeholder{color:var(--muted);opacity:.7}
+
+input:focus-visible,
+select:focus-visible{
+  outline:0;
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 22%,transparent);
+}
+
+input[aria-invalid="true"],
+select[aria-invalid="true"]{
+  border-color:var(--danger);
+}
+
+/* قائمة الخدمات (بدل select الأصلي عشان الأسماء الطويلة ما تطلع برا الصفحة) */
+.combo{position:relative}
+
+.combo-btn{
+  width:100%;
+  min-height:52px;
+  padding:9px 16px 9px 44px;
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  background:var(--field);
+  color:var(--ink);
+  font:inherit;
+  font-size:15.5px;
+  text-align:start;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  transition:border-color .15s,box-shadow .15s;
+}
+
+.combo-btn:focus-visible,
+.combo-btn[aria-expanded="true"]{
+  outline:0;
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 22%,transparent);
+}
+
+.combo-btn[aria-invalid="true"]{border-color:var(--danger)}
+
+.combo-text{
+  flex:1;
+  min-width:0;
+  line-height:1.45;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow-wrap:anywhere;
+}
+
+.combo > svg{
+  position:absolute;
+  left:16px;
+  top:26px;
+  width:18px;
+  height:18px;
+  margin-top:-9px;
+  color:var(--muted);
+  pointer-events:none;
+}
+
+.p{
+  flex:0 0 auto;
+  min-width:62px;
+  padding:2px 9px;
+  border-radius:999px;
+  background:color-mix(in srgb,var(--hit) 55%,transparent);
+  color:var(--ink);
+  font-size:13px;
+  font-weight:600;
+  text-align:center;
+  direction:ltr;
+  font-variant-numeric:tabular-nums;
+}
+
+.combo-panel{
+  position:absolute;
+  z-index:30;
+  inset-inline:0;
+  top:calc(100% + 8px);
+  max-height:min(380px,55vh);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:6px;
+  background:var(--surface);
+  border:1.5px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 24px 48px -16px rgba(23,18,59,.4);
+}
+
+.combo-panel[hidden]{display:none}
+
+.opt{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:15px;
+  line-height:1.5;
+  cursor:pointer;
+}
+
+.opt .n{
+  flex:1;
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+
+.opt.active{
+  background:color-mix(in srgb,var(--primary) 12%,transparent);
+}
+
+.opt[aria-selected="true"]{
+  background:color-mix(in srgb,var(--primary) 20%,transparent);
+  font-weight:500;
+}
+
+.grp{
+  position:sticky;
+  top:-6px;
+  z-index:1;
+  padding:10px 12px 6px;
+  background:var(--surface);
+  color:var(--muted);
+  font-size:12.5px;
+  font-weight:600;
+}
+
+.note{
+  margin-top:8px;
+  min-height:22px;
+  font-size:13.5px;
+  color:var(--muted);
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+
+.chip{
+  padding:8px 14px;
+  border:1.5px solid var(--line);
+  border-radius:999px;
+  background:transparent;
+  color:var(--ink);
+  font:inherit;
+  font-size:14px;
+  cursor:pointer;
+  transition:border-color .15s,background-color .15s;
+}
+
+.chip:hover{border-color:var(--primary)}
+
+/* ---------- نوع الخدمة ---------- */
+.types{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:0 0 4px;
+}
+
+.types .chip{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 13px;
+  background:var(--field);
+  font-size:14px;
+}
+
+.types .chip .c{
+  padding:0 7px;
+  border-radius:999px;
+  background:color-mix(in srgb,var(--ink) 9%,transparent);
+  color:var(--muted);
+  font-size:12px;
+  font-weight:600;
+  direction:ltr;
+  font-variant-numeric:tabular-nums;
+}
+
+.types .chip[aria-pressed="true"]{
+  border-color:var(--primary);
+  background:color-mix(in srgb,var(--primary) 14%,transparent);
+  font-weight:600;
+}
+
+.types .chip[aria-pressed="true"] .c{
+  background:var(--primary);
+  color:#fff;
+}
+
+.chip:focus-visible,
+.plat:focus-visible,
+.order:focus-visible{
+  outline:3px solid var(--primary);
+  outline-offset:2px;
+}
+
+/* ---------- ملخص الطلب ---------- */
+.summary{
+  background:var(--summary);
+  color:#fff;
+  border-radius:28px;
+  padding:26px 24px 24px;
+}
+
+.summary .label{
+  font-size:14px;
+  opacity:.8;
+}
+
+.price{
+  display:flex;
+  align-items:baseline;
+  gap:6px;
+  margin:4px 0 12px;
+  direction:ltr;
+  justify-content:flex-end;
+  font-variant-numeric:tabular-nums;
+}
+
+.price .cur{
+  font-size:28px;
+  font-weight:500;
+  opacity:.8;
+}
+
+.price #price{
+  font-size:clamp(44px,9vw,60px);
+  font-weight:700;
+  letter-spacing:-.02em;
+  line-height:1.05;
+  overflow-wrap:anywhere;
+}
+
+.rate{
+  display:inline-block;
+  padding:5px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.16);
+  font-size:13.5px;
+}
+
+.facts{
+  margin:20px 0 0;
+  padding:16px 0 0;
+  border-top:1px solid rgba(255,255,255,.22);
+  display:grid;
+  gap:10px;
+}
+
+.facts div{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  font-size:14px;
+}
+
+.facts dt{opacity:.75;flex:0 0 auto}
+
+.facts dd{
+  margin:0;
+  text-align:left;
+  font-weight:500;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+}
+
+.order{
+  width:100%;
+  height:56px;
+  margin-top:22px;
+  border:0;
+  border-radius:16px;
+  background:var(--hit);
+  color:var(--on-hit);
+  font:inherit;
+  font-size:17px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .12s;
+}
+
+.order:active{transform:scale(.985)}
+
+.order:focus-visible{outline-color:#fff}
+
+.msg{
+  min-height:24px;
+  margin-top:12px;
+  font-size:14px;
+  text-align:center;
+}
+
+.msg.error{color:#FFD1D8}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important}
+}
+
+/* ---------- من نحن ---------- */
+.about{
+  max-width:1040px;
+  margin:20px auto 0;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:26px 24px;
+  box-shadow:var(--shadow);
+}
+
+.about h2{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 12px;
+  font-size:19px;
+  font-weight:700;
+}
+
+.about h2 span{
+  width:30px;
+  height:30px;
+  border-radius:10px;
+  background:var(--hit);
+  color:var(--on-hit);
+  display:grid;
+  place-items:center;
+  font-size:15px;
+}
+
+.about p{
+  margin:0 0 12px;
+  color:var(--muted);
+  font-size:15px;
+}
+
+.about p b{color:var(--ink);font-weight:600}
+
+.contacts{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:16px;
+}
+
+.contact{
+  flex:1 1 220px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 16px;
+  border:1.5px solid var(--line);
+  border-radius:16px;
+  background:var(--field);
+  color:var(--ink);
+  text-decoration:none;
+  font-size:15px;
+  font-weight:500;
+  transition:border-color .15s,transform .12s;
+}
+
+.contact:hover{border-color:var(--primary)}
+
+.contact:active{transform:scale(.99)}
+
+.contact:focus-visible{
+  outline:3px solid var(--primary);
+  outline-offset:2px;
+}
+
+.contact .ci{
+  flex:0 0 auto;
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+}
+
+.contact .ci svg{width:21px;height:21px}
+
+.contact .wa{background:#25D366}
+
+.contact .em{background:var(--primary)}
+
+.contact small{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:400;
+  direction:ltr;
+  text-align:start;
+  overflow-wrap:anywhere;
+}
+
+.foot{
+  max-width:1040px;
+  margin:18px auto 0;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* =====================================================
+   تصميم عصري: فاتح نظيف
+   ===================================================== */
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+
+body{
+  background:
+    radial-gradient(900px 420px at 88% -120px,#E6E0FF 0,transparent 70%),
+    radial-gradient(760px 380px at -5% 40px,#DDF0FF 0,transparent 70%),
+    var(--paper);
+  background-repeat:no-repeat;
+}
+
+.shell{padding:0 16px}
+
+/* الشريط العلوي */
+.nav{
+  position:sticky;
+  top:0;
+  z-index:40;
+  background:rgba(255,255,255,.82);
+  -webkit-backdrop-filter:saturate(1.4) blur(12px);
+  backdrop-filter:saturate(1.4) blur(12px);
+  border-bottom:1px solid var(--line);
+}
+
+.nav-in{
+  max-width:1040px;
+  margin:0 auto;
+  padding:11px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.nav .brand{font-size:21px}
+.nav .brand small{font-size:21px}
+.nav .brand .mark{width:36px;height:36px;border-radius:12px}
+.nav .brand .mark svg{width:20px;height:20px}
+
+.links{display:none;gap:4px}
+
+.links a{
+  padding:8px 13px;
+  border-radius:10px;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14.5px;
+  font-weight:500;
+  transition:background-color .15s,color .15s;
+}
+
+.links a:hover{background:var(--field);color:var(--ink)}
+
+@media(min-width:760px){.links{display:flex}}
+
+/* الأزرار */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  height:50px;
+  padding:0 24px;
+  border:1.5px solid transparent;
+  border-radius:15px;
+  font:inherit;
+  font-size:15.5px;
+  font-weight:600;
+  text-decoration:none;
+  cursor:pointer;
+  transition:transform .12s,box-shadow .15s,background-color .15s,border-color .15s;
+}
+
+.btn:active{transform:scale(.98)}
+.btn:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+
+.btn.primary{
+  background:var(--primary);
+  color:#fff;
+  box-shadow:0 12px 26px -12px rgba(90,60,240,.75);
+}
+
+.btn.primary:hover{background:#4B2FE0}
+
+.btn.ghost{
+  background:var(--surface);
+  color:var(--ink);
+  border-color:var(--line);
+}
+
+.btn.ghost:hover{border-color:var(--primary)}
+
+.btn.sm{height:40px;padding:0 16px;font-size:14px;border-radius:12px}
+
+.btn.wa{background:#25D366;color:#fff}
+.btn.wa:hover{background:#1FB955}
+
+/* الواجهة الرئيسية */
+.hero{padding:54px 16px 30px;text-align:center}
+
+.hero-in{max-width:760px;margin:0 auto}
+
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 15px;
+  border-radius:999px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  color:var(--primary);
+  font-size:13.5px;
+  font-weight:600;
+  box-shadow:0 8px 20px -14px rgba(90,60,240,.5);
+}
+
+.hero h1{
+  margin:18px 0 14px;
+  font-size:clamp(32px,6.4vw,56px);
+  line-height:1.25;
+  font-weight:700;
+  letter-spacing:-.02em;
+}
+
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(90deg,#5A3CF0,#B04CF6 60%,#F0568A);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.lead{
+  margin:0 auto 26px;
+  max-width:560px;
+  color:var(--muted);
+  font-size:clamp(15px,2.4vw,18px);
+}
+
+.hero-cta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+}
+
+.trust{
+  list-style:none;
+  margin:24px 0 0;
+  padding:0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 22px;
+  justify-content:center;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.logos{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+  margin-top:34px;
+}
+
+.logos span{
+  width:52px;
+  height:52px;
+  border-radius:16px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  display:grid;
+  place-items:center;
+  box-shadow:0 14px 26px -18px rgba(20,26,51,.4);
+  animation:float 5s ease-in-out infinite;
+}
+
+.logos span:nth-child(even){animation-delay:-2.5s}
+.logos span:nth-child(3n){animation-delay:-1.2s}
+
+.logos img{width:26px;height:26px;display:block}
+
+@keyframes float{50%{transform:translateY(-6px)}}
+
+/* عناوين الأقسام */
+.sec-head{text-align:center;margin:8px 0 24px}
+
+.sec-head h2{
+  margin:0 0 6px;
+  font-size:clamp(24px,4.4vw,32px);
+  font-weight:700;
+  letter-spacing:-.01em;
+}
+
+.sec-head p{margin:0;color:var(--muted);font-size:15.5px}
+
+.band{padding:52px 16px 4px}
+.band-in{max-width:1040px;margin:0 auto}
+
+/* الأرقام */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px;
+}
+
+.stat{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:22px 14px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+
+.stat b{
+  display:block;
+  font-size:clamp(28px,5vw,38px);
+  font-weight:700;
+  line-height:1.1;
+  color:var(--primary);
+  direction:ltr;
+}
+
+.stat span{display:block;margin-top:6px;color:var(--muted);font-size:14px}
+
+/* المميزات */
+.feat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:14px;
+}
+
+.feat{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:22px;
+  transition:transform .18s,box-shadow .18s,border-color .18s;
+}
+
+.feat:hover{
+  transform:translateY(-3px);
+  border-color:color-mix(in srgb,var(--primary) 40%,var(--line));
+  box-shadow:0 22px 40px -26px rgba(90,60,240,.55);
+}
+
+.feat .fi{
+  width:50px;
+  height:50px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  font-size:24px;
+  margin-bottom:14px;
+}
+
+.feat h3{margin:0 0 6px;font-size:17px}
+.feat p{margin:0;color:var(--muted);font-size:14.5px}
+
+/* الأسئلة الشائعة */
+.faq{max-width:760px;margin:0 auto;display:grid;gap:10px}
+
+.faq details{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:0 18px;
+  transition:border-color .15s;
+}
+
+.faq details[open]{
+  border-color:color-mix(in srgb,var(--primary) 45%,var(--line));
+}
+
+.faq summary{
+  list-style:none;
+  cursor:pointer;
+  padding:16px 0;
+  font-weight:600;
+  font-size:15.5px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.faq summary::-webkit-details-marker{display:none}
+
+.faq summary::after{
+  content:"+";
+  flex:0 0 auto;
+  width:28px;
+  height:28px;
+  border-radius:9px;
+  background:var(--field);
+  display:grid;
+  place-items:center;
+  font-size:19px;
+  color:var(--primary);
+  transition:transform .2s;
+}
+
+.faq details[open] summary::after{transform:rotate(45deg)}
+
+.faq summary:focus-visible{outline:3px solid var(--primary);outline-offset:2px;border-radius:10px}
+
+.faq details p{margin:0 0 16px;color:var(--muted);font-size:14.5px}
+
+/* من نحن + الفوتر */
+.about{margin-top:52px}
+.foot{padding-bottom:40px}
+
+@media(min-width:900px){
+  .summary{top:84px}
+}
+
+/* ظهور تدريجي عند التمرير */
+.js .reveal{
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity .5s ease,transform .5s ease;
+}
+
+.js .reveal.in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .js .reveal{opacity:1;transform:none;transition:none}
+  .logos span{animation:none}
+}
+
+/* ---------- نافذة الدفع ---------- */
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:grid;
+  place-items:center;
+  padding:16px;
+  background:rgba(20,26,51,.55);
+  -webkit-backdrop-filter:blur(4px);
+  backdrop-filter:blur(4px);
+}
+
+.modal[hidden]{display:none}
+
+.modal-card{
+  width:100%;
+  max-width:420px;
+  background:var(--surface);
+  border-radius:26px;
+  padding:26px 22px 22px;
+  text-align:center;
+  box-shadow:0 40px 80px -30px rgba(20,26,51,.6);
+}
+
+.modal-card .big{font-size:46px;line-height:1;margin-bottom:10px}
+.modal-card h3{margin:0 0 8px;font-size:20px}
+.modal-card p{margin:0 0 6px;color:var(--muted);font-size:14.5px}
+.modal-card .amt{margin:14px 0;font-size:28px;font-weight:700;color:var(--primary);direction:ltr}
+.modal-card .row{display:flex;gap:10px;margin-top:16px}
+.modal-card .row .btn{flex:1;height:46px;padding:0 10px}
+.modal-card .btn.danger{background:#FDECEF;color:var(--danger);border-color:transparent}
+.modal-card .btn.ok{background:#22C55E;color:#fff}
+.modal-tag{
+  display:inline-block;
+  margin-bottom:12px;
+  padding:3px 12px;
+  border-radius:999px;
+  background:#FFF3C4;
+  color:#7A5B00;
+  font-size:12.5px;
+  font-weight:600;
+}
+
+/* ---------- حساب الزبون ---------- */
+.nav-actions{display:flex;align-items:center;gap:8px}
+
+@media(max-width:520px){
+  .nav .btn.wa{display:none}
+}
+
+.auth-card{
+  text-align:start;
+  max-width:440px;
+  max-height:92vh;
+  overflow-y:auto;
+  position:relative;
+}
+
+.auth-card h3{text-align:center;margin-bottom:6px}
+.auth-card .lead-s{text-align:center;margin:0 0 16px;color:var(--muted);font-size:14px}
+
+.auth-x{
+  position:absolute;
+  top:12px;
+  inset-inline-end:14px;
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:10px;
+  background:var(--field);
+  color:var(--muted);
+  font-size:16px;
+  cursor:pointer;
+}
+
+.auth-lbl{display:block;margin:0 0 5px;font-size:13.5px;font-weight:500;color:var(--muted)}
+
+.auth-in{
+  width:100%;
+  height:48px;
+  padding:0 14px;
+  margin:0 0 10px;
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  background:var(--field);
+  color:var(--ink);
+  font:inherit;
+  font-size:15px;
+}
+
+.auth-in:focus{
+  outline:0;
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 20%,transparent);
+}
+
+.auth-in[dir="ltr"]{text-align:left}
+
+.auth-err{min-height:20px;margin:0 0 8px;color:var(--danger);font-size:13.5px}
+.auth-err.auth-ok{color:#15803D}
+
+.auth-or{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:14px 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.auth-or::before,.auth-or::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.gbtn{width:100%;background:#fff;color:var(--ink);border-color:var(--line)}
+.gbtn:hover{border-color:var(--primary)}
+.gbtn img{width:20px;height:20px}
+
+.auth-link{
+  background:none;
+  border:0;
+  padding:0;
+  color:var(--primary);
+  font:inherit;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.auth-foot{margin-top:14px;text-align:center;font-size:14px;color:var(--muted);line-height:2}
+
+.auth-remember{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:2px 0 12px;
+  font-size:14px;
+  color:var(--muted);
+  cursor:pointer;
+  user-select:none;
+}
+
+.auth-remember input{
+  width:18px;
+  height:18px;
+  min-width:18px;
+  margin:0;
+  padding:0;
+  border:0;
+  background:none;
+  box-shadow:none;
+  accent-color:var(--primary);
+  cursor:pointer;
+}
+
+.login-hint{
+  margin:10px 0 0;
+  text-align:center;
+  font-size:13.5px;
+  color:var(--muted);
+}
+
+/* ---------- التبليغات ---------- */
+.bell{position:relative;padding:0 12px}
+.bell[hidden]{display:none}
+
+.bell-badge{
+  position:absolute;
+  top:-6px;
+  inset-inline-start:-6px;
+  min-width:20px;
+  height:20px;
+  padding:0 5px;
+  border-radius:999px;
+  background:var(--danger);
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  line-height:1;
+  display:grid;
+  place-items:center;
+}
+
+.bell-badge[hidden]{display:none}
+
+.notif-card{
+  text-align:start;
+  max-width:460px;
+  max-height:88vh;
+  overflow-y:auto;
+  position:relative;
+}
+
+.notif-card h3{text-align:center;margin-bottom:14px}
+.notif-card .lead-s{text-align:center;margin:8px 0}
+
+.notif-list{display:grid;gap:8px}
+
+.notif-card .notif{
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--field);
+}
+
+.notif-card .notif.new{
+  border-color:var(--primary);
+  background:color-mix(in srgb,var(--primary) 8%,var(--surface));
+}
+
+.notif-card .notif b{display:block;margin-bottom:4px;font-size:15px}
+
+.notif-card .notif p{
+  margin:0 0 6px;
+  color:var(--ink);
+  font-size:14px;
+  line-height:1.8;
+  white-space:pre-wrap;
+}
+
+.notif-card .notif a{
+  display:inline-block;
+  margin:0 0 6px;
+  color:var(--primary);
+  font-size:13.5px;
+  font-weight:600;
+}
+
+.notif-card .notif small{display:block;color:var(--muted);font-size:12.5px}
+
+.notif-toast{
+  position:fixed;
+  top:14px;
+  left:14px;
+  right:14px;
+  margin-inline:auto;
+  max-width:420px;
+  z-index:120;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 16px;
+  border-radius:16px;
+  background:var(--ink);
+  color:#fff;
+  box-shadow:0 20px 40px -18px rgba(20,26,51,.7);
+  cursor:pointer;
+  text-align:start;
+}
+
+.notif-toast[hidden]{display:none}
+.notif-toast b{display:block;font-size:14.5px}
+.notif-toast small{display:block;margin-top:2px;color:#C9CEE4;font-size:13px}
+
+.ord-list{display:grid;gap:8px;margin-top:8px}
+
+.ord{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--field);
+  font-size:13.5px;
+}
+
+.ord b{display:block;font-size:14px}
+.ord small{color:var(--muted)}
+.ord .r{flex:0 0 auto;text-align:end}
+.ord .st{display:inline-block;margin-top:2px;padding:1px 10px;border-radius:999px;background:#EEEDF7;font-size:12px}
+
+/* ---------- المحفظة ---------- */
+.wbtn{font-weight:700;color:var(--primary)}
+.wbtn[hidden]{display:none}
+.wallet-line{margin:12px 0 0;font-size:13.5px;text-align:center;color:rgba(255,255,255,.92)}
+.wallet-line[hidden]{display:none}
+.wallet-card{
+  margin:14px 0 6px;
+  padding:16px;
+  border-radius:18px;
+  background:var(--summary);
+  color:#fff;
+  text-align:center;
+}
+.wallet-card small{display:block;font-size:13px;opacity:.85}
+.wallet-card b{display:block;margin:2px 0 4px;font-size:30px;line-height:1.3;direction:ltr}
+.wallet-card .btn{width:100%;height:44px;margin-top:8px;background:var(--hit);color:var(--on-hit)}
+.tp-chips{justify-content:center}
+.tp-chips .chip.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.tp-err{min-height:20px;margin:0 0 4px;color:var(--danger);font-size:13.5px}
+.ord .r b.pos{color:#16A34A}
+.ord .r b.neg{color:var(--danger)}
+</style>
+</head>
+
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top" style="text-decoration:none;color:inherit">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 1.5l2.6 7.4 7.4 2.6-7.4 2.6L12 21.5l-2.6-7.4L2 11.5l7.4-2.6z"/>
+        </svg>
+      </span>
+      Dopamine<small>Store</small>
+    </a>
+
+    <nav class="links" aria-label="التنقل">
+      <a href="#order">المتجر</a>
+      <a href="#features">المميزات</a>
+      <a href="#faq">الأسئلة الشائعة</a>
+      <a href="#about">من نحن</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="btn sm ghost wbtn" id="walletBtn" type="button" aria-label="طلب رصيد" title="طلب شحن رصيد" hidden>💰 <span id="walletBal">0</span></button>
+      <button class="btn sm ghost bell" id="bellBtn" type="button" aria-label="التبليغات" hidden>🔔<span class="bell-badge" id="bellBadge" hidden>0</span></button>
+      <button class="btn sm ghost" id="acctBtn" type="button">👤 دخول</button>
+      <a class="btn sm wa" data-wa href="#" target="_blank" rel="noopener">💬 تواصل معنا</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-in">
+    <span class="tag">🚀 خدمات السوشيال ميديا</span>
+
+    <h1>زيّد <em>حضورك الرقمي</em> بضغطة زر</h1>
+
+    <p class="lead">متابعين، لايكات، مشاهدات وتعليقات لكل منصاتك، بأسعار مناسبة وتنفيذ سريع ودعم على مدار الساعة.</p>
+
+    <div class="hero-cta">
+      <a class="btn primary" href="#order">ابدأ طلبك الآن ←</a>
+      <a class="btn ghost" data-wa href="#" target="_blank" rel="noopener">راسلنا على واتساب</a>
+    </div>
+
+    <ul class="trust">
+      <li>⚡ تنفيذ سريع</li>
+      <li>🔒 آمن تماماً</li>
+      <li>💬 دعم مستمر</li>
+    </ul>
+
+    <div class="logos" aria-hidden="true">
+      <span><img src="https://cdn.simpleicons.org/instagram/E1306C" alt="" onerror="this.parentNode.style.display='none'"></span>
+      <span><img src="https://cdn.simpleicons.org/tiktok/000000" alt="" onerror="this.parentNode.style.display='none'"></span>
+      <span><img src="https://cdn.simpleicons.org/youtube/FF0000" alt="" onerror="this.parentNode.style.display='none'"></span>
+      <span><img src="https://cdn.simpleicons.org/facebook/1877F2" alt="" onerror="this.parentNode.style.display='none'"></span>
+      <span><img src="https://cdn.simpleicons.org/x/000000" alt="" onerror="this.parentNode.style.display='none'"></span>
+      <span><img src="https://cdn.simpleicons.org/telegram/26A5E4" alt="" onerror="this.parentNode.style.display='none'"></span>
+      <span style="background:#FFFC00"><img src="https://cdn.simpleicons.org/snapchat/000000" alt="" onerror="this.parentNode.style.display='none'"></span>
+    </div>
+  </div>
+</section>
+
+<div class="shell">
+
+  <div class="sec-head reveal" id="order">
+    <h2>اطلب خدمتك</h2>
+    <p>اختر المنصة ثم نوع الخدمة، واكتب الرابط والكمية.</p>
+  </div>
+
+  <main class="layout">
+
+    <section class="steps">
+
+      <div class="step">
+        <h2><b>1</b> المنصة</h2>
+        <div class="platforms" id="tabs"></div>
+      </div>
+
+      <div class="step">
+        <h2><b>2</b> الخدمة</h2>
+
+        <div class="field">
+          <label>نوع الخدمة</label>
+          <div class="types" id="types" role="group" aria-label="نوع الخدمة"></div>
+        </div>
+
+        <div class="field" id="searchField" hidden>
+          <label for="search">بحث</label>
+          <input
+            id="search"
+            type="search"
+            placeholder="ابحث باسم الخدمة"
+            autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label for="catBtn">القسم</label>
+          <div class="combo" id="catCombo">
+            <button
+              type="button"
+              class="combo-btn"
+              id="catBtn"
+              aria-haspopup="listbox"
+              aria-expanded="false">
+              <span class="combo-text" id="catText">كل الأقسام</span>
+            </button>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            <div class="combo-panel" id="catPanel" role="listbox" hidden></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="serviceBtn">اختر الخدمة</label>
+          <div class="combo" id="combo">
+            <button
+              type="button"
+              class="combo-btn"
+              id="serviceBtn"
+              aria-haspopup="listbox"
+              aria-expanded="false">
+              <span class="p" id="servicePrice" hidden></span>
+              <span class="combo-text" id="serviceText">جاري تحميل الخدمات...</span>
+            </button>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            <div class="combo-panel" id="servicePanel" role="listbox" hidden></div>
+          </div>
+          <div class="note" id="status"></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <h2><b>3</b> الرابط والكمية</h2>
+
+        <div class="field">
+          <label for="link">الرابط</label>
+          <input
+            id="link"
+            type="url"
+            dir="ltr"
+            inputmode="url"
+            autocapitalize="off"
+            autocomplete="off"
+            placeholder="https://">
+        </div>
+
+        <div class="field">
+          <label for="quantity">الكمية</label>
+          <input
+            id="quantity"
+            type="number"
+            min="1"
+            inputmode="numeric"
+            placeholder="مثلاً 1000">
+          <div class="chips" id="chips"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <aside class="summary" aria-live="polite">
+      <div class="label">الإجمالي</div>
+
+      <div class="price">
+        <span id="price">0.00</span>
+        <span class="cur">$</span>
+      </div>
+
+      <span class="rate" id="rateHint">اختر خدمة لعرض السعر</span>
+      <p class="wallet-line" id="walletLine" hidden></p>
+
+      <dl class="facts">
+        <div><dt>الخدمة</dt><dd id="sumService">—</dd></div>
+        <div><dt>الكمية</dt><dd id="sumQty">—</dd></div>
+      </dl>
+
+      <button class="order" id="orderBtn" type="button">إتمام الطلب</button>
+
+      <p class="login-hint" id="loginHint" hidden>
+        🔒 لازم <button class="auth-link" id="hintLogin" type="button">تسجّل دخولك</button> حتى تكمل الطلب
+      </p>
+
+      <div class="msg" id="orderMsg"></div>
+    </aside>
+
+  </main>
+
+</div>
+
+
+<section class="band" id="stats">
+  <div class="band-in">
+    <div class="stats-grid" id="statsGrid"></div>
+  </div>
+</section>
+
+
+<section class="band" id="features">
+  <div class="band-in">
+
+    <div class="sec-head reveal">
+      <h2>ليش Dopamine Store؟</h2>
+      <p>كل شي تحتاجه لتنمية حساباتك بمكان واحد.</p>
+    </div>
+
+    <div class="feat-grid">
+
+      <article class="feat reveal">
+        <div class="fi" style="background:#FFF3C4">⚡</div>
+        <h3>سرعة التنفيذ</h3>
+        <p>ألصق الرابط واختر الكمية، والطلب ينطلق بسرعة بدون تعقيد.</p>
+      </article>
+
+      <article class="feat reveal">
+        <div class="fi" style="background:#DFF7E8">🔒</div>
+        <h3>أمان تام</h3>
+        <p>ما نطلب كلمة مرور حسابك أبداً، رابط الحساب أو المنشور يكفي.</p>
+      </article>
+
+      <article class="feat reveal">
+        <div class="fi" style="background:#E7E1FF">💰</div>
+        <h3>أسعار مناسبة</h3>
+        <p>السعر يظهر بجانب كل خدمة لكل 1000، وتشوف إجمالي طلبك قبل ما تكمل.</p>
+      </article>
+
+      <article class="feat reveal">
+        <div class="fi" style="background:#DDEEFF">🎯</div>
+        <h3>خدمات متنوعة</h3>
+        <p>متابعين ولايكات ومشاهدات وتعليقات على أشهر المنصات، بأكثر من خيار جودة.</p>
+      </article>
+
+      <article class="feat reveal">
+        <div class="fi" style="background:#FFE3EC">🔄</div>
+        <h3>خيارات بضمان</h3>
+        <p>بعض الخدمات تشمل إعادة تعبئة لفترة محددة، ومكتوبة بوضوح باسم الخدمة.</p>
+      </article>
+
+      <article class="feat reveal">
+        <div class="fi" style="background:#D9F5F3">💬</div>
+        <h3>دعم مستمر</h3>
+        <p>فريق الدعم متواجد على مدار الساعة عبر واتساب والبريد.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="band" id="faq">
+  <div class="band-in">
+
+    <div class="sec-head reveal">
+      <h2>الأسئلة الشائعة</h2>
+      <p>إجابات سريعة لأكثر ما يسأل عنه الزبائن.</p>
+    </div>
+
+    <div class="faq reveal">
+
+      <details>
+        <summary>كيف أسوي طلب؟</summary>
+        <p>اختر المنصة، ثم نوع الخدمة (متابعين، لايكات...)، ثم الخدمة المناسبة. بعدها ألصق رابط الحساب أو المنشور، واكتب الكمية، وتشوف السعر النهائي قبل إتمام الطلب.</p>
+      </details>
+
+      <details>
+        <summary>هل تحتاجون كلمة مرور حسابي؟</summary>
+        <p>أبداً. نحتاج الرابط فقط. لا تشارك كلمة مرورك مع أي شخص أو موقع.</p>
+      </details>
+
+      <details>
+        <summary>لازم يكون حسابي عام؟</summary>
+        <p>نعم، الحساب أو المنشور لازم يكون عاماً (غير خاص) أثناء تنفيذ الطلب، حتى تقدر الخدمة توصله.</p>
+      </details>
+
+      <details>
+        <summary>كم يستغرق التنفيذ؟</summary>
+        <p>يختلف من خدمة لثانية. سرعة كل خدمة مكتوبة باسمها (مثل "فوري" أو عدد الآلاف اليومي)، فاختر اللي يناسب وقتك.</p>
+      </details>
+
+      <details>
+        <summary>شنو معنى إعادة التعبئة والضمان؟</summary>
+        <p>بعض الخدمات تشمل إعادة تعبئة لفترة محددة (مثل 30 يوماً) مكتوبة باسم الخدمة. إذا نقص العدد خلال هذي المدة يتم تعويضه حسب شروط الخدمة.</p>
+      </details>
+
+      <details>
+        <summary>كيف أدفع وكيف أتواصل معكم؟</summary>
+        <p>الدفع يتم من رصيد حسابك (المحفظة). لشحن الرصيد اضغط زر 💰 أعلى الصفحة واختر مبلغ من 10,000 إلى 50,000 د.ع (كل 1 د.ع = 1 نقطة)، وبعد ما تدفع نؤكد طلبك ونضيف الرصيد لمحفظتك. وإذا فشل تنفيذ أي طلب يرجع مبلغه لرصيدك تلقائياً.</p>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+
+<div class="shell">
+
+  <section class="about reveal" id="about">
+    <h2><span>👋</span> من نحن</h2>
+
+    <p>أهلاً بك! أنا <b>علي رضا مهند</b>، مؤسس هذا المشروع التقني. نقدم لك حلولاً سريعة ومضمونة لتعزيز حضورك الرقمي وتنشيط حساباتك على منصات التواصل الاجتماعي بأفضل الأسعار وأعلى معايير الجودة.</p>
+
+    <p>نضمن لك سرعة التنفيذ، الأمان التام، والدعم المستمر على مدار الساعة.</p>
+
+    <div class="contacts">
+
+      <a class="contact" id="waLink" data-wa href="#" target="_blank" rel="noopener">
+        <span class="ci wa">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.06c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.12-.96-.3-1.66-.6-2.92-1.26-4.82-4.2-4.97-4.4-.14-.2-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.26-.29.57-.36.76-.36l.55.01c.17.01.41-.07.64.49.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.2-.14.32-.28.49l-.42.49c-.14.14-.28.29-.12.57.16.29.71 1.17 1.53 1.9 1.05.93 1.93 1.22 2.21 1.36.27.15.43.12.59-.07.16-.2.68-.79.86-1.07.18-.29.36-.24.61-.14.24.1 1.56.73 1.83.87.27.14.45.2.51.31.07.12.07.68-.17 1.35z"/></svg>
+        </span>
+        <span>
+          واتساب: راسلنا مباشرة
+          <small id="waNum"></small>
+        </span>
+      </a>
+
+      <a class="contact" href="mailto:ye19cm@gmail.com?subject=%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20-%20Dopamine%20Store">
+        <span class="ci em">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="M3 7l9 6 9-6"/></svg>
+        </span>
+        <span>
+          البريد الإلكتروني
+          <small>ye19cm@gmail.com</small>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <p class="foot">© Dopamine Store — جميع الحقوق محفوظة</p>
+
+</div>
+
+<div class="modal" id="payModal" hidden role="dialog" aria-modal="true" aria-live="polite">
+  <div class="modal-card" id="payBody"></div>
+</div>
+
+<div class="modal" id="authModal" hidden role="dialog" aria-modal="true">
+  <div class="modal-card auth-card" id="authBody"></div>
+</div>
+
+<div class="modal" id="notifModal" hidden role="dialog" aria-modal="true">
+  <div class="modal-card notif-card" id="notifBody"></div>
+</div>
+
+<div class="notif-toast" id="notifToast" hidden role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* الخدمات تجي من دالة admin-worker (إجراء عام يرجع الاسم والقسم وسعر البيع فقط) */
+const API =
+  "https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/admin-worker";
+
+/* [المفتاح, الاسم, الأيقونة, لون الأيقونة] */
+const TABS = [
+  ["cheap","الأرخص","💰","#FFD23F"],
+  ["instagram","انستقرام","📸","linear-gradient(135deg,#F9A03F,#E1306C 55%,#833AB4)"],
+  ["tiktok","تيك توك","🎵","#111111"],
+  ["youtube","يوتيوب","▶","#F0243A"],
+  ["facebook","فيسبوك","👍","#1877F2"],
+  ["twitter","تويتر","🐦","#0F1419"],
+  ["telegram","تيليجرام","✈️","#229ED9"],
+  ["snapchat","سناب","👻","#FFFC00"],
+  ["all","كل الخدمات","🔎","#5A3CF0"]
+];
+
+document.documentElement.classList.add("js");
+
+const QUICK = [100,500,1000,5000,10000];
+
+/* أرقام قسم الإحصائيات: اكتب أرقامك الحقيقية هنا (0 = يختفي الرقم) */
+const STATS_ORDERS = 0;
+const STATS_CUSTOMERS = 0;
+
+/* شعارات المنصات: [اسم الشعار, لونه] من cdn.simpleicons.org
+   إذا الشعار ما تحمّل يرجع تلقائياً للإيموجي */
+const LOGOS = {
+  instagram:["instagram","E1306C"],
+  tiktok:["tiktok","000000"],
+  youtube:["youtube","FF0000"],
+  facebook:["facebook","1877F2"],
+  twitter:["x","000000"],
+  telegram:["telegram","26A5E4"],
+  snapchat:["snapchat","000000"]
 };
 
-// كلمات تتعرف بيها المنصة من اسم الخدمة أو القسم
-const PLATFORMS: Record<string, string[]> = {
-  instagram: ["instagram", "انستقرام", "انستغرام", "إنستقرام", "انستا"],
-  tiktok: ["tiktok", "تيك"],
-  youtube: ["youtube", "يوتيوب"],
-  facebook: ["facebook", "فيسبوك"],
-  twitter: ["twitter", "تويتر"],
-  telegram: ["telegram", "تيليجرام", "تلجرام", "تلغرام"],
-  snapchat: ["snapchat", "سناب"],
-};
+/* ===== رقم الواتساب: بدّل الرقم هنا فقط (بصيغة دولية بدون + وبدون أصفار) =====
+   مثال العراق: 9647701234567   */
+const WHATSAPP = "9647717885719";
 
-const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: { ...cors, "Content-Type": "application/json" },
+const WHATSAPP_TEXT = "السلام عليكم، عندي استفسار عن خدمات Dopamine Store";
+
+/* أنواع الخدمات: يتم التعرف عليها من اسم الخدمة أو اسم القسم */
+const TYPES = [
+  ["followers","متابعين","👥",/متابع|فولو|follow|subscriber|مشترك|اشتراك|عضو|أعضاء|اعضاء|member/i],
+  ["likes","لايكات","❤️",/لايك|إعجاب|اعجاب|like|reaction|تفاعل/i],
+  ["views","مشاهدات","👁",/مشاهد|شاهد|view|بلاي|play|impression|ظهور|وصول|reach/i],
+  ["comments","تعليقات","💬",/تعليق|كومنت|comment/i],
+  ["shares","مشاركات","🔁",/مشارك|share|ريتويت|retweet|إعادة نشر|repost|حفظ|save|story|ستوري/i],
+  ["votes","تصويت","📊",/تصويت|فوت|vote|poll|استطلاع/i]
+];
+
+const QUICK_TYPE_FALLBACK = ["other","أخرى","✨",null];
+
+let tab = "cheap";
+let selectedType = "all";
+let selectedCat = "all";
+let catOptionEls = [];
+let catOpen = false;
+let allServices = [];
+let services = [];
+let requestId = 0;
+let searchTimer = null;
+let selectedId = null;
+let optionEls = [];
+let activeIndex = -1;
+let isOpen = false;
+
+const $ = id => document.getElementById(id);
+
+const tabsBox     = $("tabs");
+const typesBox    = $("types");
+const searchBox   = $("search");
+const searchField = $("searchField");
+const catBtn      = $("catBtn");
+const catText     = $("catText");
+const catPanel    = $("catPanel");
+const catCombo    = $("catCombo");
+const serviceBtn   = $("serviceBtn");
+const serviceText  = $("serviceText");
+const servicePrice = $("servicePrice");
+const servicePanel = $("servicePanel");
+const combo        = $("combo");
+const linkBox     = $("link");
+const quantityBox = $("quantity");
+const priceBox    = $("price");
+const statusBox   = $("status");
+const rateHint    = $("rateHint");
+const sumService  = $("sumService");
+const sumQty      = $("sumQty");
+const orderMsg    = $("orderMsg");
+
+
+/* ---------- المحفظة (الرصيد بالدينار العراقي) ---------- */
+
+let USD_TO_IQD = 1500;      /* يتحدّث من السيرفر (USD_TO_IQD) */
+let walletBalance = null;   /* null = غير معروف / غير مسجّل */
+let walletPending = [];     /* طلبات شحن بانتظار التأكيد */
+let TOPUP_MIN = 10000;      /* تتحدّث من السيرفر */
+let TOPUP_MAX = 50000;
+
+const fmtIqd = n => Number(n || 0).toLocaleString("en-US") + " د.ع";
+
+const fmtPts = n => Number(n || 0).toLocaleString("en-US") + " نقطة";
+
+function renderWalletBtn(){
+
+  const b = $("walletBtn");
+
+  b.hidden = !session;
+
+  $("walletBal").textContent = fmtIqd(walletBalance || 0);
+
+}
+
+function updateWalletLine(){
+
+  const service = selectedService();
+  const q = Number(quantityBox.value || 0);
+  const parts = [];
+
+  if(service && q > 0){
+    parts.push("المبلغ: " + fmtIqd(Math.ceil(Number(service.sell_rate || 0) * q / 1000 * USD_TO_IQD)));
+  }
+
+  if(session && walletBalance !== null){
+    parts.push("رصيدك: " + fmtIqd(walletBalance));
+  }
+
+  const el = $("walletLine");
+
+  el.textContent = parts.join(" • ");
+  el.hidden = !parts.length;
+
+}
+
+async function loadWallet(){
+
+  if(!session){
+    walletBalance = null;
+    walletPending = [];
+    renderWalletBtn();
+    updateWalletLine();
+    return null;
+  }
+
+  try{
+
+    const w = await callApi({action:"my_wallet",access_token:session.access_token});
+
+    walletBalance = Number(w.balance) || 0;
+
+    walletPending = Array.isArray(w.pending) ? w.pending : [];
+
+    return w;
+
+  }catch(e){
+
+    return null;
+
+  }finally{
+
+    renderWalletBtn();
+    updateWalletLine();
+
+  }
+
+}
+
+/* يقبل الأرقام العربية ١٢٣ */
+const parseNum = v => Number(
+  String(v || "").replace(/[٠-٩]/g,d => d.charCodeAt(0) - 1632).replace(/[,٬\s]/g,"")
+);
+
+/* طلب شحن رصيد: مبلغ من TOPUP_MIN إلى TOPUP_MAX، والنقاط = نفس المبلغ */
+function openTopup(preset){
+
+  if(!session){
+    openAuth("login","سجّل دخولك حتى تطلب شحن رصيد");
+    return;
+  }
+
+  let amt = Math.ceil((Number(preset) || TOPUP_MIN) / 1000) * 1000;
+
+  amt = Math.min(TOPUP_MAX,Math.max(TOPUP_MIN,amt));
+
+  const pend = walletPending.length
+    ? "<p>عندك طلب معلّق: <b>#" + walletPending[0].id + "</b> (" + fmtIqd(walletPending[0].amount) + ")</p>"
+    : "";
+
+  payBody.dataset.lock = "";
+
+  openModal(
+    '<div class="big">💰</div>' +
+    "<h3>طلب شحن رصيد</h3>" +
+    "<p>رصيدك الحالي: <b>" + fmtIqd(walletBalance || 0) + "</b> (" + fmtPts(walletBalance || 0) + ")</p>" +
+    pend +
+    '<div class="chips tp-chips" id="tpChips"></div>' +
+    '<input class="auth-in" id="tpAmt" type="text" inputmode="numeric" dir="ltr" style="margin-top:12px;text-align:center" autocomplete="off">' +
+    '<div class="amt" id="tpPts"></div>' +
+    "<p>كل 1 د.ع = 1 نقطة • من " + TOPUP_MIN.toLocaleString("en-US") + " إلى " + TOPUP_MAX.toLocaleString("en-US") + " د.ع</p>" +
+    '<div class="tp-err" id="tpMsg"></div>' +
+    '<div class="row">' +
+      '<button class="btn ghost" type="button" onclick="closeModal()">إغلاق</button>' +
+      '<button class="btn primary" type="button" id="tpSend">إرسال الطلب</button>' +
+    "</div>"
+  );
+
+  const box = $("tpChips");
+  const inp = $("tpAmt");
+
+  const paint = ()=>{
+
+    $("tpPts").textContent = fmtPts(amt);
+
+    box.querySelectorAll(".chip").forEach(b =>{
+      b.classList.toggle("on",Number(b.dataset.a) === amt);
+    });
+
+  };
+
+  for(let a = TOPUP_MIN; a <= TOPUP_MAX; a += 10000){
+
+    const b = document.createElement("button");
+
+    b.type = "button";
+    b.className = "chip";
+    b.dataset.a = a;
+    b.textContent = a.toLocaleString("en-US");
+
+    b.onclick = ()=>{
+      amt = a;
+      inp.value = a;
+      $("tpMsg").textContent = "";
+      paint();
+    };
+
+    box.appendChild(b);
+
+  }
+
+  inp.value = amt;
+
+  inp.addEventListener("input",()=>{
+    amt = parseNum(inp.value) || 0;
+    paint();
   });
 
-// إذا الجداول ما موجودة نرجع رسالة واضحة بدل خطأ تقني
-const dbErr = (e: any) => {
-  const m = String(e?.message ?? e);
-  if (/(orders|wallets?|wallet_\w+|topup_\w+)/.test(m) && /(does not exist|schema cache|find the (table|function))/i.test(m)) {
-    return json({ error: "الجداول ناقصة. نفّذ orders.sql ثم wallet.sql في Supabase أولاً" }, 500);
-  }
-  throw e;
-};
+  paint();
 
-const ORDER_STATUSES = ["unpaid", "pending", "processing", "completed", "partial", "canceled", "refunded"];
-const NOT_COUNTED = ["unpaid", "canceled", "refunded"]; // ما تنحسب بالمبيعات والربح
+  $("tpSend").onclick = async ()=>{
 
+    amt = Math.trunc(parseNum(inp.value));
 
-// ================= المحفظة + المزود =================
-// SUBMIT_TO_PROVIDER = "false" → وضع تجريبي (يخصم من المحفظة ولا يرسل للمزود).
-// أي قيمة ثانية أو غير موجود = يرسل الطلبات للمزود فعلياً.
-// حدود طلب الشحن (بالدينار). النقاط = نفس المبلغ (1 د.ع = 1 نقطة)
-const TOPUP_MIN = 10_000;
-const TOPUP_MAX = 50_000;
-const usdToIqd = () => Number(Deno.env.get("USD_TO_IQD")) || 1500;
-
-function safeEqual(a: string, b: string) {
-  if (a.length !== b.length) return false;
-  let r = 0;
-  for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return r === 0;
-}
-
-// رفض صريح من المزود → نسترجع المبلغ تلقائياً.
-// أي خطأ ثاني (شبكة / مهلة / رد غريب) نعتبره "غير مؤكد" ولا نسترجع، لأن الطلب ممكن انسجل عنده.
-class ProviderRejected extends Error {}
-
-async function providerCall(params: Record<string, string>) {
-  const key = Deno.env.get("DRD3M_API_KEY");
-  if (!key) throw new ProviderRejected("DRD3M_API_KEY غير موجود");
-  const r = await fetch("https://drd3m.me/api/v2", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ key, ...params }),
-    signal: AbortSignal.timeout(20000),
-  });
-  return await r.json();
-}
-
-async function submitToProvider(o: { service_id: number; link: string; quantity: number }) {
-  const j = await providerCall({
-    action: "add",
-    service: String(o.service_id),
-    link: o.link,
-    quantity: String(o.quantity),
-  });
-  if (j?.order) return String(j.order);
-  if (j?.error) throw new ProviderRejected(String(j.error));
-  throw new Error("رد غير متوقع من المزود");
-}
-
-// نص آمن للزبون (ما نعرض رسائل المزود الخام له، مثل "Not enough funds")
-const friendlyProviderError = (m: string) =>
-  /quantity|min|max/i.test(m)
-    ? "الكمية خارج الحد المسموح لهذي الخدمة، جرّب كمية ثانية. رجّعنا المبلغ لرصيدك."
-    : "تعذر تنفيذ الطلب حالياً. رجّعنا المبلغ لرصيدك، جرّب لاحقاً أو اختر خدمة ثانية.";
-
-async function getBalance(sb: any, uid: string) {
-  const { data } = await sb.from("wallets").select("balance").eq("user_id", uid).maybeSingle();
-  return Number(data?.balance ?? 0);
-}
-
-async function fetchAll(sb: any, table: string, cols: string, orderCol: string) {
-  const rows: any[] = [];
-  for (let from = 0; from < 100000; from += 1000) {
-    const { data, error } = await sb.from(table).select(cols).order(orderCol).range(from, from + 999);
-    if (error) throw error;
-    rows.push(...data);
-    if (data.length < 1000) break;
-  }
-  return rows;
-}
-
-async function allAuthUsers(sb: any) {
-  const out: any[] = [];
-  for (let page = 1; page <= 50; page++) {
-    const { data, error } = await sb.auth.admin.listUsers({ page, perPage: 1000 });
-    if (error) throw error;
-    out.push(...data.users);
-    if (data.users.length < 1000) break;
-  }
-  return out;
-}
-
-// يتحقق من توكن الزبون (تسجيل الدخول عبر Supabase Auth) ويرجع المستخدم أو null
-async function userFrom(sb: any, token: unknown) {
-  const t = String(token ?? "");
-  if (!t) return null;
-  const { data, error } = await sb.auth.getUser(t);
-  return error ? null : data.user;
-}
-
-Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
-
-  try {
-    const { action, password, ...p } = await req.json();
-
-    const sb = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
-
-    // ---- عام: خدمات المتجر (بدون كلمة سر، يرجع فقط id والاسم والقسم وسعر البيع) ----
-    if (action === "public_services") {
-      const platform = String(p.platform ?? "");
-      const s = String(p.search ?? "").trim().replace(/[%,()"\\]/g, "").slice(0, 60);
-      const words = PLATFORMS[platform];
-      const cheap = platform === "cheap";
-
-      // بدون منصة معينة لازم يكتب بحث
-      if (!cheap && !words && s.length < 2) return json({ items: [] });
-
-      const MAX = cheap || !words ? 300 : 3000;
-      const items: unknown[] = [];
-
-      for (let from = 0; from < MAX; from += 1000) {
-        let q = sb
-          .from("services")
-          .select("id,name,category,sell_rate")
-          .not("sell_rate", "is", null)
-          .or("active.is.null,active.eq.true");
-
-        if (s) q = q.or(`name.ilike.%${s}%,category.ilike.%${s}%`);
-        if (words) {
-          q = q.or(words.flatMap((k) => [`category.ilike.%${k}%`, `name.ilike.%${k}%`]).join(","));
-        }
-
-        q = cheap
-          ? q.gt("sell_rate", 0).order("sell_rate", { ascending: true }).order("id")
-          : q.order("category").order("id");
-
-        const to = Math.min(from + 999, MAX - 1);
-        const { data, error } = await q.range(from, to);
-        if (error) throw error;
-        items.push(...data);
-        if (data.length < to - from + 1) break;
-      }
-
-      return json({ items });
+    if(!(amt >= TOPUP_MIN && amt <= TOPUP_MAX)){
+      $("tpMsg").textContent =
+        "المبلغ لازم يكون بين " + TOPUP_MIN.toLocaleString("en-US") +
+        " و" + TOPUP_MAX.toLocaleString("en-US");
+      return;
     }
 
+    const btn = $("tpSend");
 
-    // ---- إنشاء طلب: خصم من المحفظة ثم إرسال للمزود (السعر يُحسب هنا بالسيرفر) ----
-    if (action === "create_order") {
-      const serviceId = Number(p.service_id);
-      const quantity = Math.floor(Number(p.quantity));
-      const link = String(p.link ?? "").trim().slice(0, 500);
+    btn.disabled = true;
 
-      if (!Number.isFinite(serviceId)) return json({ error: "خدمة غير صحيحة" }, 400);
-      if (!Number.isFinite(quantity) || quantity < 1 || quantity > 10_000_000) {
-        return json({ error: "كمية غير صحيحة" }, 400);
-      }
-      if (!/^https?:\/\/\S+\.\S+/i.test(link)) return json({ error: "رابط غير صحيح" }, 400);
+    try{
 
-      const buyer = await userFrom(sb, p.access_token);
-      if (!buyer) return json({ error: "سجّل دخولك أولاً" }, 401);
-
-      const { data: svc, error: se } = await sb
-        .from("services")
-        .select("id,name,sell_rate,provider_rate,base_price,active")
-        .eq("id", serviceId)
-        .maybeSingle();
-      if (se) throw se;
-      if (!svc || svc.active === false || !(Number(svc.sell_rate) > 0)) {
-        return json({ error: "الخدمة غير متاحة" }, 400);
-      }
-
-      const sell = Number(svc.sell_rate);
-      const prov = Number(svc.provider_rate ?? svc.base_price ?? 0);
-      const price = (sell * quantity) / 1000;
-      const cost = (prov * quantity) / 1000;
-      const amountIqd = Math.ceil(price * usdToIqd());
-      if (amountIqd < 1) return json({ error: "الكمية قليلة جداً" }, 400);
-
-      // 1) خصم من المحفظة + إنشاء الطلب بعملية وحدة
-      const { data: buy, error: be } = await sb.rpc("wallet_purchase", {
-        p_user: buyer.id,
-        p_service_id: svc.id,
-        p_service_name: svc.name,
-        p_link: link,
-        p_quantity: quantity,
-        p_sell_rate: sell,
-        p_provider_rate: prov,
-        p_price: Number(price.toFixed(6)),
-        p_cost: Number(cost.toFixed(6)),
-        p_amount: amountIqd,
+      const r = await callApi({
+        action:"request_topup",
+        access_token:session.access_token,
+        amount:amt
       });
-      if (be) {
-        if (/INSUFFICIENT_FUNDS/.test(be.message)) {
-          return json({
-            error: "رصيدك ما يكفي لهذا الطلب",
-            code: "insufficient_funds",
-            need: amountIqd,
-            balance: await getBalance(sb, buyer.id),
-          }, 402);
-        }
-        return dbErr(be);
-      }
 
-      const orderId = Number(buy.order_id);
-      const now = () => new Date().toISOString();
+      loadWallet();
 
-      // وضع تجريبي: خصم بدون إرسال
-      if (Deno.env.get("SUBMIT_TO_PROVIDER") === "false") {
-        await sb.from("orders").update({ note: "وضع تجريبي: الطلب ما انرسل للمزود", updated_at: now() }).eq("id", orderId);
-        return json({ ok: true, order_id: orderId, amount_iqd: amountIqd, balance: Number(buy.balance), test: true });
-      }
+      showTopupSent(r);
 
-      // 2) إرسال للمزود
-      try {
-        const providerId = await submitToProvider({ service_id: svc.id, link, quantity });
-        await sb.from("orders").update({ provider_order_id: providerId, status: "processing", updated_at: now() }).eq("id", orderId);
-      } catch (e) {
-        const msg = String((e as Error).message ?? e);
+    }catch(e){
 
-        if (e instanceof ProviderRejected) {
-          // رفض صريح: نرجّع الفلوس تلقائياً
-          await sb.rpc("wallet_refund_order", {
-            p_order: orderId,
-            p_status: "canceled",
-            p_note: "رفض المزود: " + msg.slice(0, 200),
-          });
-          return json({
-            error: friendlyProviderError(msg),
-            refunded: true,
-            order_id: orderId,
-            balance: await getBalance(sb, buyer.id),
-          }, 502);
-        }
+      $("tpMsg").textContent = e.message;
 
-        // غير مؤكد (مهلة/شبكة): نترك الطلب ونعلّمه للأدمن بدون استرجاع تلقائي
-        await sb.from("orders").update({
-          note: "⚠️ ما تأكد الإرسال للمزود (" + msg.slice(0, 120) + "). افحص عند المزود قبل أي استرجاع",
-          updated_at: now(),
-        }).eq("id", orderId);
-      }
+      btn.disabled = false;
 
-      return json({ ok: true, order_id: orderId, amount_iqd: amountIqd, balance: await getBalance(sb, buyer.id) });
     }
 
+  };
 
-    // ---- حساب الزبون: قراءة المعلومات ----
-    if (action === "my_profile") {
-      const u = await userFrom(sb, p.access_token);
-      if (!u) return json({ error: "سجّل دخولك أولاً" }, 401);
-      const { data, error } = await sb.from("profiles").select("full_name,phone").eq("user_id", u.id).maybeSingle();
-      if (error) throw error;
-      const meta: any = u.user_metadata ?? {};
-      return json({
-        email: u.email ?? "",
-        full_name: data?.full_name ?? meta.full_name ?? meta.name ?? "",
-        phone: data?.phone ?? "",
-      });
+}
+
+function showTopupSent(r){
+
+  openModal(
+    '<div class="big">✅</div>' +
+    "<h3>وصل طلب الشحن</h3>" +
+    "<p>رقم الطلب: <b>#" + r.id + "</b></p>" +
+    '<div class="amt">' + fmtIqd(r.amount) + "</div>" +
+    "<p>راح تحصل على <b>" + fmtPts(r.points) + "</b> بعد تأكيد الدفع.</p>" +
+    "<p>بعد ما تدفع المبلغ، راسلنا على واتساب حتى نؤكد طلبك ونضيف الرصيد.</p>" +
+    '<div class="row">' +
+      '<button class="btn ghost" type="button" onclick="closeModal()">إغلاق</button>' +
+      '<a class="btn primary" target="_blank" rel="noopener" href="' + esc(topupUrl(r.amount,r.id)) + '">إرسال عبر واتساب</a>' +
+    "</div>"
+  );
+
+}
+
+
+/* رابط واتساب لطلب شحن الرصيد (فيه بريد ورقم حساب الزبون حتى تعرف تشحنله) */
+function topupUrl(amount,reqId){
+
+  const u = session && session.user;
+
+  const msg =
+    "السلام عليكم، أريد شحن رصيدي في Dopamine Store.\n" +
+    (u ? "بريد الحساب: " + (u.email || "") + "\nرقم الحساب: " + u.id + "\n" : "") +
+    (reqId ? "رقم طلب الشحن: #" + reqId + "\n" : "") +
+    (amount ? "المبلغ: " + Number(amount).toLocaleString("en-US") + " د.ع" : "المبلغ: ");
+
+  return "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
+
+}
+
+fetch(API,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({action:"public_config"})
+})
+  .then(r => r.json())
+  .then(c =>{
+    USD_TO_IQD = Number(c.usd_to_iqd) || USD_TO_IQD;
+    TOPUP_MIN = Number(c.topup_min) || TOPUP_MIN;
+    TOPUP_MAX = Number(c.topup_max) || TOPUP_MAX;
+    updateWalletLine();
+  })
+  .catch(()=>{});
+
+
+
+function renderTabs(){
+
+  /* البحث بالاسم يظهر فقط في قسم "كل الخدمات" */
+  searchField.hidden = tab !== "all";
+
+  tabsBox.innerHTML = "";
+
+  TABS.forEach(([key,label,icon,bg])=>{
+
+    const b = document.createElement("button");
+
+    b.type = "button";
+    b.className = "plat";
+    b.setAttribute("aria-pressed", String(key === tab));
+
+    const ico = document.createElement("span");
+    ico.className = "ico";
+    ico.style.background = bg;
+    ico.textContent = icon;
+
+    if(key === "cheap"){
+      ico.style.color = "#17123B";
     }
 
-    // ---- حساب الزبون: حفظ المعلومات ----
-    if (action === "save_profile") {
-      const u = await userFrom(sb, p.access_token);
-      if (!u) return json({ error: "سجّل دخولك أولاً" }, 401);
-      const full_name = String(p.full_name ?? "").trim().slice(0, 80);
-      const phone = String(p.phone ?? "").trim().slice(0, 25);
-      if (phone && !/^[0-9+\-\s()]{6,25}$/.test(phone)) return json({ error: "رقم الهاتف غير صحيح" }, 400);
-      const { error } = await sb
-        .from("profiles")
-        .upsert({ user_id: u.id, full_name, phone, updated_at: new Date().toISOString() }, { onConflict: "user_id" });
-      if (error) throw error;
-      return json({ ok: true });
-    }
+    /* المنصات الرئيسية: شعار حقيقي على مربع فاتح مثل التطبيقات */
+    if(LOGOS[key]){
 
-    // ---- حساب الزبون: طلباتي ----
-    if (action === "my_orders") {
-      const u = await userFrom(sb, p.access_token);
-      if (!u) return json({ error: "سجّل دخولك أولاً" }, 401);
-      const { data, error } = await sb
-        .from("orders")
-        .select("id,created_at,service_name,quantity,price,status")
-        .eq("user_id", u.id)
-        .order("created_at", { ascending: false })
-        .limit(30);
-      if (error) return dbErr(error);
-      return json({ items: data });
-    }
+      const [slug,hex] = LOGOS[key];
 
-    // ---- عام: إعدادات بسيطة للواجهة (سعر الصرف فقط) ----
-    if (action === "public_config") {
-      return json({ usd_to_iqd: usdToIqd(), topup_min: TOPUP_MIN, topup_max: TOPUP_MAX });
-    }
+      ico.style.background = key === "snapchat" ? "#FFFC00" : "#EEEDF7";
 
-    // ---- محفظتي: الرصيد + آخر الحركات ----
-    if (action === "my_wallet") {
-      const u = await userFrom(sb, p.access_token);
-      if (!u) return json({ error: "سجّل دخولك أولاً" }, 401);
-      const [w, t] = await Promise.all([
-        sb.from("wallets").select("balance").eq("user_id", u.id).maybeSingle(),
-        sb.from("wallet_transactions")
-          .select("id,type,amount,balance_after,order_id,note,created_at")
-          .eq("user_id", u.id)
-          .order("id", { ascending: false })
-          .limit(20),
-      ]);
-      if (w.error) return dbErr(w.error);
-      if (t.error) return dbErr(t.error);
-      // طلبات الشحن المعلّقة (إذا الجدول ما موجود نتجاهل)
-      const pt = await sb.from("topup_requests")
-        .select("id,amount,created_at")
-        .eq("user_id", u.id).eq("status", "pending")
-        .order("id", { ascending: false }).limit(5);
-      return json({
-        balance: Number(w.data?.balance ?? 0),
-        items: t.data,
-        pending: pt.error ? [] : pt.data,
-        user_id: u.id,
-        email: u.email ?? "",
-      });
-    }
+      const img = document.createElement("img");
 
-    // ---- طلب شحن رصيد (يوصل للأدمن ويأكده بعد استلام المبلغ) ----
-    if (action === "request_topup") {
-      const u = await userFrom(sb, p.access_token);
-      if (!u) return json({ error: "سجّل دخولك أولاً" }, 401);
+      img.alt = "";
+      img.loading = "lazy";
+      img.src = "https://cdn.simpleicons.org/" + slug + "/" + hex;
 
-      const amount = Math.trunc(Number(p.amount));
-      if (!Number.isFinite(amount) || amount < TOPUP_MIN || amount > TOPUP_MAX) {
-        return json({ error: `المبلغ لازم يكون بين ${TOPUP_MIN.toLocaleString("en-US")} و${TOPUP_MAX.toLocaleString("en-US")} د.ع` }, 400);
-      }
-
-      const { count, error: ce } = await sb.from("topup_requests")
-        .select("*", { count: "exact", head: true })
-        .eq("user_id", u.id).eq("status", "pending");
-      if (ce) return dbErr(ce);
-      if ((count ?? 0) >= 3) return json({ error: "عندك 3 طلبات شحن معلّقة، انتظر تأكيدها أو راسلنا على واتساب" }, 429);
-
-      const { data, error } = await sb.from("topup_requests")
-        .insert({ user_id: u.id, user_email: u.email ?? null, amount })
-        .select("id").single();
-      if (error) return dbErr(error);
-      return json({ ok: true, id: data.id, amount, points: amount });
-    }
-
-    // الحماية الحقيقية: كلمة السر محفوظة في Secrets مو في الكود
-    const adminPass = Deno.env.get("ADMIN_PASSWORD");
-    if (!adminPass || !safeEqual(String(password ?? ""), adminPass)) {
-      return json({ error: "كلمة المرور غلط" }, 401);
-    }
-
-    // ---- عرض الخدمات (بحث + منصة + الأرخص + صفحات) ----
-    if (action === "services") {
-      const limit = Math.min(Number(p.limit) || 100, 200);
-      const offset = Math.max(Number(p.offset) || 0, 0);
-
-      let q = sb.from("services").select("*", { count: "exact" });
-
-      const s = String(p.search ?? "").trim().replace(/[%,()]/g, "");
-      if (s) q = /^\d+$/.test(s) ? q.eq("id", Number(s)) : q.ilike("name", `%${s}%`);
-
-      const words = PLATFORMS[String(p.platform ?? "")];
-      if (words) {
-        q = q.or(words.flatMap((k) => [`category.ilike.%${k}%`, `name.ilike.%${k}%`]).join(","));
-      }
-
-      q = p.sort === "cheap"
-        ? q.gt("sell_rate", 0).order("sell_rate", { ascending: true }).order("id")
-        : q.order("id");
-
-      const { data, error, count } = await q.range(offset, offset + limit - 1);
-      if (error) throw error;
-      return json({ items: data, total: count ?? data.length });
-    }
-
-    // ---- تعديل سعر البيع ----
-    if (action === "update_price") {
-      const rate = Number(p.sell_rate);
-      if (!Number.isFinite(rate) || rate < 0) return json({ error: "سعر غير صحيح" }, 400);
-      const { error } = await sb
-        .from("services")
-        .update({ sell_rate: rate, updated_at: new Date().toISOString() })
-        .eq("id", p.id);
-      if (error) throw error;
-      return json({ ok: true });
-    }
-
-    // ---- إخفاء / إظهار ----
-    if (action === "toggle_service") {
-      const { error } = await sb
-        .from("services")
-        .update({ active: !!p.active, updated_at: new Date().toISOString() })
-        .eq("id", p.id);
-      if (error) throw error;
-      return json({ ok: true });
-    }
-
-    // ---- زيادة جماعية: سعر البيع = سعر المزود + النسبة ----
-    if (action === "bulk_markup") {
-      const percent = Number(p.percent);
-      if (!Number.isFinite(percent) || percent < 0 || percent > 1000) {
-        return json({ error: "نسبة غير صحيحة" }, 400);
-      }
-      const { error } = await sb.rpc("apply_markup", { percent });
-      if (error) throw error;
-      return json({ ok: true });
-    }
-
-
-    // ---- كل الخدمات دفعة وحدة (بدون صفحات) ----
-    if (action === "all_services") {
-      const items: unknown[] = [];
-      for (let from = 0; from < 50000; from += 1000) {
-        const { data, error } = await sb
-          .from("services")
-          .select("id,name,category,provider_rate,base_price,sell_rate,active")
-          .order("id")
-          .range(from, from + 999);
-        if (error) throw error;
-        items.push(...data);
-        if (data.length < 1000) break;
-      }
-      return json({ items });
-    }
-
-    // ---- زيادة بنسبة على خدمات محددة فقط (تحتاج دالة apply_markup_ids من orders.sql) ----
-    if (action === "bulk_markup_ids") {
-      const percent = Number(p.percent);
-      const ids = Array.isArray(p.ids) ? p.ids.map(Number).filter(Number.isFinite) : [];
-      if (!Number.isFinite(percent) || percent < 0 || percent > 1000) {
-        return json({ error: "نسبة غير صحيحة" }, 400);
-      }
-      if (!ids.length) return json({ error: "ما في خدمات محددة" }, 400);
-      const { error } = await sb.rpc("apply_markup_ids", { ids, percent });
-      if (error) throw error;
-      return json({ ok: true, count: ids.length });
-    }
-
-    // ---- إخفاء / إظهار جماعي ----
-    if (action === "bulk_toggle") {
-      const ids = Array.isArray(p.ids) ? p.ids.map(Number).filter(Number.isFinite) : [];
-      if (!ids.length) return json({ error: "ما في خدمات محددة" }, 400);
-      for (let i = 0; i < ids.length; i += 300) {
-        const { error } = await sb
-          .from("services")
-          .update({ active: !!p.active, updated_at: new Date().toISOString() })
-          .in("id", ids.slice(i, i + 300));
-        if (error) throw error;
-      }
-      return json({ ok: true, count: ids.length });
-    }
-
-    // ---- قائمة الطلبات (فلترة + صفحات) ----
-    if (action === "orders") {
-      const limit = Math.min(Number(p.limit) || 50, 200);
-      const offset = Math.max(Number(p.offset) || 0, 0);
-
-      let q = sb.from("orders").select("*", { count: "exact" });
-
-      const st = String(p.status ?? "");
-      if (ORDER_STATUSES.includes(st)) q = q.eq("status", st);
-
-      const s = String(p.search ?? "").trim().replace(/[%,()"\\]/g, "").slice(0, 80);
-      if (s) {
-        q = /^\d+$/.test(s)
-          ? q.or(`id.eq.${s},service_id.eq.${s}`)
-          : q.or(`service_name.ilike.%${s}%,link.ilike.%${s}%,customer.ilike.%${s}%`);
-      }
-
-      // التواريخ بتوقيت العراق (UTC+3)
-      if (/^\d{4}-\d{2}-\d{2}$/.test(String(p.from ?? ""))) q = q.gte("created_at", `${p.from}T00:00:00+03:00`);
-      if (/^\d{4}-\d{2}-\d{2}$/.test(String(p.to ?? ""))) q = q.lte("created_at", `${p.to}T23:59:59+03:00`);
-
-      const { data, error, count } = await q
-        .order("created_at", { ascending: false })
-        .range(offset, offset + limit - 1);
-      if (error) return dbErr(error);
-      return json({ items: data, total: count ?? data.length });
-    }
-
-    // ---- تغيير حالة طلب (الإلغاء/الاسترجاع يرجّع المبلغ للمحفظة تلقائياً مرة وحدة) ----
-    if (action === "update_order") {
-      if (!ORDER_STATUSES.includes(String(p.status))) return json({ error: "حالة غير صحيحة" }, 400);
-
-      let refunded = 0;
-      if (p.status === "canceled" || p.status === "refunded") {
-        const { data, error } = await sb.rpc("wallet_refund_order", {
-          p_order: Number(p.id),
-          p_status: p.status,
-          p_note: "استرجاع من الإدارة",
-        });
-        if (error) return dbErr(error);
-        refunded = Number(data ?? 0);
-      }
-
-      const { error } = await sb
-        .from("orders")
-        .update({ status: p.status, updated_at: new Date().toISOString() })
-        .eq("id", p.id);
-      if (error) return dbErr(error);
-      return json({ ok: true, refunded });
-    }
-
-    // ---- إحصائيات الطلبات والأرباح ----
-    if (action === "orders_stats") {
-      const rows: any[] = [];
-      for (let from = 0; from < 100000; from += 1000) {
-        const { data, error } = await sb
-          .from("orders")
-          .select("created_at,status,price,profit")
-          .order("id")
-          .range(from, from + 999);
-        if (error) return dbErr(error);
-        rows.push(...data);
-        if (data.length < 1000) break;
-      }
-
-      const TZ = 3 * 3600 * 1000; // توقيت العراق
-      const ln = new Date(Date.now() + TZ);
-      const dayStart = Date.UTC(ln.getUTCFullYear(), ln.getUTCMonth(), ln.getUTCDate()) - TZ;
-      const monthStart = Date.UTC(ln.getUTCFullYear(), ln.getUTCMonth(), 1) - TZ;
-      const weekStart = dayStart - 6 * 86400000;
-
-      const blank = () => ({ count: 0, revenue: 0, profit: 0 });
-      const periods = { today: blank(), week: blank(), month: blank(), all: blank() };
-      const by_status: Record<string, number> = {};
-
-      for (const r of rows) {
-        by_status[r.status] = (by_status[r.status] ?? 0) + 1;
-        const t = new Date(r.created_at).getTime();
-        const counted = !NOT_COUNTED.includes(r.status);
-        const price = Number(r.price) || 0;
-        const profit = Number(r.profit) || 0;
-        const add = (b: { count: number; revenue: number; profit: number }) => {
-          b.count++;
-          if (counted) { b.revenue += price; b.profit += profit; }
-        };
-        add(periods.all);
-        if (t >= monthStart) add(periods.month);
-        if (t >= weekStart) add(periods.week);
-        if (t >= dayStart) add(periods.today);
-      }
-
-      return json({ periods, by_status });
-    }
-
-    // ---- مزامنة الخدمات من drd3m (لا تمسح أسعارك) ----
-    if (action === "sync") {
-      const key = Deno.env.get("DRD3M_API_KEY");
-      if (!key) return json({ error: "DRD3M_API_KEY غير موجود في Secrets" }, 500);
-
-      const r = await fetch("https://drd3m.me/api/v2", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ key, action: "services" }),
-      });
-      const list = await r.json();
-      if (!Array.isArray(list)) return json({ error: "رد غير متوقع من المزود" }, 502);
-
-      const rows = list.map((s: any) => ({
-        id: Number(s.service),
-        name: s.name,
-        category: s.category ?? null,
-        provider_rate: Number(s.rate),
-        base_price: Number(s.rate),
-      }));
-
-      // الأعمدة sell_rate و active غير موجودة هنا، فتبقى كما هي للخدمات القديمة
-      for (let i = 0; i < rows.length; i += 500) {
-        const { error } = await sb.from("services").upsert(rows.slice(i, i + 500), { onConflict: "id" });
-        if (error) throw error;
-      }
-
-      const markup = Number(p.markup) || 1.3;
-      const { error } = await sb.rpc("fill_sell_rate", { markup });
-      if (error) throw error;
-
-      return json({ ok: true, count: rows.length });
-    }
-
-    // ---- طلبات الشحن المعلّقة ----
-    if (action === "topups") {
-      const { data, error } = await sb.from("topup_requests")
-        .select("id,user_id,user_email,amount,created_at")
-        .eq("status", "pending").order("id").limit(100);
-      if (error) return dbErr(error);
-      const ids = [...new Set(data.map((r: any) => r.user_id))];
-      const ph = new Map<string, any>();
-      if (ids.length) {
-        const { data: pr } = await sb.from("profiles").select("user_id,full_name,phone").in("user_id", ids);
-        (pr ?? []).forEach((x: any) => ph.set(x.user_id, x));
-      }
-      return json({
-        items: data.map((r: any) => ({
-          ...r,
-          full_name: ph.get(r.user_id)?.full_name ?? "",
-          phone: ph.get(r.user_id)?.phone ?? "",
-        })),
-      });
-    }
-
-    // ---- قبول / رفض طلب شحن ----
-    if (action === "topup_decide") {
-      const id = Number(p.id);
-      if (!Number.isFinite(id)) return json({ error: "رقم غير صحيح" }, 400);
-
-      if (p.approve) {
-        const { data, error } = await sb.rpc("topup_approve", { p_request: id });
-        if (error) {
-          if (/ALREADY_HANDLED/.test(error.message)) return json({ error: "هذا الطلب انعالج من قبل" }, 400);
-          if (/NOT_FOUND/.test(error.message)) return json({ error: "الطلب غير موجود" }, 404);
-          return dbErr(error);
-        }
-        await sb.from("notifications").insert({
-          user_id: data.user_id,
-          title: "💰 تم شحن رصيدك",
-          body: "أُضيف " + Number(data.amount).toLocaleString("en-US") + " د.ع (" + Number(data.amount).toLocaleString("en-US") + " نقطة) إلى محفظتك.",
-        });
-        return json({ ok: true, balance: Number(data.balance) });
-      }
-
-      const { data, error } = await sb.from("topup_requests")
-        .update({ status: "rejected", handled_at: new Date().toISOString() })
-        .eq("id", id).eq("status", "pending").select("user_id");
-      if (error) return dbErr(error);
-      if (!data.length) return json({ error: "هذا الطلب انعالج من قبل" }, 400);
-      await sb.from("notifications").insert({
-        user_id: data[0].user_id,
-        title: "لم يتم تأكيد طلب الشحن",
-        body: "تواصل معنا على واتساب لمعرفة التفاصيل.",
-      });
-      return json({ ok: true });
-    }
-
-    // ---- شحن / خصم رصيد زبون (كاش استلمته) ----
-    if (action === "wallet_adjust") {
-      const amount = Math.trunc(Number(p.amount));
-      const uid = String(p.id ?? "");
-      if (!uid || !Number.isFinite(amount) || amount === 0 || Math.abs(amount) > 100_000_000) {
-        return json({ error: "مبلغ غير صحيح" }, 400);
-      }
-      const note = String(p.note ?? "").trim().slice(0, 120) || (amount > 0 ? "شحن رصيد" : "خصم من الإدارة");
-      const { data, error } = await sb.rpc("wallet_adjust_balance", { p_user: uid, p_amount: amount, p_note: note });
-      if (error) {
-        if (/check constraint|balance/i.test(error.message)) return json({ error: "رصيد الزبون أقل من المبلغ المراد خصمه" }, 400);
-        return dbErr(error);
-      }
-      if (amount > 0) {
-        // تبليغ فوري للزبون (إذا فشل ما يهم)
-        await sb.from("notifications").insert({
-          user_id: uid,
-          title: "💰 تم شحن رصيدك",
-          body: "أُضيف " + amount.toLocaleString("en-US") + " د.ع إلى محفظتك.",
-        });
-      }
-      return json({ ok: true, balance: Number(data) });
-    }
-
-    // ---- رصيدك عند المزود ----
-    if (action === "provider_balance") {
-      const j = await providerCall({ action: "balance" });
-      if (j?.error) return json({ error: String(j.error) }, 502);
-      return json({ balance: j?.balance ?? null, currency: j?.currency ?? "USD" });
-    }
-
-    // ---- تحديث حالات الطلبات من المزود + استرجاع تلقائي للملغي/الجزئي ----
-    if (action === "sync_orders") {
-      const { data: rows, error } = await sb
-        .from("orders")
-        .select("id,provider_order_id,quantity,amount_iqd,status")
-        .in("status", ["pending", "processing"])
-        .not("provider_order_id", "is", null)
-        .order("id")
-        .limit(100);
-      if (error) return dbErr(error);
-      if (!rows.length) return json({ ok: true, checked: 0, updated: 0, refunded: 0 });
-
-      const j = await providerCall({ action: "orders", orders: rows.map((r: any) => r.provider_order_id).join(",") });
-      if (!j || typeof j !== "object" || j.error) return json({ error: String(j?.error ?? "رد غير متوقع من المزود") }, 502);
-
-      let updated = 0, refunded = 0;
-      for (const r of rows) {
-        const info = j[r.provider_order_id];
-        if (!info || info.error) continue;
-        const st = String(info.status ?? "").toLowerCase().trim();
-        let next: string | null = null;
-
-        if (st === "completed") next = "completed";
-        else if (st === "in progress" || st === "processing") next = "processing";
-        else if (st === "pending") next = "pending";
-        else if (["canceled", "cancelled", "fail", "failed", "refunded"].includes(st)) {
-          const back = await sb.rpc("wallet_refund_order", { p_order: r.id, p_status: "canceled", p_note: "ألغاه المزود، رجع المبلغ للمحفظة" });
-          refunded += Number(back.data ?? 0);
-          updated++;
-          continue;
-        } else if (st === "partial") {
-          const remains = Math.max(0, Number(info.remains) || 0);
-          const part = remains > 0 ? Math.ceil((Number(r.amount_iqd) * Math.min(remains, r.quantity)) / r.quantity) : 0;
-          if (part > 0) {
-            const back = await sb.rpc("wallet_refund_order", { p_order: r.id, p_amount: part, p_status: "partial", p_note: "تنفيذ جزئي، رجع المتبقي للمحفظة" });
-            refunded += Number(back.data ?? 0);
-          } else {
-            await sb.from("orders").update({ status: "partial", updated_at: new Date().toISOString() }).eq("id", r.id);
-          }
-          updated++;
-          continue;
-        }
-
-        if (next && next !== r.status) {
-          await sb.from("orders").update({ status: next, updated_at: new Date().toISOString() }).eq("id", r.id);
-          updated++;
-        }
-      }
-      return json({ ok: true, checked: rows.length, updated, refunded });
-    }
-
-    // ---- قائمة الحسابات (مع الرصيد والطلبات) ----
-    if (action === "users") {
-      const limit = Math.min(Number(p.limit) || 50, 200);
-      const offset = Math.max(Number(p.offset) || 0, 0);
-      const q = String(p.search ?? "").trim().toLowerCase();
-
-      const [users, profs, orders, wallets] = await Promise.all([
-        allAuthUsers(sb),
-        fetchAll(sb, "profiles", "user_id,full_name,phone", "user_id"),
-        fetchAll(sb, "orders", "user_id,status,price", "id"),
-        fetchAll(sb, "wallets", "user_id,balance", "user_id"),
-      ]);
-
-      const pm = new Map(profs.map((x: any) => [x.user_id, x]));
-      const wm = new Map(wallets.map((x: any) => [x.user_id, Number(x.balance) || 0]));
-      const om = new Map<string, { n: number; spent: number }>();
-      for (const o of orders) {
-        if (!o.user_id || NOT_COUNTED.includes(o.status)) continue;
-        const c = om.get(o.user_id) ?? { n: 0, spent: 0 };
-        c.n++; c.spent += Number(o.price) || 0;
-        om.set(o.user_id, c);
-      }
-
-      let list = users.map((u: any) => {
-        const pr: any = pm.get(u.id) ?? {};
-        const meta = u.user_metadata ?? {};
-        const oc = om.get(u.id);
-        return {
-          id: u.id,
-          email: u.email ?? "",
-          full_name: pr.full_name || meta.full_name || meta.name || "",
-          phone: pr.phone || u.phone || "",
-          provider: u.app_metadata?.provider ?? "email",
-          confirmed: !!u.email_confirmed_at,
-          created_at: u.created_at,
-          last_sign_in_at: u.last_sign_in_at ?? null,
-          orders_count: oc?.n ?? 0,
-          total_spent: oc?.spent ?? 0,
-          balance: wm.get(u.id) ?? 0,
-        };
-      }).sort((a: any, b: any) => String(b.created_at).localeCompare(String(a.created_at)));
-
-      const TZ = 3 * 3600 * 1000;
-      const ln = new Date(Date.now() + TZ);
-      const dayStart = Date.UTC(ln.getUTCFullYear(), ln.getUTCMonth(), ln.getUTCDate()) - TZ;
-      const stats = {
-        all: list.length,
-        today: list.filter((u: any) => new Date(u.created_at).getTime() >= dayStart).length,
-        week: list.filter((u: any) => new Date(u.created_at).getTime() >= dayStart - 6 * 86400000).length,
-        buyers: om.size,
-        wallets_total: [...wm.values()].reduce((a, b) => a + b, 0),
+      img.onerror = ()=>{
+        img.remove();
+        ico.style.background = bg;
+        ico.textContent = icon;
       };
 
-      if (q) {
-        list = list.filter((u: any) => [u.email, u.full_name, u.phone].some((v) => String(v).toLowerCase().includes(q)));
+      ico.textContent = "";
+
+      ico.appendChild(img);
+
+    }
+
+    const text = document.createElement("span");
+    text.textContent = label;
+
+    b.append(ico,text);
+
+    b.onclick = ()=>{
+      tab = key;
+      selectedCat = "all";
+      renderTabs();
+      loadServices();
+      if(key === "all"){
+        searchBox.focus();
       }
-      return json({ items: list.slice(offset, offset + limit), total: list.length, stats });
-    }
+    };
 
-    // ---- تغيير كلمة مرور زبون ----
-    if (action === "set_user_password") {
-      const pw = String(p.new_password ?? "");
-      if (!p.id || pw.length < 6) return json({ error: "كلمة المرور لازم 6 أحرف على الأقل" }, 400);
-      const { error } = await sb.auth.admin.updateUserById(String(p.id), { password: pw });
-      if (error) throw error;
-      return json({ ok: true });
-    }
+    tabsBox.appendChild(b);
 
-    // ---- التبليغات: إرسال ----
-    if (action === "send_notification") {
-      const title = String(p.title ?? "").trim().slice(0, 120);
-      const body = String(p.message ?? "").trim().slice(0, 1000);
-      const link = String(p.link ?? "").trim().slice(0, 500);
-      const email = String(p.email ?? "").trim().toLowerCase();
-      if (!title) return json({ error: "اكتب عنوان التبليغ" }, 400);
-      if (link && !/^https?:\/\/\S+\.\S+/i.test(link)) return json({ error: "رابط غير صحيح" }, 400);
+  });
 
-      let uid: string | null = null;
-      if (email) {
-        const u = (await allAuthUsers(sb)).find((x: any) => String(x.email ?? "").toLowerCase() === email);
-        if (!u) return json({ error: "ما لقينا مستخدم بهذا البريد" }, 404);
-        uid = u.id;
-      }
-      const { error } = await sb.from("notifications").insert({ user_id: uid, title, body: body || null, link: link || null });
-      if (error) throw error;
-      return json({ ok: true });
-    }
+}
 
-    // ---- التبليغات: القائمة ----
-    if (action === "notifications") {
-      const limit = Math.min(Number(p.limit) || 50, 200);
-      const offset = Math.max(Number(p.offset) || 0, 0);
-      const { data, error, count } = await sb
-        .from("notifications")
-        .select("id,user_id,title,body,link,created_at", { count: "exact" })
-        .order("created_at", { ascending: false })
-        .range(offset, offset + limit - 1);
-      if (error) throw error;
 
-      const items = await Promise.all(data.map(async (n: any) => {
-        const { count: rc } = await sb.from("notification_reads")
-          .select("*", { count: "exact", head: true }).eq("notification_id", n.id);
-        let target_email: string | null = null;
-        if (n.user_id) {
-          const { data: ud } = await sb.auth.admin.getUserById(n.user_id);
-          target_email = ud?.user?.email ?? null;
-        }
-        return { ...n, read_count: rc ?? 0, target_email };
-      }));
-      return json({ items, total: count ?? items.length });
-    }
+/* نحدد نوع الخدمة من اسمها (ومن اسم القسم إذا الاسم ما وضّح) */
+function typeOf(service){
 
-    // ---- التبليغات: حذف ----
-    if (action === "delete_notification") {
-      const id = Number(p.id);
-      if (!Number.isFinite(id)) return json({ error: "رقم غير صحيح" }, 400);
-      await sb.from("notification_reads").delete().eq("notification_id", id);
-      const { error } = await sb.from("notifications").delete().eq("id", id);
-      if (error) throw error;
-      return json({ ok: true });
-    }
+  const text =
+    (service.name || "") + " " + (service.category || "");
 
-    return json({ error: "action غير معروف" }, 400);
-  } catch (e) {
-    return json({ error: String((e as Error).message ?? e) }, 500);
+  const found = TYPES.find(([,,,re]) => re.test(text));
+
+  return found ? found[0] : "other";
+
+}
+
+
+function typeLabel(key){
+
+  const found = TYPES.find(([k]) => k === key);
+
+  return found || QUICK_TYPE_FALLBACK;
+
+}
+
+
+function renderTypes(){
+
+  typesBox.innerHTML = "";
+
+  /* نعد كم خدمة بكل نوع حسب القسم المفتوح حالياً */
+  const counts = new Map();
+
+  allServices.forEach(service=>{
+
+    const key = typeOf(service);
+
+    counts.set(key,(counts.get(key) || 0) + 1);
+
+  });
+
+  if(!allServices.length){
+
+    selectedType = "all";
+
+    return;
+
   }
+
+  /* إذا النوع المختار ما عنده خدمات بهذا القسم نرجع للكل */
+  if(selectedType !== "all" && !counts.has(selectedType)){
+    selectedType = "all";
+  }
+
+  const list = [["all","الكل","✳️",allServices.length]];
+
+  TYPES.forEach(([key,label,icon])=>{
+    if(counts.has(key)){
+      list.push([key,label,icon,counts.get(key)]);
+    }
+  });
+
+  if(counts.has("other")){
+    list.push([
+      "other",
+      QUICK_TYPE_FALLBACK[1],
+      QUICK_TYPE_FALLBACK[2],
+      counts.get("other")
+    ]);
+  }
+
+  list.forEach(([key,label,icon,count])=>{
+
+    const b = document.createElement("button");
+
+    b.type = "button";
+    b.className = "chip";
+    b.setAttribute("aria-pressed", String(key === selectedType));
+
+    const t = document.createElement("span");
+    t.textContent = icon + " " + label;
+
+    const c = document.createElement("span");
+    c.className = "c";
+    c.textContent = count.toLocaleString("en-US");
+
+    b.append(t,c);
+
+    b.onclick = ()=>{
+
+      selectedType = key;
+
+      renderTypes();
+
+      applyFilters();
+
+    };
+
+    typesBox.appendChild(b);
+
+  });
+
+}
+
+
+/* الخدمات المطابقة للنوع المختار فقط (قبل فلتر القسم) */
+function byType(){
+
+  return selectedType === "all"
+    ? allServices.slice()
+    : allServices.filter(s => typeOf(s) === selectedType);
+
+}
+
+
+function catOf(service){
+
+  return service.category || "أخرى";
+
+}
+
+
+/* قائمة الأقسام تُبنى من الخدمات نفسها */
+function renderCats(list){
+
+  catPanel.innerHTML = "";
+
+  catOptionEls = [];
+
+  closeCatPanel();
+
+  const counts = new Map();
+
+  list.forEach(service=>{
+
+    const name = catOf(service);
+
+    counts.set(name,(counts.get(name) || 0) + 1);
+
+  });
+
+  /* إذا القسم المختار ما عاد موجود نرجع للكل */
+  if(selectedCat !== "all" && !counts.has(selectedCat)){
+    selectedCat = "all";
+  }
+
+  if(!counts.size){
+
+    catText.textContent = "لا توجد أقسام";
+
+    return;
+
+  }
+
+  const rows = [["all","كل الأقسام",list.length]];
+
+  [...counts.keys()]
+    .sort((a,b)=>a.localeCompare(b,"ar"))
+    .forEach(name=>{
+      rows.push([name,name,counts.get(name)]);
+    });
+
+  rows.forEach(([value,label,count])=>{
+
+    const el = document.createElement("div");
+
+    el.className = "opt";
+    el.dataset.value = value;
+    el.setAttribute("role","option");
+    el.setAttribute("aria-selected",String(value === selectedCat));
+
+    const c = document.createElement("span");
+    c.className = "p";
+    c.textContent = count.toLocaleString("en-US");
+
+    const n = document.createElement("span");
+    n.className = "n";
+    n.textContent = label;
+
+    el.append(c,n);
+
+    catPanel.appendChild(el);
+
+    catOptionEls.push(el);
+
+  });
+
+  catText.textContent =
+    selectedCat === "all" ? "كل الأقسام" : selectedCat;
+
+}
+
+
+function openCatPanel(){
+
+  if(!catOptionEls.length) return;
+
+  catOpen = true;
+
+  catPanel.hidden = false;
+
+  catBtn.setAttribute("aria-expanded","true");
+
+  const el = catOptionEls.find(
+    e => e.dataset.value === selectedCat
+  );
+
+  if(el) el.scrollIntoView({block:"nearest"});
+
+}
+
+
+function closeCatPanel(){
+
+  catOpen = false;
+
+  catPanel.hidden = true;
+
+  catBtn.setAttribute("aria-expanded","false");
+
+}
+
+
+function chooseCat(value){
+
+  selectedCat = value;
+
+  closeCatPanel();
+
+  applyFilters();
+
+  catBtn.focus();
+
+}
+
+
+/* نطبّق فلتر النوع ثم القسم على الخدمات القادمة من الخادم */
+function applyFilters(){
+
+  const list = byType();
+
+  renderCats(list);
+
+  services =
+    selectedCat === "all"
+      ? list
+      : list.filter(s => catOf(s) === selectedCat);
+
+  renderServices();
+
+}
+
+
+function renderChips(){
+
+  const box = $("chips");
+
+  QUICK.forEach(n=>{
+
+    const b = document.createElement("button");
+
+    b.type = "button";
+    b.className = "chip";
+    b.textContent = n.toLocaleString("en-US");
+
+    b.onclick = ()=>{
+      quantityBox.value = n;
+      clearInvalid(quantityBox);
+      updatePrice();
+    };
+
+    box.appendChild(b);
+
+  });
+
+}
+
+
+async function loadServices(){
+
+  const myRequest = ++requestId;
+
+  statusBox.textContent = "جاري تحميل الخدمات...";
+
+  setMessage("جاري تحميل الخدمات...");
+
+  try{
+
+    const response = await fetch(API,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({
+        action:"public_services",
+        platform:tab,
+        search:searchBox.value.trim()
+      })
+    });
+
+    const result = await response.json();
+
+    /* تجاهل الردود القديمة إذا المستخدم غيّر القسم بسرعة */
+    if(myRequest !== requestId) return;
+
+    if(!response.ok){
+      throw new Error(result.error || ("HTTP " + response.status));
+    }
+
+    allServices = Array.isArray(result.items) ? result.items : [];
+
+    renderTypes();
+
+    applyFilters();
+
+  }catch(error){
+
+    if(myRequest !== requestId) return;
+
+    console.error("LOAD SERVICES ERROR:", error);
+
+    allServices = [];
+
+    services = [];
+
+    renderTypes();
+
+    renderCats([]);
+
+    setMessage("تعذر تحميل الخدمات");
+
+    statusBox.textContent =
+      "تعذر تحميل الخدمات. حدّث الصفحة وحاول مرة ثانية.";
+
+    updatePrice();
+
+  }
+
+}
+
+
+function fmtRate(service){
+
+  const rate = Number(service.sell_rate || 0);
+
+  return "$" + (
+    rate >= 1
+      ? rate.toFixed(2)
+      : String(Number(rate.toFixed(4)))
+  );
+
+}
+
+
+function setMessage(text){
+
+  servicePrice.hidden = true;
+
+  serviceText.textContent = text;
+
+}
+
+
+function selectedService(){
+
+  return services.find(service =>
+    String(service.id) === String(selectedId)
+  );
+
+}
+
+
+function refreshSelection(){
+
+  optionEls.forEach(el=>{
+    el.setAttribute(
+      "aria-selected",
+      String(el.dataset.id === String(selectedId))
+    );
+  });
+
+  const service = selectedService();
+
+  if(!service) return;
+
+  servicePrice.hidden = false;
+
+  servicePrice.textContent = fmtRate(service);
+
+  serviceText.textContent =
+    service.name || "خدمة بدون اسم";
+
+}
+
+
+function setActive(i){
+
+  if(!optionEls.length) return;
+
+  activeIndex = Math.max(0,Math.min(i,optionEls.length-1));
+
+  optionEls.forEach((el,k)=>{
+    el.classList.toggle("active",k === activeIndex);
+  });
+
+  const el = optionEls[activeIndex];
+
+  serviceBtn.setAttribute("aria-activedescendant",el.id);
+
+  el.scrollIntoView({block:"nearest"});
+
+}
+
+
+function openPanel(){
+
+  if(!optionEls.length) return;
+
+  isOpen = true;
+
+  servicePanel.hidden = false;
+
+  serviceBtn.setAttribute("aria-expanded","true");
+
+  const i = optionEls.findIndex(
+    el => el.dataset.id === String(selectedId)
+  );
+
+  setActive(i >= 0 ? i : 0);
+
+}
+
+
+function closePanel(){
+
+  isOpen = false;
+
+  servicePanel.hidden = true;
+
+  serviceBtn.setAttribute("aria-expanded","false");
+
+  serviceBtn.removeAttribute("aria-activedescendant");
+
+}
+
+
+function chooseService(id){
+
+  selectedId = id;
+
+  refreshSelection();
+
+  clearInvalid(serviceBtn);
+
+  updatePrice();
+
+  closePanel();
+
+  serviceBtn.focus();
+
+}
+
+
+function addOption(service){
+
+  const el = document.createElement("div");
+
+  el.className = "opt";
+  el.id = "opt-" + service.id;
+  el.dataset.id = service.id;
+  el.setAttribute("role","option");
+  el.setAttribute("aria-selected","false");
+
+  const p = document.createElement("span");
+  p.className = "p";
+  p.textContent = fmtRate(service);
+
+  const n = document.createElement("span");
+  n.className = "n";
+  n.textContent = service.name || "خدمة بدون اسم";
+
+  el.append(p,n);
+
+  servicePanel.appendChild(el);
+
+  optionEls.push(el);
+
+}
+
+
+function renderServices(){
+
+  servicePanel.innerHTML = "";
+
+  optionEls = [];
+
+  closePanel();
+
+  if(!services.length){
+
+    selectedId = null;
+
+    const needSearch =
+      tab === "all" && searchBox.value.trim().length < 2;
+
+    setMessage(
+      needSearch
+        ? "اكتب اسم الخدمة في خانة البحث"
+        : (
+          selectedType !== "all" && allServices.length
+            ? "لا توجد " + typeLabel(selectedType)[1] + " في هذا القسم"
+            : "لا توجد خدمات مطابقة"
+          )
+    );
+
+    statusBox.textContent = "";
+
+    updatePrice();
+
+    return;
+
+  }
+
+  if(tab === "cheap" || tab === "all"){
+
+    /* الأرخص والبحث: قائمة وحدة مرتبة */
+    services.forEach(addOption);
+
+  }else{
+
+    /* أقسام المنصات: الخدمات مجمّعة حسب النوع داخل القسم */
+    const groups = new Map();
+
+    services.forEach(service=>{
+
+      const name = service.category || "أخرى";
+
+      if(!groups.has(name)){
+        groups.set(name,[]);
+      }
+
+      groups.get(name).push(service);
+
+    });
+
+    groups.forEach((list,name)=>{
+
+      const head = document.createElement("div");
+
+      head.className = "grp";
+      head.setAttribute("role","presentation");
+      head.textContent = name;
+
+      servicePanel.appendChild(head);
+
+      list.forEach(addOption);
+
+    });
+
+  }
+
+  if(!services.some(s => String(s.id) === String(selectedId))){
+    selectedId = services[0].id;
+  }
+
+  refreshSelection();
+
+  statusBox.textContent =
+    services.length.toLocaleString("en-US") +
+    " خدمة متاحة، والسعر بجانب كل خدمة لكل 1000";
+
+  clearInvalid(serviceBtn);
+
+  updatePrice();
+
+}
+
+
+function money(n){
+
+  return n < 1 ? n.toFixed(4) : n.toFixed(2);
+
+}
+
+
+function updatePrice(){
+
+  updatePriceCore();
+
+  updateWalletLine();
+
+}
+
+
+function updatePriceCore(){
+
+  const service = selectedService();
+
+  const quantity = Number(quantityBox.value || 0);
+
+  if(!service){
+
+    priceBox.textContent = "0.00";
+
+    rateHint.textContent = "اختر خدمة لعرض السعر";
+
+    sumService.textContent = "—";
+
+    sumQty.textContent = quantity
+      ? quantity.toLocaleString("en-US")
+      : "—";
+
+    return;
+
+  }
+
+  const rate = Number(service.sell_rate || 0);
+
+  /* السعر محسوب لكل 1000 */
+  const total = rate * quantity / 1000;
+
+  priceBox.textContent = money(total);
+
+  rateHint.textContent =
+    "السعر لكل 1000: $" + Number(rate.toFixed(4));
+
+  sumService.textContent =
+    service.name || "خدمة بدون اسم";
+
+  sumQty.textContent = quantity
+    ? quantity.toLocaleString("en-US")
+    : "—";
+
+}
+
+
+function clearInvalid(el){
+
+  el.removeAttribute("aria-invalid");
+
+}
+
+
+function showMessage(text,isError){
+
+  orderMsg.textContent = text;
+
+  orderMsg.className = isError ? "msg error" : "msg";
+
+}
+
+
+/* ---------- الدفع ---------- */
+
+const payModal = $("payModal");
+const payBody  = $("payBody");
+
+function openModal(html){
+  payBody.innerHTML = html;
+  payModal.hidden = false;
+}
+
+function closeModal(){
+  payModal.hidden = true;
+}
+
+payModal.addEventListener("click",e=>{
+  if(e.target === payModal && payBody.dataset.lock !== "1") closeModal();
 });
+
+async function callApi(body){
+
+  const r = await fetch(API,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(body)
+  });
+
+  const d = await r.json().catch(()=>({}));
+
+  if(!r.ok){
+
+    const err = new Error(d.error || "حدث خطأ، حاول مرة ثانية");
+
+    err.data = d;
+
+    throw err;
+
+  }
+
+  return d;
+
+}
+
+function showOrderDone(r){
+
+  payBody.dataset.lock = "";
+
+  const test = r.test
+    ? '<span class="modal-tag">🧪 وضع تجريبي</span><br>'
+    : "";
+
+  openModal(
+    test +
+    '<div class="big">✅</div>' +
+    "<h3>تم إرسال طلبك</h3>" +
+    "<p>رقم طلبك: <b>#" + r.order_id + "</b></p>" +
+    "<p>انخصم <b>" + fmtIqd(r.amount_iqd) + "</b> من رصيدك.</p>" +
+    '<div class="amt">' + fmtIqd(r.balance) + "</div>" +
+    "<p>رصيدك المتبقي</p>" +
+    '<div class="row"><button class="btn primary" type="button" onclick="closeModal()">تمام</button></div>'
+  );
+
+}
+
+function showNeedFunds(d){
+
+  payBody.dataset.lock = "";
+
+  const lack = Math.max(0,Number(d.need) - Number(d.balance));
+
+  openModal(
+    '<div class="big">💰</div>' +
+    "<h3>رصيدك ما يكفي</h3>" +
+    "<p>سعر الطلب: <b>" + fmtIqd(d.need) + "</b></p>" +
+    "<p>رصيدك الحالي: <b>" + fmtIqd(d.balance) + "</b></p>" +
+    '<div class="amt">ينقصك ' + fmtIqd(lack) + "</div>" +
+    '<div class="row">' +
+      '<button class="btn ghost" type="button" onclick="closeModal()">إغلاق</button>' +
+      '<button class="btn primary" type="button" onclick="openTopup(' + lack + ')">طلب شحن رصيد</button>' +
+    "</div>"
+  );
+
+}
+
+
+async function submitOrder(){
+
+  const service = selectedService();
+
+  const link = linkBox.value.trim();
+
+  const quantity = Number(quantityBox.value);
+
+  showMessage("",false);
+
+  if(!service){
+
+    serviceBtn.setAttribute("aria-invalid","true");
+
+    serviceBtn.focus();
+
+    showMessage("اختر الخدمة أولاً",true);
+
+    return;
+
+  }
+
+  if(!/^https?:\/\/\S+\.\S+/i.test(link)){
+
+    linkBox.setAttribute("aria-invalid","true");
+
+    linkBox.focus();
+
+    showMessage("اكتب رابطاً صحيحاً يبدأ بـ https://",true);
+
+    return;
+
+  }
+
+  if(!Number.isFinite(quantity) || quantity < 1){
+
+    quantityBox.setAttribute("aria-invalid","true");
+
+    quantityBox.focus();
+
+    showMessage("اكتب الكمية",true);
+
+    return;
+
+  }
+
+  /* الطلب يحتاج حساب: بدون تسجيل دخول نفتح نافذة الدخول */
+  if(!session){
+
+    showMessage("سجّل دخولك أول حتى تكمل الطلب",true);
+
+    openAuth("login","سجّل دخولك أو أنشئ حساب حتى تكمل طلبك");
+
+    return;
+
+  }
+
+  const btn = $("orderBtn");
+
+  btn.disabled = true;
+
+  const label = btn.textContent;
+
+  btn.textContent = "جاري إنشاء الطلب...";
+
+  try{
+
+    const r = await callApi({
+      action:"create_order",
+      service_id:service.id,
+      link,
+      quantity,
+      access_token: session.access_token
+    });
+
+    walletBalance = Number(r.balance) || 0;
+
+    renderWalletBtn();
+
+    updateWalletLine();
+
+    showOrderDone(r);
+
+  }catch(e){
+
+    const d = e.data || {};
+
+    if(d.code === "insufficient_funds"){
+
+      walletBalance = Number(d.balance) || 0;
+
+      renderWalletBtn();
+
+      updateWalletLine();
+
+      showNeedFunds(d);
+
+    }else{
+
+      if(d.refunded) loadWallet();
+
+      showMessage(e.message,true);
+
+    }
+
+  }finally{
+
+    btn.disabled = false;
+
+    btn.textContent = label;
+
+  }
+
+}
+
+
+catBtn.addEventListener("click",()=>{
+  catOpen ? closeCatPanel() : openCatPanel();
+});
+
+catBtn.addEventListener("keydown",e=>{
+
+  if(e.key === "ArrowDown" && !catOpen){
+    e.preventDefault();
+    openCatPanel();
+  }else if(e.key === "Escape" && catOpen){
+    e.preventDefault();
+    closeCatPanel();
+  }
+
+});
+
+catPanel.addEventListener("mousedown",e=>{
+  e.preventDefault();
+});
+
+catPanel.addEventListener("click",e=>{
+
+  const el = e.target.closest(".opt");
+
+  if(el) chooseCat(el.dataset.value);
+
+});
+
+document.addEventListener("click",e=>{
+
+  if(catOpen && !catCombo.contains(e.target)){
+    closeCatPanel();
+  }
+
+});
+
+serviceBtn.addEventListener("click",()=>{
+  isOpen ? closePanel() : openPanel();
+});
+
+serviceBtn.addEventListener("keydown",e=>{
+
+  if(e.key === "ArrowDown" || e.key === "ArrowUp"){
+
+    e.preventDefault();
+
+    if(!isOpen){
+      openPanel();
+      return;
+    }
+
+    setActive(activeIndex + (e.key === "ArrowDown" ? 1 : -1));
+
+  }else if(e.key === "Enter" && isOpen){
+
+    e.preventDefault();
+
+    const el = optionEls[activeIndex];
+
+    if(el) chooseService(el.dataset.id);
+
+  }else if((e.key === "Escape" || e.key === "Tab") && isOpen){
+
+    if(e.key === "Escape") e.preventDefault();
+
+    closePanel();
+
+  }
+
+});
+
+/* نمنع فقدان التركيز عند الضغط داخل القائمة */
+servicePanel.addEventListener("mousedown",e=>{
+  e.preventDefault();
+});
+
+servicePanel.addEventListener("click",e=>{
+
+  const el = e.target.closest(".opt");
+
+  if(el) chooseService(el.dataset.id);
+
+});
+
+document.addEventListener("click",e=>{
+
+  if(isOpen && !combo.contains(e.target)){
+    closePanel();
+  }
+
+});
+
+quantityBox.addEventListener("input",()=>{
+  clearInvalid(quantityBox);
+  updatePrice();
+});
+
+linkBox.addEventListener("input",()=>{
+  clearInvalid(linkBox);
+});
+
+searchBox.addEventListener("input",()=>{
+
+  clearTimeout(searchTimer);
+
+  searchTimer = setTimeout(loadServices,400);
+
+});
+
+$("orderBtn").addEventListener("click",submitOrder);
+
+
+/* تجهيز رابط الواتساب: يفتح تطبيق واتساب مع رسالة جاهزة */
+(function setupWhatsApp(){
+
+  const link = $("waLink");
+
+  const waHref =
+    "https://wa.me/" + WHATSAPP +
+    "?text=" + encodeURIComponent(WHATSAPP_TEXT);
+
+  link.href = waHref;
+
+  document.querySelectorAll("[data-wa]").forEach(a=>{
+    a.href = waHref;
+  });
+
+  $("waNum").textContent = "+" + WHATSAPP;
+
+})();
+
+
+/* =====================================================
+   حسابات الزبائن (Supabase Auth: بريد وكلمة مرور + Google)
+   ===================================================== */
+
+const SUPABASE_URL = "https://kwxqjtnfppffuoohlmpl.supabase.co";
+
+/* ← الصق هنا المفتاح العام (anon / publishable) من:
+     Supabase ← Project Settings ← API Keys
+   هذا المفتاح مصمم يكون ظاهر بالموقع، لا تحط مفتاح service_role هنا أبداً */
+const SUPABASE_ANON_KEY = "sb_publishable_IlwFss6aK0UH72AFS-s8UA_tQGo46aA";
+
+const authModal = $("authModal");
+const authBody  = $("authBody");
+const acctBtn   = $("acctBtn");
+
+let sbAuth = null;
+let session = null;
+
+/* تذكرني: إذا مفعّل تنحفظ الجلسة بالمتصفح (localStorage)،
+   وإذا ملغي تنحفظ لين تسكّر التبويب فقط (sessionStorage) */
+const REMEMBER_KEY = "o7_remember";
+
+let rememberMe = true;
+
+try{ rememberMe = localStorage.getItem(REMEMBER_KEY) !== "0"; }catch(e){}
+
+function setRemember(v){
+
+  rememberMe = !!v;
+
+  try{ localStorage.setItem(REMEMBER_KEY,rememberMe ? "1" : "0"); }catch(e){}
+
+}
+
+const authStorage = {
+
+  getItem(k){
+    try{
+      const v = localStorage.getItem(k);
+      return v !== null ? v : sessionStorage.getItem(k);
+    }catch(e){ return null; }
+  },
+
+  setItem(k,v){
+    try{
+      if(rememberMe){
+        localStorage.setItem(k,v);
+        sessionStorage.removeItem(k);
+      }else{
+        sessionStorage.setItem(k,v);
+        localStorage.removeItem(k);
+      }
+    }catch(e){}
+  },
+
+  removeItem(k){
+    try{
+      localStorage.removeItem(k);
+      sessionStorage.removeItem(k);
+    }catch(e){}
+  }
+
+};
+
+const ORDER_ST = {
+  unpaid:"غير مدفوع",
+  pending:"قيد الانتظار",
+  processing:"قيد التنفيذ",
+  completed:"مكتمل",
+  partial:"جزئي",
+  canceled:"ملغي",
+  refunded:"مسترجع"
+};
+
+const esc = v => String(v ?? "").replace(/[&<>"']/g,c => ({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+}[c]));
+
+const TX_T = {
+  topup:"شحن رصيد",
+  adjust:"تعديل من الإدارة",
+  purchase:"طلب",
+  refund:"استرجاع"
+};
+
+function walletCardHtml(w){
+
+  return '<div class="wallet-card">' +
+    "<small>رصيدك الحالي</small>" +
+    "<b>" + fmtIqd(w.balance) + "</b>" +
+    "<small>= " + fmtPts(w.balance) + "</small>" +
+    '<button class="btn" type="button" id="wTopup">طلب شحن رصيد</button>' +
+  "</div>";
+
+}
+
+function walletTxHtml(w){
+
+  const items = w.items || [];
+
+  if(!items.length) return '<p class="lead-s" style="margin:6px 0">ما في حركات بعد.</p>';
+
+  return items.map(t =>{
+
+    const amt = Number(t.amount) || 0;
+
+    return '<div class="ord"><div><b>' + esc(TX_T[t.type] || t.type) + "</b>" +
+      "<small>" + esc(t.note || "") + " • " +
+      esc(new Date(t.created_at).toLocaleDateString("en-GB")) + "</small></div>" +
+      '<div class="r"><b class="' + (amt >= 0 ? "pos" : "neg") + '" dir="ltr">' +
+      (amt >= 0 ? "+" : "") + amt.toLocaleString("en-US") + "</b>" +
+      "<small>الرصيد " + Number(t.balance_after).toLocaleString("en-US") + "</small></div></div>";
+
+  }).join("");
+
+}
+
+
+function updateAcctBtn(){
+
+  acctBtn.textContent = session ? "👤 حسابي" : "👤 دخول";
+
+  const hint = $("loginHint");
+
+  if(hint) hint.hidden = !!session;
+
+}
+
+
+function authErr(e){
+
+  const m = String((e && e.message) || e || "");
+
+  if(/invalid login credentials/i.test(m)) return "البريد أو كلمة المرور غلط";
+  if(/already registered|already been registered/i.test(m)) return "هذا البريد مسجّل من قبل، سجّل دخولك";
+  if(/email not confirmed/i.test(m)) return "أكّد بريدك الإلكتروني أولاً (راجع صندوق الوارد)";
+  if(/at least 6|weak password/i.test(m)) return "كلمة المرور لازم 6 أحرف على الأقل";
+  if(/valid email|invalid email|unable to validate email/i.test(m)) return "اكتب بريداً إلكترونياً صحيحاً";
+  if(/rate limit|too many/i.test(m)) return "محاولات كثيرة، انتظر شوية وحاول";
+  if(/provider is not enabled|unsupported provider/i.test(m)) return "تسجيل Google غير مفعّل بعد";
+
+  return m || "حدث خطأ، حاول مرة ثانية";
+
+}
+
+
+function authShell(inner){
+
+  authBody.innerHTML =
+    '<button class="auth-x" id="authClose" type="button" aria-label="إغلاق">✕</button>' + inner;
+
+  $("authClose").onclick = closeAuth;
+
+}
+
+
+function authMsg(text,ok){
+
+  const m = $("aMsg");
+
+  if(!m) return;
+
+  m.textContent = text || "";
+
+  m.className = "auth-err" + (ok ? " auth-ok" : "");
+
+}
+
+
+async function withBusy(btn,fn){
+
+  const label = btn.textContent;
+
+  btn.disabled = true;
+
+  btn.textContent = "لحظة...";
+
+  try{
+
+    await fn();
+
+  }finally{
+
+    btn.disabled = false;
+
+    btn.textContent = label;
+
+  }
+
+}
+
+
+function enterToSubmit(ids,btnId){
+
+  ids.forEach(id=>{
+
+    const el = $(id);
+
+    if(el) el.addEventListener("keydown",e=>{
+      if(e.key === "Enter") $(btnId).click();
+    });
+
+  });
+
+}
+
+
+function openAuth(view,note){
+
+  authModal.hidden = false;
+
+  renderAuth(view || (session ? "account" : "login"));
+
+  if(note) authMsg(note,true);
+
+}
+
+
+function closeAuth(){
+
+  authModal.hidden = true;
+
+}
+
+
+function renderAuth(view){
+
+  if(!sbAuth){
+
+    authShell(
+      '<h3>الحسابات غير مفعّلة بعد</h3>' +
+      '<p class="lead-s">لازم ينضاف مفتاح Supabase العام بالموقع حتى تشتغل الحسابات.</p>'
+    );
+
+    return;
+
+  }
+
+  if(view === "account") return renderAccount();
+
+  const google =
+    '<button class="btn gbtn" id="gBtn" type="button">' +
+      '<img src="https://cdn.simpleicons.org/google/4285F4" alt="" onerror="this.remove()">' +
+      "المتابعة عبر Google" +
+    "</button>" +
+    '<div class="auth-or">أو بالبريد الإلكتروني</div>';
+
+  if(view === "signup"){
+
+    authShell(
+      "<h3>إنشاء حساب</h3>" +
+      '<p class="lead-s">احفظ طلباتك ومعلوماتك وتابعها بأي وقت.</p>' +
+      google +
+      '<label class="auth-lbl" for="aName">الاسم</label>' +
+      '<input class="auth-in" id="aName" autocomplete="name">' +
+      '<label class="auth-lbl" for="aEmail">البريد الإلكتروني</label>' +
+      '<input class="auth-in" id="aEmail" type="email" dir="ltr" autocomplete="email">' +
+      '<label class="auth-lbl" for="aPass">كلمة المرور (6 أحرف على الأقل)</label>' +
+      '<input class="auth-in" id="aPass" type="password" dir="ltr" autocomplete="new-password">' +
+      '<div class="auth-err" id="aMsg"></div>' +
+      '<button class="btn primary" style="width:100%" id="aGo" type="button">إنشاء الحساب</button>' +
+      '<div class="auth-foot">عندك حساب؟ <button class="auth-link" id="aSwitch" type="button">سجّل دخولك</button></div>'
+    );
+
+    $("aGo").onclick = ()=>withBusy($("aGo"),async ()=>{
+
+      const name = $("aName").value.trim();
+      const email = $("aEmail").value.trim();
+      const password = $("aPass").value;
+
+      if(!email || !password){ authMsg("اكتب البريد وكلمة المرور"); return; }
+
+      setRemember(true);
+
+      const {data,error} = await sbAuth.auth.signUp({
+        email,
+        password,
+        options:{
+          data:{full_name:name},
+          emailRedirectTo:location.origin + location.pathname
+        }
+      });
+
+      if(error){ authMsg(authErr(error)); return; }
+
+      if(!data.session){
+        authMsg("تم إنشاء الحساب. راجع بريدك وأكّد الحساب ثم سجّل دخولك.",true);
+      }else{
+        closeAuth();
+      }
+
+    });
+
+    $("aSwitch").onclick = ()=>renderAuth("login");
+
+    enterToSubmit(["aName","aEmail","aPass"],"aGo");
+
+  }else if(view === "forgot"){
+
+    authShell(
+      "<h3>استرجاع كلمة المرور</h3>" +
+      '<p class="lead-s">اكتب بريدك ونرسل لك رابط تغيير كلمة المرور.</p>' +
+      '<label class="auth-lbl" for="aEmail">البريد الإلكتروني</label>' +
+      '<input class="auth-in" id="aEmail" type="email" dir="ltr" autocomplete="email">' +
+      '<div class="auth-err" id="aMsg"></div>' +
+      '<button class="btn primary" style="width:100%" id="aGo" type="button">إرسال الرابط</button>' +
+      '<div class="auth-foot"><button class="auth-link" id="aSwitch" type="button">رجوع لتسجيل الدخول</button></div>'
+    );
+
+    $("aGo").onclick = ()=>withBusy($("aGo"),async ()=>{
+
+      const email = $("aEmail").value.trim();
+
+      if(!email){ authMsg("اكتب بريدك"); return; }
+
+      const {error} = await sbAuth.auth.resetPasswordForEmail(email,{
+        redirectTo:location.origin + location.pathname
+      });
+
+      authMsg(error ? authErr(error) : "أرسلنا لك رابط تغيير كلمة المرور. راجع بريدك.",!error);
+
+    });
+
+    $("aSwitch").onclick = ()=>renderAuth("login");
+
+    enterToSubmit(["aEmail"],"aGo");
+
+  }else if(view === "reset"){
+
+    authShell(
+      "<h3>كلمة مرور جديدة</h3>" +
+      '<label class="auth-lbl" for="aPass">كلمة المرور الجديدة</label>' +
+      '<input class="auth-in" id="aPass" type="password" dir="ltr" autocomplete="new-password">' +
+      '<div class="auth-err" id="aMsg"></div>' +
+      '<button class="btn primary" style="width:100%" id="aGo" type="button">حفظ</button>'
+    );
+
+    $("aGo").onclick = ()=>withBusy($("aGo"),async ()=>{
+
+      const {error} = await sbAuth.auth.updateUser({password:$("aPass").value});
+
+      if(error){ authMsg(authErr(error)); return; }
+
+      renderAuth("account");
+
+    });
+
+    enterToSubmit(["aPass"],"aGo");
+
+  }else{
+
+    authShell(
+      "<h3>تسجيل الدخول</h3>" +
+      '<p class="lead-s">سجّل دخولك لحفظ طلباتك ومعلوماتك.</p>' +
+      google +
+      '<label class="auth-lbl" for="aEmail">البريد الإلكتروني</label>' +
+      '<input class="auth-in" id="aEmail" type="email" dir="ltr" autocomplete="email">' +
+      '<label class="auth-lbl" for="aPass">كلمة المرور</label>' +
+      '<input class="auth-in" id="aPass" type="password" dir="ltr" autocomplete="current-password">' +
+      '<label class="auth-remember"><input type="checkbox" id="aRemember" checked> تذكرني</label>' +
+      '<div class="auth-err" id="aMsg"></div>' +
+      '<button class="btn primary" style="width:100%" id="aGo" type="button">دخول</button>' +
+      '<div class="auth-foot">' +
+        '<button class="auth-link" id="aForgot" type="button">نسيت كلمة المرور؟</button><br>' +
+        'ما عندك حساب؟ <button class="auth-link" id="aSwitch" type="button">أنشئ حساب</button>' +
+      "</div>"
+    );
+
+    $("aGo").onclick = ()=>withBusy($("aGo"),async ()=>{
+
+      const email = $("aEmail").value.trim();
+      const password = $("aPass").value;
+
+      if(!email || !password){ authMsg("اكتب البريد وكلمة المرور"); return; }
+
+      setRemember($("aRemember") ? $("aRemember").checked : true);
+
+      const {error} = await sbAuth.auth.signInWithPassword({email,password});
+
+      if(error){ authMsg(authErr(error)); return; }
+
+      closeAuth();
+
+    });
+
+    $("aSwitch").onclick = ()=>renderAuth("signup");
+    $("aForgot").onclick = ()=>renderAuth("forgot");
+
+    enterToSubmit(["aEmail","aPass"],"aGo");
+
+  }
+
+  const g = $("gBtn");
+
+  if(g){
+
+    g.onclick = async ()=>{
+
+      setRemember($("aRemember") ? $("aRemember").checked : true);
+
+      const {error} = await sbAuth.auth.signInWithOAuth({
+        provider:"google",
+        options:{redirectTo:location.origin + location.pathname}
+      });
+
+      if(error) authMsg(authErr(error));
+
+    };
+
+  }
+
+}
+
+
+async function renderAccount(){
+
+  authShell('<p class="lead-s">جاري التحميل...</p>');
+
+  const token = session.access_token;
+
+  let prof = {
+    email:(session.user && session.user.email) || "",
+    full_name:"",
+    phone:""
+  };
+
+  let orders = [];
+  let wal = {balance:0,items:[]};
+  let problem = "";
+
+  try{
+
+    const [pr,or,wl] = await Promise.all([
+      callApi({action:"my_profile",access_token:token}),
+      callApi({action:"my_orders",access_token:token}),
+      callApi({action:"my_wallet",access_token:token}).catch(()=>null)
+    ]);
+
+    prof = pr;
+
+    orders = or.items || [];
+
+    if(wl){
+
+      wal = wl;
+
+      walletPending = Array.isArray(wl.pending) ? wl.pending : [];
+
+      walletBalance = Number(wl.balance) || 0;
+
+      renderWalletBtn();
+
+      updateWalletLine();
+
+    }
+
+  }catch(e){
+
+    problem = e.message;
+
+  }
+
+  const list = orders.length
+    ? orders.map(o =>
+        '<div class="ord"><div><b>' + esc(o.service_name || "") + "</b>" +
+        "<small>#" + o.id + " • " + Number(o.quantity).toLocaleString("en-US") + " • " +
+        esc(new Date(o.created_at).toLocaleDateString("en-GB")) + "</small></div>" +
+        '<div class="r"><b>$' + Number(o.price || 0).toFixed(2) + "</b>" +
+        '<span class="st">' + esc(ORDER_ST[o.status] || o.status) + "</span></div></div>"
+      ).join("")
+    : '<p class="lead-s" style="margin:6px 0">ما عندك طلبات بعد.</p>';
+
+  authShell(
+    "<h3>حسابي</h3>" +
+    '<p class="lead-s" dir="ltr">' + esc(prof.email) + "</p>" +
+    walletCardHtml(wal) +
+    '<label class="auth-lbl" for="pName">الاسم</label>' +
+    '<input class="auth-in" id="pName" autocomplete="name" value="' + esc(prof.full_name) + '">' +
+    '<label class="auth-lbl" for="pPhone">رقم الهاتف / واتساب</label>' +
+    '<input class="auth-in" id="pPhone" dir="ltr" inputmode="tel" autocomplete="tel" value="' + esc(prof.phone) + '">' +
+    '<div class="auth-err" id="aMsg">' + esc(problem) + "</div>" +
+    '<button class="btn primary" style="width:100%" id="pSave" type="button">حفظ المعلومات</button>' +
+    '<h3 style="margin:20px 0 4px;font-size:16px;text-align:start">طلباتي</h3>' +
+    '<div class="ord-list">' + list + "</div>" +
+    '<h3 style="margin:20px 0 4px;font-size:16px;text-align:start">حركات المحفظة</h3>' +
+    '<div class="ord-list">' + walletTxHtml(wal) + "</div>" +
+    '<button class="btn ghost" style="width:100%;margin-top:16px" id="pOut" type="button">تسجيل الخروج</button>'
+  );
+
+  $("wTopup").onclick = ()=>{
+
+    closeAuth();
+
+    openTopup();
+
+  };
+
+  $("pSave").onclick = ()=>withBusy($("pSave"),async ()=>{
+
+    try{
+
+      await callApi({
+        action:"save_profile",
+        access_token:session.access_token,
+        full_name:$("pName").value,
+        phone:$("pPhone").value
+      });
+
+      authMsg("تم حفظ معلوماتك ✅",true);
+
+    }catch(e){
+
+      authMsg(e.message);
+
+    }
+
+  });
+
+  $("pOut").onclick = async ()=>{
+
+    await sbAuth.auth.signOut();
+
+    closeAuth();
+
+  };
+
+}
+
+
+authModal.addEventListener("click",e=>{
+  if(e.target === authModal) closeAuth();
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key === "Escape" && !authModal.hidden) closeAuth();
+});
+
+acctBtn.addEventListener("click",()=>openAuth());
+
+$("walletBtn").addEventListener("click",()=>openTopup());
+
+$("hintLogin").addEventListener("click",()=>openAuth("login"));
+
+
+/* =====================================================
+   التبليغات: رسائل من الإدارة توصل فوراً (Supabase Realtime)
+   ===================================================== */
+
+const bellBtn    = $("bellBtn");
+const bellBadge  = $("bellBadge");
+const notifModal = $("notifModal");
+const notifBody  = $("notifBody");
+const notifToast = $("notifToast");
+
+let notifs = [];
+let notifRead = new Set();
+let notifFresh = new Set();
+let notifChannel = null;
+let notifUser = null;
+let notifToastTimer = null;
+
+
+function notifSince(){
+
+  const t = session && session.user
+    ? new Date(session.user.created_at).getTime()
+    : 0;
+
+  return Number.isFinite(t) ? t : 0;
+
+}
+
+
+function updateBell(){
+
+  const n = notifs.filter(x => !notifRead.has(x.id)).length;
+
+  bellBadge.textContent = n > 99 ? "99+" : String(n);
+
+  bellBadge.hidden = n === 0;
+
+}
+
+
+async function loadNotifs(){
+
+  if(!sbAuth || !session) return;
+
+  const t = notifSince();
+
+  const since = t ? new Date(t).toISOString() : "1970-01-01T00:00:00Z";
+
+  const [a,b] = await Promise.all([
+    sbAuth.from("notifications")
+      .select("id,user_id,title,body,link,created_at")
+      .gte("created_at",since)
+      .order("created_at",{ascending:false})
+      .limit(30),
+    sbAuth.from("notification_reads").select("notification_id")
+  ]);
+
+  if(a.error || b.error) return;
+
+  notifs = a.data || [];
+
+  notifRead = new Set((b.data || []).map(r => r.notification_id));
+
+  updateBell();
+
+}
+
+
+async function markRead(ids){
+
+  if(!ids.length || !sbAuth || !session) return;
+
+  const rows = ids.map(id => ({
+    user_id:session.user.id,
+    notification_id:id
+  }));
+
+  const {error} = await sbAuth.from("notification_reads")
+    .upsert(rows,{onConflict:"user_id,notification_id",ignoreDuplicates:true});
+
+  if(!error){
+
+    ids.forEach(id => notifRead.add(id));
+
+    updateBell();
+
+  }
+
+}
+
+
+function renderNotifs(){
+
+  const list = notifs.length
+    ? notifs.map(n=>{
+
+        const link = /^https?:\/\//i.test(n.link || "")
+          ? '<a href="' + esc(n.link) + '" target="_blank" rel="noopener">فتح الرابط ↗</a>'
+          : "";
+
+        return '<div class="notif' + (notifFresh.has(n.id) ? " new" : "") + '">' +
+          "<b>" + esc(n.title) + "</b>" +
+          (n.body ? "<p>" + esc(n.body) + "</p>" : "") +
+          link +
+          "<small>" + esc(new Date(n.created_at).toLocaleString("en-GB",{dateStyle:"short",timeStyle:"short"})) + "</small>" +
+        "</div>";
+
+      }).join("")
+    : '<p class="lead-s">ما عندك تبليغات بعد.</p>';
+
+  notifBody.innerHTML =
+    '<button class="auth-x" id="notifClose" type="button" aria-label="إغلاق">✕</button>' +
+    "<h3>🔔 التبليغات</h3>" +
+    '<div class="notif-list">' + list + "</div>";
+
+  $("notifClose").onclick = closeNotifs;
+
+}
+
+
+async function openNotifs(){
+
+  if(!session) return;
+
+  notifModal.hidden = false;
+
+  notifToast.hidden = true;
+
+  notifBody.innerHTML =
+    '<button class="auth-x" id="notifClose" type="button" aria-label="إغلاق">✕</button>' +
+    '<p class="lead-s">جاري التحميل...</p>';
+
+  $("notifClose").onclick = closeNotifs;
+
+  await loadNotifs();
+
+  notifFresh = new Set(notifs.filter(n => !notifRead.has(n.id)).map(n => n.id));
+
+  renderNotifs();
+
+  markRead([...notifFresh]);
+
+}
+
+
+function closeNotifs(){
+
+  notifModal.hidden = true;
+
+}
+
+
+function showNotifToast(n){
+
+  notifToast.innerHTML =
+    "<span>🔔</span><div><b>" + esc(n.title) + "</b>" +
+    (n.body ? "<small>" + esc(String(n.body).slice(0,90)) + "</small>" : "") +
+    "</div>";
+
+  notifToast.hidden = false;
+
+  clearTimeout(notifToastTimer);
+
+  notifToastTimer = setTimeout(()=>{ notifToast.hidden = true; },8000);
+
+}
+
+
+function stopNotifs(){
+
+  if(notifChannel && sbAuth) sbAuth.removeChannel(notifChannel);
+
+  notifChannel = null;
+  notifUser = null;
+  notifs = [];
+  notifRead = new Set();
+  notifFresh = new Set();
+
+  bellBtn.hidden = true;
+  notifToast.hidden = true;
+  notifModal.hidden = true;
+
+  updateBell();
+
+}
+
+
+async function startNotifs(){
+
+  if(!sbAuth || !session) return;
+
+  if(notifUser === session.user.id) return;
+
+  stopNotifs();
+
+  const uid = session.user.id;
+
+  notifUser = uid;
+
+  bellBtn.hidden = false;
+
+  await loadNotifs();
+
+  if(notifUser !== uid) return;
+
+  notifChannel = sbAuth.channel("notifs-" + uid)
+
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications"},payload=>{
+
+      const n = payload.new;
+
+      if(!n || (n.user_id && n.user_id !== uid)) return;
+
+      if(new Date(n.created_at).getTime() < notifSince()) return;
+
+      if(notifs.some(x => x.id === n.id)) return;
+
+      notifs.unshift(n);
+
+      updateBell();
+
+      if(!notifModal.hidden){
+
+        notifFresh.add(n.id);
+
+        renderNotifs();
+
+        markRead([n.id]);
+
+      }else{
+
+        showNotifToast(n);
+
+      }
+
+    })
+
+    .on("postgres_changes",{event:"DELETE",schema:"public",table:"notifications"},payload=>{
+
+      const id = payload.old && payload.old.id;
+
+      notifs = notifs.filter(x => x.id !== id);
+
+      updateBell();
+
+      if(!notifModal.hidden) renderNotifs();
+
+    })
+
+    .subscribe();
+
+}
+
+
+function syncNotifs(){
+
+  if(session) startNotifs();
+  else stopNotifs();
+
+}
+
+
+bellBtn.addEventListener("click",openNotifs);
+
+notifToast.addEventListener("click",()=>{
+  notifToast.hidden = true;
+  openNotifs();
+});
+
+notifModal.addEventListener("click",e=>{
+  if(e.target === notifModal) closeNotifs();
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key === "Escape" && !notifModal.hidden) closeNotifs();
+});
+
+
+(function initAuth(){
+
+  if(!SUPABASE_ANON_KEY || !window.supabase){
+    updateAcctBtn();
+    return;
+  }
+
+  sbAuth = window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{
+    auth:{
+      storage:authStorage,
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true
+    }
+  });
+
+  sbAuth.auth.getSession().then(({data})=>{
+    session = data.session;
+    updateAcctBtn();
+    syncNotifs();
+    loadWallet();
+  });
+
+  sbAuth.auth.onAuthStateChange((event,s)=>{
+
+    session = s;
+
+    updateAcctBtn();
+
+    /* نأجلها لأن Supabase ما يحب ينادى عليه داخل هذا الحدث مباشرة */
+    setTimeout(()=>{ syncNotifs(); loadWallet(); },0);
+
+    if(event === "PASSWORD_RECOVERY"){
+      openAuth("reset");
+    }
+
+  });
+
+})();
+
+
+/* بطاقات الأرقام: نعرض الأرقام الحقيقية فقط */
+(function renderStats(){
+
+  const list = [];
+
+  if(STATS_ORDERS > 0){
+    list.push([STATS_ORDERS.toLocaleString("en-US") + "+","طلب مكتمل"]);
+  }
+
+  if(STATS_CUSTOMERS > 0){
+    list.push([STATS_CUSTOMERS.toLocaleString("en-US") + "+","زبون يثق بنا"]);
+  }
+
+  list.push([
+    String(TABS.filter(t => t[0] !== "cheap" && t[0] !== "all").length),
+    "منصات مدعومة"
+  ]);
+
+  list.push([String(TYPES.length),"أنواع خدمات"]);
+
+  list.push(["24/7","دعم مستمر"]);
+
+  $("statsGrid").innerHTML = list.map(([n,label]) =>
+    `<div class="stat reveal"><b>${n}</b><span>${label}</span></div>`
+  ).join("");
+
+})();
+
+
+/* ظهور تدريجي للأقسام عند التمرير */
+(function setupReveal(){
+
+  const els = document.querySelectorAll(".reveal");
+
+  if(!("IntersectionObserver" in window)){
+    els.forEach(el => el.classList.add("in"));
+    return;
+  }
+
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add("in");
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:.12});
+
+  els.forEach(el => io.observe(el));
+
+})();
+
+
+renderTabs();
+
+renderChips();
+
+loadServices();
+
+</script>
+
+</body>
+</html>
