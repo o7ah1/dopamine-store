@@ -57,6 +57,22 @@ input,select{
   min-width:0;
 }
 
+textarea{
+  font:inherit;
+  font-size:15px;
+  border:0;
+  border-radius:10px;
+  padding:11px 12px;
+  background:#26344f;
+  color:var(--ink);
+  width:100%;
+  min-height:110px;
+  resize:vertical;
+}
+
+.nform{display:grid;gap:8px}
+.nform .hint{color:var(--muted);font-size:13px}
+
 input[type=checkbox]{width:18px;height:18px;padding:0;accent-color:var(--green);cursor:pointer}
 
 button{
@@ -345,6 +361,8 @@ td.lnk a{color:#7cb7ff}
       <div class="views">
         <button id="vbServices" class="active" onclick="switchView('services')">📦 الخدمات</button>
         <button id="vbOrders" onclick="switchView('orders')">🧾 الطلبات والأرباح</button>
+        <button id="vbUsers" onclick="switchView('users')">👥 الحسابات</button>
+        <button id="vbNotifs" onclick="switchView('notifs')">📣 التبليغات</button>
         <button class="b-red" onclick="logout()">خروج</button>
       </div>
     </div>
@@ -477,6 +495,116 @@ td.lnk a{color:#7cb7ff}
         <div class="row">
           <button onclick="orderPage(-1)">السابق</button>
           <button onclick="orderPage(1)">التالي</button>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ============ قسم الحسابات ============ -->
+    <div id="viewUsers" class="hidden">
+
+      <div class="stats" id="uStats"></div>
+
+      <div class="ofilters">
+        <input id="uSearch" placeholder="🔎 الاسم أو البريد أو رقم الهاتف"
+          onkeydown="if(event.key==='Enter')searchUsers()">
+
+        <button class="b-blue" onclick="searchUsers()">بحث</button>
+        <button class="b-gray" onclick="loadUsers()">↻ تحديث</button>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>الاسم</th>
+              <th>البريد</th>
+              <th>الهاتف</th>
+              <th>طريقة التسجيل</th>
+              <th>تاريخ التسجيل</th>
+              <th>آخر دخول</th>
+              <th>الطلبات</th>
+              <th>إجمالي المشتريات</th>
+            </tr>
+          </thead>
+          <tbody id="userRows"></tbody>
+        </table>
+      </div>
+
+      <div class="tbl-foot">
+        <div class="status" id="uStatusLine" style="margin:0">—</div>
+        <div class="row">
+          <button onclick="userPage(-1)">السابق</button>
+          <button onclick="userPage(1)">التالي</button>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ============ قسم التبليغات ============ -->
+    <div id="viewNotifs" class="hidden">
+
+      <div class="markup">
+
+        <h3>📣 إرسال تبليغ فوري للمستخدمين</h3>
+
+        <div class="nform">
+
+          <select id="nTarget" onchange="toggleTarget()">
+            <option value="all">إلى كل المستخدمين</option>
+            <option value="one">إلى مستخدم محدد (بالبريد)</option>
+          </select>
+
+          <input id="nEmail" class="hidden" type="email" dir="ltr"
+            placeholder="بريد المستخدم: name@gmail.com">
+
+          <input id="nTitle" maxlength="120"
+            placeholder="العنوان، مثلاً: نزلت خدمة جديدة 🎉">
+
+          <textarea id="nBody" maxlength="1000"
+            placeholder="نص الرسالة (اختياري)"></textarea>
+
+          <input id="nLink" type="url" dir="ltr"
+            placeholder="رابط اختياري (https://...)">
+
+          <div>
+            <button class="b-violet" id="nSend" onclick="sendNotif()">🚀 إرسال الآن</button>
+          </div>
+
+          <div class="hint">
+            يوصل فوراً لكل من عنده الموقع مفتوح (يطلع له إشعار أعلى الصفحة)،
+            والباقي يشوفه بأيقونة 🔔 لما يدخل.
+            المستخدمون الجدد ما يشوفون تبليغات قبل تسجيلهم.
+          </div>
+
+        </div>
+
+      </div>
+
+      <h3>آخر التبليغات المرسلة</h3>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>التاريخ</th>
+              <th>إلى</th>
+              <th>التبليغ</th>
+              <th>قرأوه</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="sentRows"></tbody>
+        </table>
+      </div>
+
+      <div class="tbl-foot">
+        <div class="status" id="nStatusLine" style="margin:0">—</div>
+        <div class="row">
+          <button onclick="loadSent()">↻ تحديث</button>
         </div>
       </div>
 
@@ -619,6 +747,12 @@ function logout(){
 
   $("rows").innerHTML = "";
 
+  usersLoaded = false;
+  $("userRows").innerHTML = "";
+
+  sentLoaded = false;
+  $("sentRows").innerHTML = "";
+
   $("adminBox").classList.add("hidden");
   $("loginBox").classList.remove("hidden");
 
@@ -632,12 +766,25 @@ function switchView(name){
 
   $("viewServices").classList.toggle("hidden",name !== "services");
   $("viewOrders").classList.toggle("hidden",name !== "orders");
+  $("viewUsers").classList.toggle("hidden",name !== "users");
+  $("viewNotifs").classList.toggle("hidden",name !== "notifs");
 
   $("vbServices").classList.toggle("active",name === "services");
   $("vbOrders").classList.toggle("active",name === "orders");
+  $("vbUsers").classList.toggle("active",name === "users");
+  $("vbNotifs").classList.toggle("active",name === "notifs");
 
   if(name === "orders" && !ordersLoaded){
     initOrders();
+  }
+
+  if(name === "users" && !usersLoaded){
+    initUsers();
+  }
+
+  if(name === "notifs" && !sentLoaded){
+    sentLoaded = true;
+    loadSent();
   }
 
 }
@@ -1589,6 +1736,306 @@ function orderPage(step){
   oPage = Math.min(Math.max(oPage + step,0),last);
 
   loadOrders();
+
+}
+
+
+/* =====================================================
+   الحسابات المسجّلة في الموقع
+   ===================================================== */
+
+const U_SIZE = 50;
+
+let usersLoaded = false;
+let uPage = 0;
+let uTotal = 0;
+
+
+function initUsers(){
+
+  usersLoaded = true;
+
+  loadUsers();
+
+}
+
+
+function searchUsers(){
+
+  uPage = 0;
+
+  loadUsers();
+
+}
+
+
+function userPage(step){
+
+  const last = Math.max(Math.ceil(uTotal / U_SIZE) - 1,0);
+
+  uPage = Math.min(Math.max(uPage + step,0),last);
+
+  loadUsers();
+
+}
+
+
+async function loadUsers(){
+
+  const line = $("uStatusLine");
+
+  try{
+
+    line.textContent = "جاري تحميل الحسابات...";
+
+    const r = await api("users",{
+      search:$("uSearch").value.trim(),
+      limit:U_SIZE,
+      offset:uPage * U_SIZE
+    });
+
+    const items = r.items || [];
+
+    uTotal = r.total || 0;
+
+    renderUserStats(r.stats,uTotal);
+
+    renderUsers(items);
+
+    const last = Math.max(Math.ceil(uTotal / U_SIZE),1);
+
+    line.textContent =
+      "عرض " + fmtInt(items.length) + " من " + fmtInt(uTotal) +
+      " حساب (صفحة " + (uPage + 1) + " من " + last + ")";
+
+  }catch(error){
+
+    $("userRows").innerHTML = "";
+
+    $("uStats").innerHTML = "";
+
+    line.textContent =
+      error.message + " — تأكد أن admin-worker فيه إجراء users";
+
+  }
+
+}
+
+
+function renderUserStats(st,total){
+
+  st = st || {};
+
+  const card = (label,value,cls)=>
+    `<div class="stat"><small>${label}</small><b class="${cls || ""}">${fmtInt(value)}</b></div>`;
+
+  let html = card("إجمالي الحسابات",st.all ?? total);
+
+  if(st.today !== undefined) html += card("سجّلوا اليوم",st.today,"g");
+  if(st.week !== undefined) html += card("آخر 7 أيام",st.week);
+  if(st.buyers !== undefined) html += card("اشتروا فعلاً",st.buyers,"g");
+
+  $("uStats").innerHTML = html;
+
+}
+
+
+function renderUsers(items){
+
+  const body = $("userRows");
+
+  if(!items.length){
+
+    body.innerHTML =
+      "<tr><td colspan='9' class='status'>لا توجد حسابات</td></tr>";
+
+    return;
+
+  }
+
+  body.innerHTML = items.map((u,i)=>{
+
+    const provider = String(u.provider || "email") === "google"
+      ? "Google"
+      : "بريد";
+
+    const spent = Number(u.total_spent) || 0;
+
+    return `
+    <tr>
+      <td class="num">${uPage * U_SIZE + i + 1}</td>
+      <td>${escapeHtml(u.full_name || "—")}</td>
+      <td class="num">${escapeHtml(u.email || "—")}</td>
+      <td class="num">${escapeHtml(u.phone || "—")}</td>
+      <td><span class="pill">${provider}</span></td>
+      <td class="num">${escapeHtml(fmtDate(u.created_at))}</td>
+      <td class="num">${u.last_sign_in_at ? escapeHtml(fmtDate(u.last_sign_in_at)) : "—"}</td>
+      <td class="num">${fmtInt(u.orders_count)}</td>
+      <td class="num ${spent > 0 ? "g" : ""}">${fmtMoney(spent)}</td>
+    </tr>`;
+
+  }).join("");
+
+}
+
+
+/* =====================================================
+   التبليغات الفورية للمستخدمين
+   ===================================================== */
+
+let sentLoaded = false;
+
+
+function toggleTarget(){
+
+  $("nEmail").classList.toggle("hidden",$("nTarget").value !== "one");
+
+}
+
+
+async function sendNotif(){
+
+  const one = $("nTarget").value === "one";
+
+  const email = $("nEmail").value.trim();
+  const title = $("nTitle").value.trim();
+  const message = $("nBody").value.trim();
+  const link = $("nLink").value.trim();
+
+  if(!title){
+    toast("اكتب عنوان التبليغ",true);
+    $("nTitle").focus();
+    return;
+  }
+
+  if(one && !/^\S+@\S+\.\S+$/.test(email)){
+    toast("اكتب بريد المستخدم صح",true);
+    $("nEmail").focus();
+    return;
+  }
+
+  if(link && !/^https?:\/\/\S+\.\S+/i.test(link)){
+    toast("الرابط لازم يبدأ بـ https://",true);
+    $("nLink").focus();
+    return;
+  }
+
+  const who = one ? email : "كل المستخدمين";
+
+  if(!confirm("إرسال هذا التبليغ إلى: " + who + "؟\n\n" + title)) return;
+
+  const btn = $("nSend");
+
+  btn.disabled = true;
+
+  try{
+
+    await api("send_notification",{
+      title,
+      message,
+      link,
+      email:one ? email : ""
+    });
+
+    toast("تم إرسال التبليغ ✅");
+
+    $("nTitle").value = "";
+    $("nBody").value = "";
+    $("nLink").value = "";
+
+    loadSent();
+
+  }catch(error){
+
+    toast(error.message,true);
+
+  }finally{
+
+    btn.disabled = false;
+
+  }
+
+}
+
+
+async function loadSent(){
+
+  const line = $("nStatusLine");
+
+  try{
+
+    line.textContent = "جاري التحميل...";
+
+    const r = await api("notifications",{limit:50,offset:0});
+
+    const items = r.items || [];
+
+    renderSent(items);
+
+    line.textContent = "آخر " + fmtInt(items.length) + " تبليغ من " + fmtInt(r.total || 0);
+
+  }catch(error){
+
+    $("sentRows").innerHTML = "";
+
+    line.textContent =
+      error.message + " — تأكد أن admin-worker فيه إجراءات التبليغات";
+
+  }
+
+}
+
+
+function renderSent(items){
+
+  const body = $("sentRows");
+
+  if(!items.length){
+
+    body.innerHTML =
+      "<tr><td colspan='5' class='status'>ما أرسلت أي تبليغ بعد</td></tr>";
+
+    return;
+
+  }
+
+  body.innerHTML = items.map(n=>{
+
+    const target = n.user_id
+      ? escapeHtml(n.target_email || "مستخدم محدد")
+      : '<span class="pill">الكل</span>';
+
+    return `
+    <tr>
+      <td class="num">${escapeHtml(fmtDate(n.created_at))}</td>
+      <td class="num">${target}</td>
+      <td class="nm">${escapeHtml(n.title || "")}<small>${escapeHtml(n.body || "")}</small></td>
+      <td class="num">${fmtInt(n.read_count)}</td>
+      <td><button class="b-red tog" onclick="delNotif(${Number(n.id)})">حذف</button></td>
+    </tr>`;
+
+  }).join("");
+
+}
+
+
+async function delNotif(id){
+
+  if(!confirm("حذف هذا التبليغ؟ راح يختفي عند كل المستخدمين.")) return;
+
+  try{
+
+    await api("delete_notification",{id});
+
+    toast("تم الحذف ✅");
+
+    loadSent();
+
+  }catch(error){
+
+    toast(error.message,true);
+
+  }
 
 }
 
