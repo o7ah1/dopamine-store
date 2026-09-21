@@ -522,11 +522,14 @@ td.lnk a{color:#7cb7ff}
               <th>الاسم</th>
               <th>البريد</th>
               <th>الهاتف</th>
+              <th>رمز الحساب</th>
               <th>طريقة التسجيل</th>
+              <th>تأكيد البريد</th>
               <th>تاريخ التسجيل</th>
               <th>آخر دخول</th>
               <th>الطلبات</th>
               <th>إجمالي المشتريات</th>
+              <th>إجراء</th>
             </tr>
           </thead>
           <tbody id="userRows"></tbody>
@@ -1847,7 +1850,7 @@ function renderUsers(items){
   if(!items.length){
 
     body.innerHTML =
-      "<tr><td colspan='9' class='status'>لا توجد حسابات</td></tr>";
+      "<tr><td colspan='12' class='status'>لا توجد حسابات</td></tr>";
 
     return;
 
@@ -1867,14 +1870,95 @@ function renderUsers(items){
       <td>${escapeHtml(u.full_name || "—")}</td>
       <td class="num">${escapeHtml(u.email || "—")}</td>
       <td class="num">${escapeHtml(u.phone || "—")}</td>
+      <td class="num"><button class="b-gray tog" data-act="copy" data-id="${escapeHtml(u.id)}" title="اضغط للنسخ: ${escapeHtml(u.id)}">${escapeHtml(String(u.id || "").slice(0,8))}…</button></td>
       <td><span class="pill">${provider}</span></td>
+      <td>${u.confirmed ? "✅ مؤكّد" : "⏳ غير مؤكّد"}</td>
       <td class="num">${escapeHtml(fmtDate(u.created_at))}</td>
       <td class="num">${u.last_sign_in_at ? escapeHtml(fmtDate(u.last_sign_in_at)) : "—"}</td>
       <td class="num">${fmtInt(u.orders_count)}</td>
       <td class="num ${spent > 0 ? "g" : ""}">${fmtMoney(spent)}</td>
+      <td><button class="b-amber tog" data-act="pass" data-id="${escapeHtml(u.id)}" data-email="${escapeHtml(u.email || "")}">🔑 كلمة مرور</button></td>
     </tr>`;
 
   }).join("");
+
+}
+
+
+function copyText(text){
+
+  if(navigator.clipboard && navigator.clipboard.writeText){
+
+    navigator.clipboard.writeText(text)
+      .then(()=>toast("تم النسخ ✅"))
+      .catch(()=>prompt("انسخ من هنا:",text));
+
+  }else{
+
+    prompt("انسخ من هنا:",text);
+
+  }
+
+}
+
+
+$("userRows").addEventListener("click",e=>{
+
+  const b = e.target.closest("button[data-act]");
+
+  if(!b) return;
+
+  if(b.dataset.act === "copy") copyText(b.dataset.id);
+
+  if(b.dataset.act === "pass") setUserPass(b.dataset.id,b.dataset.email);
+
+});
+
+
+function randomPassword(){
+
+  const chars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+  const buf = new Uint32Array(10);
+
+  crypto.getRandomValues(buf);
+
+  return Array.from(buf,n => chars[n % chars.length]).join("");
+
+}
+
+
+async function setUserPass(id,email){
+
+  let pw = prompt(
+    "كلمة مرور جديدة للحساب:\n" + email +
+    "\n\nاكتب كلمة (6 أحرف على الأقل)، أو اتركها فاضية لتوليد كلمة عشوائية."
+  );
+
+  if(pw === null) return;
+
+  pw = pw.trim();
+
+  if(!pw) pw = randomPassword();
+
+  if(pw.length < 6){
+    toast("كلمة المرور لازم 6 أحرف على الأقل",true);
+    return;
+  }
+
+  try{
+
+    await api("set_user_password",{id,password:pw});
+
+    toast("تم تغيير كلمة المرور ✅");
+
+    prompt("انسخ كلمة المرور الجديدة وأرسلها للزبون:",pw);
+
+  }catch(error){
+
+    toast(error.message,true);
+
+  }
 
 }
 
