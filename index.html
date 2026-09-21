@@ -482,6 +482,12 @@ select[aria-invalid="true"]{
   font-size:13.5px;
 }
 
+.rate.err{
+  background:rgba(239,68,68,.22);
+  color:#fff;
+  font-weight:600;
+}
+
 .facts{
   margin:20px 0 0;
   padding:16px 0 0;
@@ -1340,6 +1346,7 @@ body{
 
     <div class="nav-actions">
       <button class="btn sm ghost wbtn" id="walletBtn" type="button" aria-label="طلب رصيد" title="طلب شحن رصيد" hidden>💰 <span id="walletBal">0</span></button>
+      <button class="btn sm ghost" id="ordersBtn" type="button" aria-label="طلباتي" hidden>📦 طلباتي</button>
       <button class="btn sm ghost bell" id="bellBtn" type="button" aria-label="التبليغات" hidden>🔔<span class="bell-badge" id="bellBadge" hidden>0</span></button>
       <button class="btn sm ghost" id="acctBtn" type="button">👤 دخول</button>
       <a class="btn sm wa" data-wa href="#" target="_blank" rel="noopener">💬 تواصل معنا</a>
@@ -1825,6 +1832,7 @@ let walletBalance = null;   /* null = غير معروف / غير مسجّل */
 let walletPending = [];     /* طلبات شحن بانتظار التأكيد */
 let TOPUP_MIN = 10000;      /* تتحدّث من السيرفر */
 let TOPUP_MAX = 50000;
+let MIN_ORDER = 1;          /* الحد الأدنى للطلب بالدولار، يتحدّث من السيرفر */
 
 const fmtIqd = n => Number(n || 0).toLocaleString("en-US") + " د.ع";
 
@@ -2057,7 +2065,9 @@ fetch(API,{
     USD_TO_IQD = Number(c.usd_to_iqd) || USD_TO_IQD;
     TOPUP_MIN = Number(c.topup_min) || TOPUP_MIN;
     TOPUP_MAX = Number(c.topup_max) || TOPUP_MAX;
+    MIN_ORDER = Number(c.min_order_usd) || MIN_ORDER;
     updateWalletLine();
+    updatePrice();
   })
   .catch(()=>{});
 
@@ -2751,8 +2761,15 @@ function updatePriceCore(){
 
   priceBox.textContent = money(total);
 
-  rateHint.textContent =
-    "السعر لكل 1000: $" + Number(rate.toFixed(4));
+  const belowMin = quantity > 0 && total < MIN_ORDER;
+
+  rateHint.textContent = belowMin
+    ? "الحد الأدنى لأي طلب $" + MIN_ORDER.toFixed(2) + "، زد الكمية"
+    : "السعر لكل 1000: $" + Number(rate.toFixed(4));
+
+  rateHint.classList.toggle("err",belowMin);
+
+  $("orderBtn").disabled = belowMin;
 
   sumService.textContent =
     service.name || "خدمة بدون اسم";
@@ -3296,6 +3313,8 @@ function updateAcctBtn(){
 
   if(hint) hint.hidden = !!session;
 
+  $("ordersBtn").hidden = !session;
+
 }
 
 
@@ -3712,6 +3731,60 @@ document.addEventListener("keydown",e=>{
 });
 
 acctBtn.addEventListener("click",()=>openAuth());
+
+$("ordersBtn").addEventListener("click",openMyOrders);
+
+
+/* قائمة سريعة بكل طلباتي (بدون فتح الملف الشخصي كامل) */
+async function openMyOrders(){
+
+  if(!session){
+    openAuth("login","سجّل دخولك حتى تشوف طلباتك");
+    return;
+  }
+
+  payBody.dataset.lock = "";
+
+  openModal("<p>جاري التحميل...</p>");
+
+  try{
+
+    const r = await callApi({action:"my_orders",access_token:session.access_token});
+
+    const items = r.items || [];
+
+    const list = items.length
+      ? items.map(o =>
+          '<div class="ord" data-oid="' + o.id + '" style="cursor:pointer"><div><b>' + esc(o.service_name || "") + "</b>" +
+          "<small>#" + o.id + " • " + Number(o.quantity).toLocaleString("en-US") + " • " +
+          esc(new Date(o.created_at).toLocaleDateString("en-GB")) + "</small></div>" +
+          '<div class="r"><b>$' + Number(o.price || 0).toFixed(2) + "</b>" +
+          '<span class="st">' + esc(ORDER_ST[o.status] || o.status) + "</span></div></div>"
+        ).join("")
+      : '<p class="lead-s" style="margin:6px 0">ما عندك طلبات بعد.</p>';
+
+    openModal(
+      "<h3>📦 طلباتي</h3>" +
+      '<div class="ord-list">' + list + "</div>" +
+      '<div class="row"><button class="btn primary" type="button" onclick="closeModal()">إغلاق</button></div>'
+    );
+
+    payBody.querySelectorAll(".ord[data-oid]").forEach(el =>{
+
+      el.addEventListener("click",()=> openOrder(el.dataset.oid));
+
+    });
+
+  }catch(e){
+
+    openModal(
+      '<div class="big">⚠️</div><h3>ما گدرنا نجيب طلباتك</h3><p>' + esc(e.message) + "</p>" +
+      '<div class="row"><button class="btn primary" type="button" onclick="closeModal()">إغلاق</button></div>'
+    );
+
+  }
+
+}
 
 $("walletBtn").addEventListener("click",()=>openTopup());
 
