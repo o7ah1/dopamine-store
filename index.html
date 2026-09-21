@@ -4163,7 +4163,7 @@ function trialSyncRange(){
   trialQty.placeholder = String(s.min);
 
   trialRange.textContent =
-    "الكمية من " + s.min.toLocaleString("en-US") +
+    "السعر: $0 (مجاني) • الكمية المجانية من " + s.min.toLocaleString("en-US") +
     " إلى " + s.max.toLocaleString("en-US");
 
 }
@@ -4194,7 +4194,8 @@ async function loadTrial(){
     trialItems.forEach(s=>{
       const o = document.createElement("option");
       o.value = s.id;
-      o.textContent = s.name;
+      o.textContent =
+        s.name + " · $0 · مجاناً حتى " + s.max.toLocaleString("en-US");
       trialSel.appendChild(o);
     });
 
