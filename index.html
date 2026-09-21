@@ -1111,6 +1111,129 @@ body{
 
 .auth-foot{margin-top:14px;text-align:center;font-size:14px;color:var(--muted);line-height:2}
 
+.auth-remember{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:2px 0 12px;
+  font-size:14px;
+  color:var(--muted);
+  cursor:pointer;
+  user-select:none;
+}
+
+.auth-remember input{
+  width:18px;
+  height:18px;
+  min-width:18px;
+  margin:0;
+  padding:0;
+  border:0;
+  background:none;
+  box-shadow:none;
+  accent-color:var(--primary);
+  cursor:pointer;
+}
+
+.login-hint{
+  margin:10px 0 0;
+  text-align:center;
+  font-size:13.5px;
+  color:var(--muted);
+}
+
+/* ---------- التبليغات ---------- */
+.bell{position:relative;padding:0 12px}
+.bell[hidden]{display:none}
+
+.bell-badge{
+  position:absolute;
+  top:-6px;
+  inset-inline-start:-6px;
+  min-width:20px;
+  height:20px;
+  padding:0 5px;
+  border-radius:999px;
+  background:var(--danger);
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  line-height:1;
+  display:grid;
+  place-items:center;
+}
+
+.bell-badge[hidden]{display:none}
+
+.notif-card{
+  text-align:start;
+  max-width:460px;
+  max-height:88vh;
+  overflow-y:auto;
+  position:relative;
+}
+
+.notif-card h3{text-align:center;margin-bottom:14px}
+.notif-card .lead-s{text-align:center;margin:8px 0}
+
+.notif-list{display:grid;gap:8px}
+
+.notif-card .notif{
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--field);
+}
+
+.notif-card .notif.new{
+  border-color:var(--primary);
+  background:color-mix(in srgb,var(--primary) 8%,var(--surface));
+}
+
+.notif-card .notif b{display:block;margin-bottom:4px;font-size:15px}
+
+.notif-card .notif p{
+  margin:0 0 6px;
+  color:var(--ink);
+  font-size:14px;
+  line-height:1.8;
+  white-space:pre-wrap;
+}
+
+.notif-card .notif a{
+  display:inline-block;
+  margin:0 0 6px;
+  color:var(--primary);
+  font-size:13.5px;
+  font-weight:600;
+}
+
+.notif-card .notif small{display:block;color:var(--muted);font-size:12.5px}
+
+.notif-toast{
+  position:fixed;
+  top:14px;
+  left:14px;
+  right:14px;
+  margin-inline:auto;
+  max-width:420px;
+  z-index:120;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 16px;
+  border-radius:16px;
+  background:var(--ink);
+  color:#fff;
+  box-shadow:0 20px 40px -18px rgba(20,26,51,.7);
+  cursor:pointer;
+  text-align:start;
+}
+
+.notif-toast[hidden]{display:none}
+.notif-toast b{display:block;font-size:14.5px}
+.notif-toast small{display:block;margin-top:2px;color:#C9CEE4;font-size:13px}
+
 .ord-list{display:grid;gap:8px;margin-top:8px}
 
 .ord{
@@ -1152,6 +1275,7 @@ body{
     </nav>
 
     <div class="nav-actions">
+      <button class="btn sm ghost bell" id="bellBtn" type="button" aria-label="التبليغات" hidden>🔔<span class="bell-badge" id="bellBadge" hidden>0</span></button>
       <button class="btn sm ghost" id="acctBtn" type="button">👤 دخول</button>
       <a class="btn sm wa" data-wa href="#" target="_blank" rel="noopener">💬 تواصل معنا</a>
     </div>
@@ -1302,6 +1426,10 @@ body{
       </dl>
 
       <button class="order" id="orderBtn" type="button">إتمام الطلب</button>
+
+      <p class="login-hint" id="loginHint" hidden>
+        🔒 لازم <button class="auth-link" id="hintLogin" type="button">تسجّل دخولك</button> حتى تكمل الطلب
+      </p>
 
       <div class="msg" id="orderMsg"></div>
     </aside>
@@ -1459,6 +1587,12 @@ body{
 <div class="modal" id="authModal" hidden role="dialog" aria-modal="true">
   <div class="modal-card auth-card" id="authBody"></div>
 </div>
+
+<div class="modal" id="notifModal" hidden role="dialog" aria-modal="true">
+  <div class="modal-card notif-card" id="notifBody"></div>
+</div>
+
+<div class="notif-toast" id="notifToast" hidden role="status" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -2430,6 +2564,17 @@ async function submitOrder(){
 
   }
 
+  /* الطلب يحتاج حساب: بدون تسجيل دخول نفتح نافذة الدخول */
+  if(!session){
+
+    showMessage("سجّل دخولك أول حتى تكمل الطلب",true);
+
+    openAuth("login","سجّل دخولك أو أنشئ حساب حتى تكمل طلبك");
+
+    return;
+
+  }
+
   const btn = $("orderBtn");
 
   btn.disabled = true;
@@ -2445,7 +2590,7 @@ async function submitOrder(){
       service_id:service.id,
       link,
       quantity,
-      access_token: session ? session.access_token : undefined
+      access_token: session.access_token
     });
 
     if(r.mode === "sim"){
@@ -2657,6 +2802,52 @@ const acctBtn   = $("acctBtn");
 let sbAuth = null;
 let session = null;
 
+/* تذكرني: إذا مفعّل تنحفظ الجلسة بالمتصفح (localStorage)،
+   وإذا ملغي تنحفظ لين تسكّر التبويب فقط (sessionStorage) */
+const REMEMBER_KEY = "o7_remember";
+
+let rememberMe = true;
+
+try{ rememberMe = localStorage.getItem(REMEMBER_KEY) !== "0"; }catch(e){}
+
+function setRemember(v){
+
+  rememberMe = !!v;
+
+  try{ localStorage.setItem(REMEMBER_KEY,rememberMe ? "1" : "0"); }catch(e){}
+
+}
+
+const authStorage = {
+
+  getItem(k){
+    try{
+      const v = localStorage.getItem(k);
+      return v !== null ? v : sessionStorage.getItem(k);
+    }catch(e){ return null; }
+  },
+
+  setItem(k,v){
+    try{
+      if(rememberMe){
+        localStorage.setItem(k,v);
+        sessionStorage.removeItem(k);
+      }else{
+        sessionStorage.setItem(k,v);
+        localStorage.removeItem(k);
+      }
+    }catch(e){}
+  },
+
+  removeItem(k){
+    try{
+      localStorage.removeItem(k);
+      sessionStorage.removeItem(k);
+    }catch(e){}
+  }
+
+};
+
 const ORDER_ST = {
   unpaid:"غير مدفوع",
   pending:"قيد الانتظار",
@@ -2675,6 +2866,10 @@ const esc = v => String(v ?? "").replace(/[&<>"']/g,c => ({
 function updateAcctBtn(){
 
   acctBtn.textContent = session ? "👤 حسابي" : "👤 دخول";
+
+  const hint = $("loginHint");
+
+  if(hint) hint.hidden = !!session;
 
 }
 
@@ -2757,11 +2952,13 @@ function enterToSubmit(ids,btnId){
 }
 
 
-function openAuth(view){
+function openAuth(view,note){
 
   authModal.hidden = false;
 
   renderAuth(view || (session ? "account" : "login"));
+
+  if(note) authMsg(note,true);
 
 }
 
@@ -2819,6 +3016,8 @@ function renderAuth(view){
       const password = $("aPass").value;
 
       if(!email || !password){ authMsg("اكتب البريد وكلمة المرور"); return; }
+
+      setRemember(true);
 
       const {data,error} = await sbAuth.auth.signUp({
         email,
@@ -2905,6 +3104,7 @@ function renderAuth(view){
       '<input class="auth-in" id="aEmail" type="email" dir="ltr" autocomplete="email">' +
       '<label class="auth-lbl" for="aPass">كلمة المرور</label>' +
       '<input class="auth-in" id="aPass" type="password" dir="ltr" autocomplete="current-password">' +
+      '<label class="auth-remember"><input type="checkbox" id="aRemember" checked> تذكرني</label>' +
       '<div class="auth-err" id="aMsg"></div>' +
       '<button class="btn primary" style="width:100%" id="aGo" type="button">دخول</button>' +
       '<div class="auth-foot">' +
@@ -2919,6 +3119,8 @@ function renderAuth(view){
       const password = $("aPass").value;
 
       if(!email || !password){ authMsg("اكتب البريد وكلمة المرور"); return; }
+
+      setRemember($("aRemember") ? $("aRemember").checked : true);
 
       const {error} = await sbAuth.auth.signInWithPassword({email,password});
 
@@ -2940,6 +3142,8 @@ function renderAuth(view){
   if(g){
 
     g.onclick = async ()=>{
+
+      setRemember($("aRemember") ? $("aRemember").checked : true);
 
       const {error} = await sbAuth.auth.signInWithOAuth({
         provider:"google",
@@ -3053,6 +3257,286 @@ document.addEventListener("keydown",e=>{
 
 acctBtn.addEventListener("click",()=>openAuth());
 
+$("hintLogin").addEventListener("click",()=>openAuth("login"));
+
+
+/* =====================================================
+   التبليغات: رسائل من الإدارة توصل فوراً (Supabase Realtime)
+   ===================================================== */
+
+const bellBtn    = $("bellBtn");
+const bellBadge  = $("bellBadge");
+const notifModal = $("notifModal");
+const notifBody  = $("notifBody");
+const notifToast = $("notifToast");
+
+let notifs = [];
+let notifRead = new Set();
+let notifFresh = new Set();
+let notifChannel = null;
+let notifUser = null;
+let notifToastTimer = null;
+
+
+function notifSince(){
+
+  const t = session && session.user
+    ? new Date(session.user.created_at).getTime()
+    : 0;
+
+  return Number.isFinite(t) ? t : 0;
+
+}
+
+
+function updateBell(){
+
+  const n = notifs.filter(x => !notifRead.has(x.id)).length;
+
+  bellBadge.textContent = n > 99 ? "99+" : String(n);
+
+  bellBadge.hidden = n === 0;
+
+}
+
+
+async function loadNotifs(){
+
+  if(!sbAuth || !session) return;
+
+  const t = notifSince();
+
+  const since = t ? new Date(t).toISOString() : "1970-01-01T00:00:00Z";
+
+  const [a,b] = await Promise.all([
+    sbAuth.from("notifications")
+      .select("id,user_id,title,body,link,created_at")
+      .gte("created_at",since)
+      .order("created_at",{ascending:false})
+      .limit(30),
+    sbAuth.from("notification_reads").select("notification_id")
+  ]);
+
+  if(a.error || b.error) return;
+
+  notifs = a.data || [];
+
+  notifRead = new Set((b.data || []).map(r => r.notification_id));
+
+  updateBell();
+
+}
+
+
+async function markRead(ids){
+
+  if(!ids.length || !sbAuth || !session) return;
+
+  const rows = ids.map(id => ({
+    user_id:session.user.id,
+    notification_id:id
+  }));
+
+  const {error} = await sbAuth.from("notification_reads")
+    .upsert(rows,{onConflict:"user_id,notification_id",ignoreDuplicates:true});
+
+  if(!error){
+
+    ids.forEach(id => notifRead.add(id));
+
+    updateBell();
+
+  }
+
+}
+
+
+function renderNotifs(){
+
+  const list = notifs.length
+    ? notifs.map(n=>{
+
+        const link = /^https?:\/\//i.test(n.link || "")
+          ? '<a href="' + esc(n.link) + '" target="_blank" rel="noopener">فتح الرابط ↗</a>'
+          : "";
+
+        return '<div class="notif' + (notifFresh.has(n.id) ? " new" : "") + '">' +
+          "<b>" + esc(n.title) + "</b>" +
+          (n.body ? "<p>" + esc(n.body) + "</p>" : "") +
+          link +
+          "<small>" + esc(new Date(n.created_at).toLocaleString("en-GB",{dateStyle:"short",timeStyle:"short"})) + "</small>" +
+        "</div>";
+
+      }).join("")
+    : '<p class="lead-s">ما عندك تبليغات بعد.</p>';
+
+  notifBody.innerHTML =
+    '<button class="auth-x" id="notifClose" type="button" aria-label="إغلاق">✕</button>' +
+    "<h3>🔔 التبليغات</h3>" +
+    '<div class="notif-list">' + list + "</div>";
+
+  $("notifClose").onclick = closeNotifs;
+
+}
+
+
+async function openNotifs(){
+
+  if(!session) return;
+
+  notifModal.hidden = false;
+
+  notifToast.hidden = true;
+
+  notifBody.innerHTML =
+    '<button class="auth-x" id="notifClose" type="button" aria-label="إغلاق">✕</button>' +
+    '<p class="lead-s">جاري التحميل...</p>';
+
+  $("notifClose").onclick = closeNotifs;
+
+  await loadNotifs();
+
+  notifFresh = new Set(notifs.filter(n => !notifRead.has(n.id)).map(n => n.id));
+
+  renderNotifs();
+
+  markRead([...notifFresh]);
+
+}
+
+
+function closeNotifs(){
+
+  notifModal.hidden = true;
+
+}
+
+
+function showNotifToast(n){
+
+  notifToast.innerHTML =
+    "<span>🔔</span><div><b>" + esc(n.title) + "</b>" +
+    (n.body ? "<small>" + esc(String(n.body).slice(0,90)) + "</small>" : "") +
+    "</div>";
+
+  notifToast.hidden = false;
+
+  clearTimeout(notifToastTimer);
+
+  notifToastTimer = setTimeout(()=>{ notifToast.hidden = true; },8000);
+
+}
+
+
+function stopNotifs(){
+
+  if(notifChannel && sbAuth) sbAuth.removeChannel(notifChannel);
+
+  notifChannel = null;
+  notifUser = null;
+  notifs = [];
+  notifRead = new Set();
+  notifFresh = new Set();
+
+  bellBtn.hidden = true;
+  notifToast.hidden = true;
+  notifModal.hidden = true;
+
+  updateBell();
+
+}
+
+
+async function startNotifs(){
+
+  if(!sbAuth || !session) return;
+
+  if(notifUser === session.user.id) return;
+
+  stopNotifs();
+
+  const uid = session.user.id;
+
+  notifUser = uid;
+
+  bellBtn.hidden = false;
+
+  await loadNotifs();
+
+  if(notifUser !== uid) return;
+
+  notifChannel = sbAuth.channel("notifs-" + uid)
+
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications"},payload=>{
+
+      const n = payload.new;
+
+      if(!n || (n.user_id && n.user_id !== uid)) return;
+
+      if(new Date(n.created_at).getTime() < notifSince()) return;
+
+      if(notifs.some(x => x.id === n.id)) return;
+
+      notifs.unshift(n);
+
+      updateBell();
+
+      if(!notifModal.hidden){
+
+        notifFresh.add(n.id);
+
+        renderNotifs();
+
+        markRead([n.id]);
+
+      }else{
+
+        showNotifToast(n);
+
+      }
+
+    })
+
+    .on("postgres_changes",{event:"DELETE",schema:"public",table:"notifications"},payload=>{
+
+      const id = payload.old && payload.old.id;
+
+      notifs = notifs.filter(x => x.id !== id);
+
+      updateBell();
+
+      if(!notifModal.hidden) renderNotifs();
+
+    })
+
+    .subscribe();
+
+}
+
+
+function syncNotifs(){
+
+  if(session) startNotifs();
+  else stopNotifs();
+
+}
+
+
+bellBtn.addEventListener("click",openNotifs);
+
+notifToast.addEventListener("click",()=>{
+  notifToast.hidden = true;
+  openNotifs();
+});
+
+notifModal.addEventListener("click",e=>{
+  if(e.target === notifModal) closeNotifs();
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key === "Escape" && !notifModal.hidden) closeNotifs();
+});
+
 
 (function initAuth(){
 
@@ -3061,11 +3545,19 @@ acctBtn.addEventListener("click",()=>openAuth());
     return;
   }
 
-  sbAuth = window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  sbAuth = window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{
+    auth:{
+      storage:authStorage,
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true
+    }
+  });
 
   sbAuth.auth.getSession().then(({data})=>{
     session = data.session;
     updateAcctBtn();
+    syncNotifs();
   });
 
   sbAuth.auth.onAuthStateChange((event,s)=>{
@@ -3073,6 +3565,9 @@ acctBtn.addEventListener("click",()=>openAuth());
     session = s;
 
     updateAcctBtn();
+
+    /* نأجلها لأن Supabase ما يحب ينادى عليه داخل هذا الحدث مباشرة */
+    setTimeout(syncNotifs,0);
 
     if(event === "PASSWORD_RECOVERY"){
       openAuth("reset");
