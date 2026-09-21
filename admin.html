@@ -383,7 +383,14 @@ td.lnk a{color:#7cb7ff}
     <div class="markup" style="margin-bottom:14px">
       <div class="mrow">
         <div class="status" id="provBal" style="margin:0;font-weight:bold">💵 رصيدك عند دكتور دعم: —</div>
+        <div class="status" id="rateBox" style="margin:0">💱 سعر الصرف: —</div>
         <div class="status" id="pendBox" style="margin:0"></div>
+        <div class="status" style="margin:0;display:flex;align-items:center;gap:6px">
+          الحد الأدنى للطلب $
+          <input id="minOrderIn" type="number" min="0.01" max="1000" step="0.01"
+            style="width:80px;padding:4px 8px;border-radius:8px;border:1px solid #384866;background:#1b2740;color:#fff">
+          <button class="b-blue tog" onclick="saveMinOrder()">حفظ</button>
+        </div>
         <button class="b-gray" onclick="loadHeader()">↻ تحديث</button>
       </div>
     </div>
@@ -539,7 +546,7 @@ td.lnk a{color:#7cb7ff}
                 <th>التاريخ</th>
                 <th>الحساب</th>
                 <th>الهاتف</th>
-                <th>المبلغ = النقاط</th>
+                <th>المبلغ (≈ دولار)</th>
                 <th>إجراء</th>
               </tr>
             </thead>
@@ -779,6 +786,7 @@ async function login(){
     loadAll();
     loadTopups();
     loadHeader();
+    loadRate();
 
   }catch(error){
 
@@ -2084,6 +2092,93 @@ function initUsers(){
 
 /* ---------- طلبات الشحن ---------- */
 
+let RATE = 1500; /* دينار لكل 1 دولار، يتحدّث من السيرفر (public_config) */
+
+
+async function loadRate(){
+
+  try{
+
+    const r = await fetch(API,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({action:"public_config"})
+    }).then(x => x.json());
+
+    RATE = Number(r.usd_to_iqd) || RATE;
+
+  }catch(e){}
+
+  $("rateBox").textContent = "💱 سعر الصرف: 1$ = " + fmtInt(RATE) + " د.ع";
+
+  try{
+
+    const s = await api("get_settings");
+
+    $("minOrderIn").value = Number(s.min_order_usd) || 1;
+
+  }catch(e){}
+
+}
+
+
+async function saveMinOrder(){
+
+  const v = Number($("minOrderIn").value);
+
+  if(!Number.isFinite(v) || v <= 0){
+    toast("اكتب رقم صحيح أكبر من صفر",true);
+    return;
+  }
+
+  try{
+
+    await api("set_settings",{min_order_usd:v});
+
+    toast("تم الحفظ ✅ الحد الأدنى الآن $" + v);
+
+  }catch(error){
+
+    toast(error.message,true);
+
+  }
+
+}
+
+
+/* يحوّل مبلغ دينار إلى نص فيه المعادل بالدولار، مثال: 15,000 د.ع (≈ $10.00) */
+function fmtDual(iqd){
+
+  const usd = Number(iqd || 0) / RATE;
+
+  return fmtInt(iqd) + " د.ع (≈ $" + usd.toFixed(2) + ")";
+
+}
+
+
+/* يقبل مبلغ بالدينار "10000" أو بالدولار "$10" أو "10$" ويرجعه دينار صحيح */
+function parseIqdOrUsd(raw){
+
+  const s = String(raw)
+    .trim()
+    .replace(/[٠-٩]/g,d => d.charCodeAt(0) - 1632)
+    .replace(/[,\s٬]/g,"");
+
+  const usdMatch = s.match(/^-?\$\s*\d+(\.\d+)?$|^-?\d+(\.\d+)?\$$/);
+
+  if(usdMatch){
+
+    const usd = Number(s.replace(/\$/g,""));
+
+    return Math.trunc(usd * RATE);
+
+  }
+
+  return Math.trunc(Number(s));
+
+}
+
+
 async function loadTopups(){
 
   const body = $("topupRows");
@@ -2111,7 +2206,7 @@ async function loadTopups(){
       <td class="num">${escapeHtml(fmtDate(t.created_at))}</td>
       <td class="nm">${escapeHtml(t.full_name || "—")}<small dir="ltr">${escapeHtml(t.user_email || "")}</small></td>
       <td class="num">${escapeHtml(t.phone || "—")}</td>
-      <td class="num g">${fmtInt(t.amount)}</td>
+      <td class="num g">${fmtDual(t.amount)}</td>
       <td>
         <button class="tog" data-tp="1" data-id="${t.id}">✅ استلمت، اشحن</button>
         <button class="b-red tog" data-tp="0" data-id="${t.id}">✖ رفض</button>
@@ -2281,7 +2376,7 @@ function renderUsers(items){
       <td class="num">${u.last_sign_in_at ? escapeHtml(fmtDate(u.last_sign_in_at)) : "—"}</td>
       <td class="num">${fmtInt(u.orders_count)}</td>
       <td class="num ${spent > 0 ? "g" : ""}">${fmtMoney(spent)}</td>
-      <td class="num ${Number(u.balance) > 0 ? "g" : ""}">${fmtInt(u.balance)}</td>
+      <td class="num ${Number(u.balance) > 0 ? "g" : ""}">${fmtDual(u.balance)}</td>
       <td><button class="b-blue tog" data-act="wallet" data-id="${escapeHtml(u.id)}" data-email="${escapeHtml(u.email || "")}">💰 رصيد</button>
         <button class="b-amber tog" data-act="pass" data-id="${escapeHtml(u.id)}" data-email="${escapeHtml(u.email || "")}">🔑 كلمة مرور</button></td>
     </tr>`;
@@ -2328,16 +2423,15 @@ async function adjustWallet(id,email){
 
   const raw = prompt(
     "شحن / خصم رصيد للحساب:\n" + email +
-    "\n\nاكتب المبلغ بالدينار.\nموجب = شحن (مثال: 10000)\nسالب = خصم (مثال: -5000)"
+    "\n\nاكتب المبلغ بالدينار أو بالدولار.\n" +
+    "موجب = شحن، سالب = خصم\n" +
+    "أمثلة: 10000  ،  -5000  ،  $10  ،  -$5\n" +
+    "(1$ = " + fmtInt(RATE) + " د.ع)"
   );
 
   if(raw === null) return;
 
-  const amount = Math.trunc(Number(
-    String(raw)
-      .replace(/[٠-٩]/g,d => d.charCodeAt(0) - 1632)
-      .replace(/[,\s٬]/g,"")
-  ));
+  const amount = parseIqdOrUsd(raw);
 
   if(!Number.isFinite(amount) || amount === 0){
     toast("اكتب مبلغاً صحيحاً",true);
@@ -2349,7 +2443,7 @@ async function adjustWallet(id,email){
   if(note === null) return;
 
   if(!confirm(
-    (amount > 0 ? "شحن " : "خصم ") + fmtInt(Math.abs(amount)) + " د.ع " +
+    (amount > 0 ? "شحن " : "خصم ") + fmtDual(Math.abs(amount)) + " " +
     (amount > 0 ? "إلى " : "من ") + email + "؟"
   )) return;
 
@@ -2357,7 +2451,7 @@ async function adjustWallet(id,email){
 
     const r = await api("wallet_adjust",{id,amount,note:note.trim()});
 
-    toast("تم ✅ الرصيد الجديد: " + fmtInt(r.balance) + " د.ع");
+    toast("تم ✅ الرصيد الجديد: " + fmtDual(r.balance));
 
     loadUsers();
 
