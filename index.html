@@ -1810,8 +1810,7 @@ body{
   }
 }
 
-</style>
-<style id="service-panel-large-mobile">
+
 /* عند فتح قائمة الخدمات على الهاتف: مساحة أكبر للقراءة والاختيار */
 @media (max-width:700px){
   #servicePanel.combo-panel{max-height:72vh!important;min-height:300px!important;padding:8px!important;border-radius:16px!important;}
@@ -1822,138 +1821,87 @@ body{
   #catPanel.combo-panel{max-height:60vh!important;padding:8px!important;}
   #catPanel .opt{min-height:48px!important;padding:11px 13px!important;font-size:14px!important;}
 }
-</style>
 
-<style id="service-hero-clean">
-/* واجهة الخدمات — تعديل بصري فقط */
-#servicePage .service-hero{width:min(1040px,92%);margin:18px auto 24px;padding:28px 22px 24px;text-align:center;background:#fff;border:1px solid #e6e6ef;border-radius:28px;box-shadow:0 12px 35px rgba(20,15,55,.07)}
-#servicePage .service-badge{display:inline-flex;align-items:center;justify-content:center;padding:9px 18px;border-radius:999px;background:#f4f1ff;color:#4d39b7;font-weight:800;font-size:15px}
-#servicePage .service-hero h1{margin:18px 0 8px;font-size:clamp(32px,5vw,54px);line-height:1.2;font-weight:900;color:#101014}
-#servicePage .service-hero h1 span{color:#4b3bd2}
-#servicePage .service-hero p{max-width:760px;margin:0 auto;color:#555665;font-size:18px;line-height:1.8}
-#servicePage .service-hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:22px 0 18px}
-#servicePage .hero-order-btn,#servicePage .hero-wa-btn{min-height:52px;padding:0 25px;border-radius:16px;font:inherit;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
-#servicePage .hero-order-btn{border:0;color:#fff;background:#4338ca;box-shadow:0 10px 22px rgba(67,56,202,.22)}
-#servicePage .hero-wa-btn{border:1px solid #e6e6ef;color:#15151b;background:#fff}
-#servicePage .service-benefits{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin:10px 0 20px;color:#4d4d58;font-weight:700}
-#servicePage .service-socials{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap}
-#servicePage .service-socials a{width:58px;height:58px;display:grid;place-items:center;border:1px solid #ecebf2;border-radius:18px;background:#fafafd;text-decoration:none;transition:transform .18s,box-shadow .18s}
-#servicePage .service-socials a:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(20,15,55,.10)}
-#servicePage .service-socials a:first-child{background:#fffc00}
-#servicePage .service-socials img{width:30px;height:30px;object-fit:contain}
-.founder-credit{margin-top:16px;color:#6a6876;font-size:14px;font-weight:800}
-@media(max-width:600px){#servicePage .service-hero{width:94%;padding:22px 14px 20px;border-radius:22px}#servicePage .service-hero h1{font-size:31px}#servicePage .service-hero p{font-size:15px}#servicePage .service-benefits{gap:12px;font-size:13px}#servicePage .service-socials a{width:48px;height:48px;border-radius:15px}#servicePage .service-socials img{width:25px;height:25px}}
 
-/* === خدمات شفافة ومتحركة - داخل صفحة الخدمات فقط === */
-#servicePage .steps{
-  background:rgba(255,255,255,.34);
-  border:1px solid rgba(255,255,255,.72);
-  box-shadow:0 18px 55px rgba(55,42,130,.08);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
+/* =====================================================
+   خدمات: نفس شكل ملف index.html المرجعي
+   - التعديل بصري فقط داخل صفحة الخدمات
+   - الصفحة الرئيسية وباقي الوظائف بدون تغيير
+   ===================================================== */
+#servicePage{
+  background:var(--paper);
+  min-height:0;
+  padding-bottom:0;
 }
-#servicePage .step{
-  background:rgba(255,255,255,.30);
-  border-color:rgba(125,112,190,.18);
-  box-shadow:0 12px 35px rgba(55,42,130,.055);
-  transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease,background .28s ease;
+#servicePage .service-topbar{
+  max-width:1040px;
+  margin:0 auto;
+  padding:14px 16px 8px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  direction:rtl;
 }
-#servicePage .step:hover{
-  transform:translateY(-3px);
-  background:rgba(255,255,255,.43);
-  border-color:rgba(90,60,240,.28);
-  box-shadow:0 18px 45px rgba(55,42,130,.10);
+#servicePage .service-headline,
+#servicePage .service-tools{
+  display:none;
 }
-#servicePage .plat{
-  background:rgba(255,255,255,.28);
-  border:1px solid rgba(120,112,170,.20);
-  box-shadow:0 8px 24px rgba(55,42,130,.045);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  transition:transform .30s cubic-bezier(.2,.8,.2,1),box-shadow .30s ease,border-color .30s ease,background .30s ease;
-  animation:serviceFloat 4.5s ease-in-out infinite;
+#servicePage .back-home{
+  border:1.5px solid var(--line);
+  background:var(--surface);
+  color:var(--ink);
+  border-radius:15px;
+  padding:9px 16px;
+  font:inherit;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:none;
+  transition:border-color .15s,transform .12s,background-color .15s;
 }
-#servicePage .plat:nth-child(2n){animation-delay:-.8s}
-#servicePage .plat:nth-child(3n){animation-delay:-1.6s}
-#servicePage .plat:nth-child(4n){animation-delay:-2.4s}
-#servicePage .plat:hover{
-  transform:translateY(-7px) scale(1.025);
-  background:rgba(255,255,255,.52);
-  border-color:rgba(90,60,240,.38);
-  box-shadow:0 16px 34px rgba(90,60,240,.13);
-}
-#servicePage .plat[aria-pressed="true"]{
-  background:rgba(255,255,255,.58);
-  border-color:rgba(90,60,240,.65);
-  box-shadow:0 12px 32px rgba(90,60,240,.16),0 0 0 3px rgba(90,60,240,.10);
-  animation:serviceSelected 2.2s ease-in-out infinite;
-}
-#servicePage .plat .ico{
-  transition:transform .30s ease,filter .30s ease;
-}
-#servicePage .plat:hover .ico{
-  transform:translateY(-2px) rotate(-3deg) scale(1.08);
-  filter:drop-shadow(0 8px 10px rgba(60,45,150,.14));
-}
-#servicePage .chip{
-  background:rgba(255,255,255,.30);
-  border-color:rgba(120,112,170,.20);
-  box-shadow:0 6px 18px rgba(55,42,130,.04);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  transition:transform .22s ease,background .22s ease,box-shadow .22s ease,border-color .22s ease;
-}
-#servicePage .chip:hover{
-  transform:translateY(-3px);
-  background:rgba(255,255,255,.48);
-  box-shadow:0 10px 22px rgba(55,42,130,.08);
-}
-#servicePage .chip[aria-pressed="true"]{
-  background:rgba(90,60,240,.82);
-  box-shadow:0 10px 24px rgba(90,60,240,.20);
-}
-@keyframes serviceFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-3px)}
-}
-@keyframes serviceSelected{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-4px)}
-}
-@media (prefers-reduced-motion:reduce){
-  #servicePage .plat,#servicePage .plat[aria-pressed="true"]{animation:none}
-  #servicePage .step,#servicePage .plat,#servicePage .chip{transition:none}
+#servicePage .back-home:hover{
+  border-color:var(--primary);
+  transform:none;
+  box-shadow:none;
+  background:var(--field);
 }
 
-</style>
+#servicePage .shell{
+  max-width:1040px;
+  padding:0 16px;
+}
 
-<style id="services-exact-reference-style">
-/* شكل بطاقات الخدمات مطابق لستايل ملف index.html المرجعي */
+#servicePage .sec-head{
+  display:block;
+}
+#servicePage .layout{
+  display:grid;
+  gap:20px;
+  align-items:start;
+  max-width:none;
+}
 #servicePage .steps{
   background:var(--surface);
   border:1px solid var(--line);
   border-radius:28px;
   padding:8px 24px;
   box-shadow:var(--shadow);
-  gap:0;
+  display:block;
+  gap:initial;
 }
-
 #servicePage .step{
-  padding:22px 0;
   border:0;
   border-radius:0;
   background:transparent;
   box-shadow:none;
-  position:relative;
+  padding:22px 0;
+  position:static;
   overflow:visible;
 }
-
 #servicePage .step:before{display:none}
-
 #servicePage .step + .step{
   border-top:1px solid var(--line);
 }
-
 #servicePage .step h2{
   display:flex;
   align-items:center;
@@ -1963,7 +1911,6 @@ body{
   font-weight:600;
   color:var(--ink);
 }
-
 #servicePage .step h2 b{
   width:26px;
   height:26px;
@@ -1976,14 +1923,12 @@ body{
   font-weight:600;
 }
 
-/* بطاقات المنصات: شفافة/فاتحة، مستديرة، وحركة بسيطة */
 #servicePage .platforms{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(84px,1fr));
   gap:10px;
   padding:2px;
 }
-
 #servicePage .plat{
   min-width:0;
   padding:12px 4px 10px;
@@ -2003,16 +1948,11 @@ body{
   transition:border-color .15s,background-color .15s,transform .12s;
   box-shadow:none;
 }
-
 #servicePage .plat:hover{
   border-color:var(--primary);
-  transform:translateY(-2px);
+  transform:none;
+  box-shadow:none;
 }
-
-#servicePage .plat:active{
-  transform:scale(.96);
-}
-
 #servicePage .plat[aria-pressed="true"]{
   border-color:var(--primary);
   background:var(--surface);
@@ -2020,7 +1960,6 @@ body{
   font-weight:600;
   transform:none;
 }
-
 #servicePage .plat .ico{
   width:56px;
   height:56px;
@@ -2030,60 +1969,23 @@ body{
   font-size:26px;
   line-height:1;
   color:#fff;
-  margin:0;
+  margin-bottom:0;
 }
-
 #servicePage .plat .ico img{
   width:32px;
   height:32px;
-  object-fit:contain;
   display:block;
 }
 
-/* أنواع الخدمات */
-#servicePage .types{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin:0 0 4px;
-}
-
-#servicePage .types .chip{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  padding:8px 13px;
-  background:var(--field);
+#servicePage .field{margin-top:12px}
+#servicePage .field:first-of-type{margin-top:0}
+#servicePage .field label{
+  display:block;
+  margin-bottom:7px;
   font-size:14px;
-  border:1.5px solid var(--line);
-  border-radius:999px;
-  color:var(--ink);
-  font:inherit;
-}
-
-#servicePage .types .chip .c{
-  padding:0 7px;
-  border-radius:999px;
-  background:color-mix(in srgb,var(--ink) 9%,transparent);
+  font-weight:500;
   color:var(--muted);
-  font-size:12px;
-  font-weight:600;
-  direction:ltr;
-  font-variant-numeric:tabular-nums;
 }
-
-#servicePage .types .chip[aria-pressed="true"]{
-  border-color:var(--primary);
-  background:color-mix(in srgb,var(--primary) 14%,transparent);
-  font-weight:600;
-}
-
-#servicePage .types .chip[aria-pressed="true"] .c{
-  background:var(--primary);
-  color:#fff;
-}
-
-/* الحقول بنفس الستايل */
 #servicePage input,
 #servicePage select{
   width:100%;
@@ -2095,262 +1997,510 @@ body{
   color:var(--ink);
   font:inherit;
   font-size:16px;
-}
-
-/* ملخص الطلب */
-#servicePage .summary{
-  background:var(--summary);
-  color:#fff;
-  border-radius:28px;
-  padding:26px 24px 24px;
   box-shadow:none;
 }
+#servicePage input:focus,
+#servicePage select:focus{
+  outline:0;
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 22%,transparent);
+}
+#servicePage .types{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:0 0 4px;
+}
+#servicePage .types .chip{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 13px;
+  background:var(--field);
+  border:1.5px solid var(--line);
+  border-radius:999px;
+  color:var(--ink);
+  font:inherit;
+  font-size:14px;
+  cursor:pointer;
+  transition:border-color .15s,background-color .15s;
+}
+#servicePage .types .chip[aria-pressed="true"]{
+  border-color:var(--primary);
+  background:color-mix(in srgb,var(--primary) 14%,transparent);
+  font-weight:600;
+}
+#servicePage .types .chip[aria-pressed="true"] .c{
+  background:var(--primary);
+  color:#fff;
+}
 
-/* الموبايل */
-@media(max-width:700px){
+#servicePage .combo{position:relative}
+#servicePage .combo-btn{
+  width:100%;
+  min-height:52px;
+  padding:9px 16px 9px 44px;
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  background:var(--field);
+  color:var(--ink);
+  font:inherit;
+  font-size:15.5px;
+  text-align:start;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  box-shadow:none;
+}
+#servicePage .combo-btn:focus-visible,
+#servicePage .combo-btn[aria-expanded="true"]{
+  outline:0;
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 22%,transparent);
+}
+#servicePage .combo > svg{
+  position:absolute;
+  left:16px;
+  top:26px;
+  width:18px;
+  height:18px;
+  margin-top:-9px;
+  color:var(--muted);
+  pointer-events:none;
+}
+
+#servicePage .summary{
+  position:sticky;
+  top:84px;
+  border:0;
+  border-radius:28px;
+  background:var(--summary);
+  box-shadow:none;
+  color:#fff;
+  padding:26px 24px 24px;
+  overflow:visible;
+}
+#servicePage .summary:before,
+#servicePage .summary:after{
+  display:none;
+}
+#servicePage .summary>*{
+  position:static;
+  z-index:auto;
+}
+#servicePage .summary .label{font-size:14px;opacity:.8}
+#servicePage .price{
+  display:flex;
+  align-items:baseline;
+  gap:6px;
+  margin:4px 0 12px;
+  direction:ltr;
+  justify-content:flex-end;
+  font-variant-numeric:tabular-nums;
+  font-size:initial;
+  font-weight:initial;
+  letter-spacing:normal;
+}
+#servicePage .price #price{
+  font-size:clamp(44px,9vw,60px);
+  font-weight:700;
+  letter-spacing:-.02em;
+  line-height:1.05;
+}
+#servicePage .price .cur{font-size:28px;font-weight:500;opacity:.8}
+#servicePage .rate{
+  display:inline-block;
+  padding:5px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.16);
+  border:0;
+  font-size:13.5px;
+}
+#servicePage .facts{
+  margin:20px 0 0;
+  padding:16px 0 0;
+  border-top:1px solid rgba(255,255,255,.22);
+  display:grid;
+  gap:10px;
+}
+#servicePage .facts div{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  margin:0;
+  font-size:14px;
+}
+#servicePage .facts dd{
+  margin:0;
+  text-align:left;
+  font-weight:500;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  max-width:none;
+}
+#servicePage .order{
+  width:100%;
+  height:56px;
+  margin-top:22px;
+  border:0;
+  border-radius:16px;
+  background:var(--hit);
+  color:var(--on-hit);
+  font:inherit;
+  font-size:17px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:none;
+  transition:transform .12s;
+}
+#servicePage .order:hover{
+  transform:none;
+  box-shadow:none;
+}
+#servicePage .login-hint{color:inherit}
+
+@media(min-width:900px){
+  #servicePage .layout{
+    grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);
+    gap:28px;
+  }
+  #servicePage .summary{position:sticky;top:84px}
+}
+@media(max-width:900px){
+  #servicePage .service-topbar{padding-inline:16px}
+  #servicePage .layout{grid-template-columns:1fr!important}
+  #servicePage .summary{position:static!important;order:initial}
+}
+@media(max-width:560px){
+  #servicePage .service-topbar{padding-inline:12px}
+  #servicePage .shell{padding:0 12px}
+  #servicePage .steps{border-radius:22px;padding:8px 16px}
+  #servicePage .step{padding:18px 0}
+  #servicePage .plat{min-width:0;padding:12px 4px 10px}
+  #servicePage .plat .ico{width:50px;height:50px}
+  #servicePage .plat .ico img{width:30px;height:30px}
+  #servicePage .summary{border-radius:24px}
+}
+
+</style>
+
+<style id="service-final-fix">
+/* Final service-page layout fix: homepage is intentionally untouched. */
+#servicePage,
+#servicePage *{
+  box-sizing:border-box;
+}
+#servicePage{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+}
+#servicePage .service-topbar{
+  width:100%;
+  max-width:1040px;
+  margin:0 auto;
+  padding:12px 16px 10px;
+  min-height:58px;
+  display:flex !important;
+  align-items:center;
+  justify-content:flex-start !important;
+  direction:rtl;
+}
+#servicePage .service-headline,
+#servicePage .service-tools{
+  display:none !important;
+}
+#servicePage .back-home{
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  width:auto;
+  min-height:46px;
+  margin:0;
+  border:1.5px solid var(--line);
+  border-radius:15px;
+  background:var(--surface);
+  color:var(--ink);
+  padding:10px 18px;
+  font:inherit;
+  font-size:15px;
+  font-weight:700;
+  box-shadow:none;
+  transform:none !important;
+}
+#servicePage .shell{
+  width:100%;
+  max-width:1040px;
+  margin-left:auto;
+  margin-right:auto;
+  padding-left:16px;
+  padding-right:16px;
+}
+#servicePage .layout{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+}
+#servicePage .steps,
+#servicePage .summary,
+#servicePage .ticket-section,
+#servicePage .service-faq,
+#servicePage .service-about{
+  min-width:0;
+  max-width:100%;
+}
+#servicePage .step,
+#servicePage .field,
+#servicePage .combo,
+#servicePage .combo-btn,
+#servicePage .combo-panel,
+#servicePage .platforms,
+#servicePage .types{
+  min-width:0;
+  max-width:100%;
+}
+#servicePage input,
+#servicePage select,
+#servicePage textarea{
+  max-width:100%;
+  min-width:0;
+}
+#servicePage .combo-panel{
+  max-width:100%;
+  overflow-x:hidden;
+}
+#servicePage .plat,
+#servicePage .types .chip{
+  min-width:0;
+}
+#servicePage .summary{
+  width:100%;
+}
+#servicePage .service-about{
+  padding-top:0;
+  padding-bottom:28px;
+}
+#servicePage .service-about-card{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:28px;
+  background:var(--surface);
+  box-shadow:var(--shadow);
+  padding:28px 24px;
+  text-align:center;
+}
+#servicePage .service-about-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 15px;
+  border-radius:999px;
+  background:color-mix(in srgb,var(--primary) 8%,var(--surface));
+  color:var(--primary);
+  font-weight:700;
+  font-size:14px;
+}
+#servicePage .service-about-card h2{
+  margin:14px 0 8px;
+  color:var(--ink);
+  font-size:28px;
+}
+#servicePage .service-about-card p{
+  max-width:760px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.9;
+}
+#servicePage .service-about-founder{
+  margin-top:16px;
+  color:var(--ink);
+  font-weight:800;
+  font-size:15px;
+}
+#servicePage .service-about-founder span{
+  margin:0 6px;
+  color:var(--muted);
+  font-weight:500;
+}
+
+/* On phones the order summary is the last part of the form, immediately before tickets. */
+@media(max-width:899px){
+  #servicePage .layout{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:16px !important;
+  }
   #servicePage .steps{
+    order:1 !important;
+    width:100% !important;
+  }
+  #servicePage .summary{
+    order:2 !important;
+    position:static !important;
+    width:100% !important;
+    margin:0 !important;
+  }
+  #servicePage .ticket-section{
+    width:100%;
+    margin-top:0;
+  }
+}
+@media(max-width:560px){
+  #servicePage .service-topbar{
+    padding:10px 12px 8px;
+    min-height:54px;
+  }
+  #servicePage .back-home{
+    min-height:44px;
+    padding:9px 15px;
+    font-size:14px;
+  }
+  #servicePage .shell{
+    padding-left:12px;
+    padding-right:12px;
+  }
+  #servicePage .steps{
+    padding:8px 14px !important;
     border-radius:22px;
-    padding:6px 16px;
+  }
+  #servicePage .step{
+    padding:18px 0;
   }
   #servicePage .platforms{
-    grid-template-columns:repeat(4,minmax(0,1fr));
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
     gap:8px;
   }
   #servicePage .plat{
+    width:100%;
     padding:10px 3px 9px;
-    border-radius:18px;
+    border-radius:17px;
+    font-size:12px;
   }
   #servicePage .plat .ico{
-    width:52px;
-    height:52px;
-    border-radius:15px;
+    width:46px;
+    height:46px;
   }
-}
-@media(max-width:430px){
-  #servicePage .platforms{
-    grid-template-columns:repeat(3,minmax(0,1fr));
+  #servicePage .plat .ico img{
+    width:28px;
+    height:28px;
+  }
+  #servicePage .types{
+    gap:7px;
+  }
+  #servicePage .types .chip{
+    padding:8px 11px;
+    font-size:13px;
+  }
+  #servicePage .summary{
+    border-radius:22px !important;
+    padding:22px 18px 20px !important;
+  }
+  #servicePage .service-about-card{
+    border-radius:22px;
+    padding:24px 18px;
+  }
+  #servicePage .service-about-card h2{
+    font-size:25px;
+  }
+  #servicePage .service-about-card p{
+    font-size:15px;
   }
 }
 </style>
 
-<style>
-#servicePage #serviceAbout{display:block!important;visibility:visible!important;margin:42px auto 28px!important;padding:0!important;max-width:820px}
-#servicePage #serviceAbout .service-about-card{display:block!important;text-align:center;padding:30px 24px 28px;border:1px solid rgba(90,60,240,.16);border-radius:24px;background:rgba(255,255,255,.72);box-shadow:0 14px 35px rgba(35,20,120,.08)}
-#servicePage #serviceAbout .service-about-icon{width:44px;height:44px;margin:0 auto 10px;display:grid;place-items:center;border-radius:14px;background:rgba(90,60,240,.10);color:var(--primary);font-size:22px}
-#servicePage #serviceAbout h2{margin:0 0 10px!important;font-size:30px!important;color:var(--ink)!important}
-#servicePage #serviceAbout p{margin:0 auto 16px!important;max-width:680px;color:var(--muted)!important;font-size:16px;line-height:1.9}
-#servicePage #serviceAbout .founder-name{display:inline-block!important;color:var(--primary);font-size:16px;font-weight:800;direction:ltr}
-@media(max-width:600px){#servicePage #serviceAbout{margin-top:30px!important}#servicePage #serviceAbout .service-about-card{padding:24px 16px}#servicePage #serviceAbout h2{font-size:26px!important}#servicePage #serviceAbout p{font-size:14px}}
-</style>
 
-
-<style id="about-force-visible">
-/* قسم من نحن - تثبيت الظهور داخل صفحة الخدمات */
-#servicePage .service-faq{
-  display:block !important;
-  visibility:visible !important;
-  height:auto !important;
-  max-height:none !important;
-  overflow:visible !important;
+<style id="live-price-notice-style">
+/* إشعار السعر الفوري — يظهر للزبون بدون الحاجة للنزول إلى زر إتمام الطلب */
+.live-price-notice{
+  position:fixed;
+  z-index:9999;
+  right:20px;
+  bottom:20px;
+  width:min(440px,calc(100vw - 32px));
+  min-height:68px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  direction:rtl;
+  border:1px solid rgba(82,55,210,.18);
+  border-radius:20px;
+  background:rgba(255,255,255,.94);
+  box-shadow:0 14px 40px rgba(38,28,100,.18);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  color:#20203a;
+  pointer-events:none;
+  transform:translateY(0);
 }
-#servicePage #faqServices .about-service-final{
-  display:block !important;
-  visibility:visible !important;
-  opacity:1 !important;
-  position:relative !important;
-  width:100% !important;
-  height:auto !important;
-  min-height:180px !important;
-  margin:40px auto 10px !important;
-  padding:0 !important;
+.live-price-notice[hidden]{display:none}
+.live-price-notice.pop{animation:livePricePop .28s ease-out}
+.live-price-icon{
+  width:44px;
+  height:44px;
+  flex:0 0 44px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:#f4c83f;
+  font-size:22px;
 }
-#servicePage #faqServices .service-about-card{
-  display:block !important;
-  visibility:visible !important;
-  opacity:1 !important;
-  width:100% !important;
-  box-sizing:border-box !important;
-  min-height:180px !important;
-  padding:32px 24px !important;
-  text-align:center !important;
-  border:1px solid rgba(90,60,240,.18) !important;
-  border-radius:26px !important;
-  background:rgba(255,255,255,.78) !important;
+.live-price-copy{
+  min-width:0;
+  flex:1;
 }
-#servicePage #faqServices .service-about-icon{
-  display:grid !important;
-  visibility:visible !important;
-  width:46px !important;
-  height:46px !important;
-  margin:0 auto 12px !important;
-  place-items:center !important;
-  border-radius:14px !important;
-  background:rgba(90,60,240,.10) !important;
+.live-price-copy strong{
+  display:block;
+  font-size:14px;
+  font-weight:800;
+  margin-bottom:3px;
 }
-#servicePage #faqServices .service-about-card h2{
-  display:block !important;
-  visibility:visible !important;
-  margin:0 0 12px !important;
-  font-size:30px !important;
+.live-price-copy span{
+  display:block;
+  color:#68687a;
+  font-size:12px;
+  line-height:1.45;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
-#servicePage #faqServices .service-about-card p{
-  display:block !important;
-  visibility:visible !important;
-  margin:0 auto 14px !important;
-  max-width:700px !important;
-  line-height:1.9 !important;
+.live-price-amount{
+  flex:0 0 auto;
+  padding:8px 11px;
+  border-radius:13px;
+  background:#f7df88;
+  color:#222;
+  font-size:16px;
+  font-weight:900;
+  direction:ltr;
+  white-space:nowrap;
 }
-#servicePage #faqServices .service-about-card .founder-name{
-  display:inline-block !important;
-  visibility:visible !important;
-  opacity:1 !important;
-  font-weight:800 !important;
-  color:var(--primary) !important;
+@keyframes livePricePop{
+  0%{opacity:.35;transform:translateY(8px) scale(.98)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
 }
-</style>
-
-
-<style id="mobile-layout-final-fix">
-/* إصلاح نهائي للموبايل: منع أي عنصر من توسيع الصفحة أفقياً */
-html,body{width:100%;max-width:100%;overflow-x:hidden!important}
-
-@media(max-width:700px){
-  #servicePage,
-  #servicePage .shell,
-  #servicePage .layout,
-  #servicePage .steps,
-  #servicePage .summary,
-  #servicePage .ticket-section,
-  #servicePage .service-faq{
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    box-sizing:border-box!important;
+@media (max-width:700px){
+  .live-price-notice{
+    right:10px;
+    left:10px;
+    bottom:max(10px,env(safe-area-inset-bottom));
+    width:auto;
+    min-height:64px;
+    padding:10px 11px;
+    border-radius:18px;
   }
-
-  #servicePage{overflow-x:hidden!important}
-  #servicePage .shell{margin-left:0!important;margin-right:0!important;padding-left:12px!important;padding-right:12px!important}
-  #servicePage .layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:14px!important}
-  #servicePage .steps{order:2!important;padding:6px 12px!important;overflow:hidden!important}
-  #servicePage .summary{order:1!important;position:static!important;overflow:hidden!important;padding:22px 18px!important}
-  #servicePage .step{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
-
-  #servicePage .service-hero{width:calc(100% - 24px)!important;max-width:calc(100% - 24px)!important;min-width:0!important;margin-left:12px!important;margin-right:12px!important;box-sizing:border-box!important}
-  #servicePage .service-topbar{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;padding-left:12px!important;padding-right:12px!important}
-
-  #servicePage .platforms{width:100%!important;max-width:100%!important;min-width:0!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
-  #servicePage .plat{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;overflow:hidden!important}
-  #servicePage .plat>span:last-child{max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
-
-  #servicePage .types{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:auto!important;overflow-y:hidden!important;box-sizing:border-box!important}
-  #servicePage .types .chip{flex:0 0 auto!important;max-width:100%!important}
-  #servicePage .field,
-  #servicePage .combo,
-  #servicePage .combo-btn,
-  #servicePage input,
-  #servicePage select,
-  #servicePage textarea{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
-  #servicePage .combo-panel{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow-x:hidden!important}
-  #servicePage .opt{min-width:0!important;max-width:100%!important;overflow:hidden!important}
-  #servicePage .opt .n{min-width:0!important;overflow-wrap:anywhere!important}
-  #servicePage .opt .p{flex-shrink:0!important;max-width:40%!important}
-
-  #servicePage .chips{width:100%!important;max-width:100%!important;min-width:0!important;display:flex!important;flex-wrap:wrap!important;overflow:hidden!important}
-  #servicePage .chips>*{max-width:100%!important;min-width:0!important}
-
-  #servicePage .ticket-section{margin-left:0!important;margin-right:0!important;padding:14px!important;grid-template-columns:minmax(0,1fr)!important;overflow:hidden!important}
-  #servicePage .ticket-intro,#servicePage .ticket-panel{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
-  #servicePage .service-faq{margin-left:0!important;margin-right:0!important;padding:16px!important;overflow:hidden!important}
-  #servicePage .service-faq .landing-faq-grid{grid-template-columns:minmax(0,1fr)!important}
-  #servicePage #faqServices .about-service-final{width:100%!important;min-width:0!important;max-width:100%!important}
-
-  #servicePage .service-about-card{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important}
-  #servicePage .service-about-card p{overflow-wrap:anywhere!important}
+  .live-price-icon{width:40px;height:40px;flex-basis:40px;border-radius:12px}
+  .live-price-copy strong{font-size:13px}
+  .live-price-copy span{font-size:11px}
+  .live-price-amount{font-size:15px;padding:7px 9px}
 }
-
-@media(max-width:430px){
-  #servicePage .platforms{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-  #servicePage .plat .ico{width:48px!important;height:48px!important}
-}
-</style>
-
-
-<style id="mobile-service-animation-fix">
-/* إصلاح نهائي للموبايل: إيقاف الحركة التي تسبب تداخل البطاقات والقوائم */
-#servicePage .plat,
-#servicePage .plat[aria-pressed="true"],
-#servicePage .step,
-#servicePage .chip,
-#servicePage .service-card,
-#servicePage .service-item,
-#servicePage .service-socials a {
-  animation: none !important;
-}
-
-/* لا تسمح للحركة أو التحويلات بإخراج العناصر من مكانها */
-#servicePage .plat:hover,
-#servicePage .plat:active,
-#servicePage .plat[aria-pressed="true"],
-#servicePage .plat:hover .ico,
-#servicePage .service-socials a:hover {
-  transform: none !important;
-}
-
-@media (max-width: 700px) {
-  /* قائمة اختيار الخدمة تصبح داخل الصفحة بدل أن تغطي الحقول التي تحتها */
-  #servicePage .combo-panel {
-    position: static !important;
-    inset: auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    max-height: 52vh !important;
-    min-height: 0 !important;
-    margin-top: 8px !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    box-sizing: border-box !important;
-    transform: none !important;
-    animation: none !important;
-  }
-
-  #servicePage .combo {
-    position: relative !important;
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  #servicePage .combo-panel .opt {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  #servicePage .combo-panel .opt .n {
-    min-width: 0 !important;
-    overflow-wrap: anywhere !important;
-  }
-
-  /* منع أي عنصر من صناعة عرض أكبر من شاشة الهاتف */
-  #servicePage,
-  #servicePage .shell,
-  #servicePage .layout,
-  #servicePage .steps,
-  #servicePage .step,
-  #servicePage .field,
-  #servicePage .summary,
-  #servicePage .ticket-section,
-  #servicePage .service-faq {
-    max-width: 100% !important;
-    min-width: 0 !important;
-    box-sizing: border-box !important;
-  }
-
-  #servicePage .plat {
-    animation: none !important;
-    transform: none !important;
-  }
+@media (prefers-reduced-motion:reduce){
+  .live-price-notice.pop{animation:none}
 }
 </style>
 
@@ -2410,13 +2560,13 @@ html,body{width:100%;max-width:100%;overflow-x:hidden!important}
         </div>
       </div>
       <div class="services-showcase-action">
-        <button class="services-showcase-btn" id="heroServicesBtn" type="button">🛍️ تصفّح الخدمات وابدأ الآن <span>←</span></button>
+        <button class="services-showcase-btn" id="heroServicesBtn" type="button">استعرض الخدمات الآن <span>←</span></button>
         <span class="services-showcase-arrow">↙</span>
       </div>
     </div>
   </section>
 
-  <section class="contact-grid" id="aboutLanding" style="scroll-margin-top:90px">
+  <section class="contact-grid" id="aboutLanding style="scroll-margin-top:90px">
     <article class="support-card">
       <span class="hero-pill">▣ تواصل معنا</span>
       <h2>نحن دائماً في خدمتك</h2>
@@ -2474,27 +2624,6 @@ html,body{width:100%;max-width:100%;overflow-x:hidden!important}
     </div>
     <button class="back-home" id="backHome" type="button">← الواجهة الرئيسية</button>
   </div>
-
-  <section class="service-hero" aria-label="خدمات السوشيال ميديا">
-    <div class="service-badge">🎯 خدمات السوشيال ميديا</div>
-    <h1>زيد <span>حضورك الرقمي</span> بضغطة زر</h1>
-    <p>متابعين، لايكات، مشاهدات وتعليقات لكل منصاتك، بأسعار مناسبة وتنفيذ سريع ودعم على مدار الساعة.</p>
-    <div class="service-hero-actions">
-      <button type="button" class="hero-order-btn" onclick="document.getElementById('servicePage').querySelector('.steps')?.scrollIntoView({behavior:'smooth',block:'start'})">ابدأ طلبك الآن ←</button>
-      <a class="hero-wa-btn" href="https://wa.me/9647717885719" target="_blank" rel="noopener noreferrer">راسلنا على واتساب</a>
-    </div>
-    <div class="service-benefits"><span>⚡ تنفيذ سريع</span><span>🔒 آمن تماماً</span><span>💬 دعم مستمر</span></div>
-    <div class="service-socials" aria-label="المنصات الاجتماعية">
-      <a href="#" onclick="return false" title="Snapchat"><img src="https://cdn.simpleicons.org/snapchat/000000" alt="Snapchat"></a>
-      <a href="https://t.me/o7ah11" target="_blank" rel="noopener noreferrer" title="Telegram"><img src="https://cdn.simpleicons.org/telegram/229ED9" alt="Telegram"></a>
-      <a href="#" onclick="return false" title="X"><img src="https://cdn.simpleicons.org/x/000000" alt="X"></a>
-      <a href="#" onclick="return false" title="Facebook"><img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook"></a>
-      <a href="#" onclick="return false" title="YouTube"><img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube"></a>
-      <a href="#" onclick="return false" title="TikTok"><img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok"></a>
-      <a href="#" onclick="return false" title="Instagram"><img src="https://cdn.simpleicons.org/instagram/E1306C" alt="Instagram"></a>
-    </div>
-  </section>
-
 <div class="shell">
 
   <div class="service-tools" aria-hidden="true">
@@ -2650,13 +2779,14 @@ html,body{width:100%;max-width:100%;overflow-x:hidden!important}
       <details><summary>هل توجد خدمات بضمان؟</summary><p>نعم، بعض الخدمات تتضمن إعادة تعبئة أو ضماناً حسب تفاصيل الخدمة المختارة.</p></details>
       <details><summary>كيف أتواصل مع الدعم؟</summary><p>يمكنك التواصل معنا عبر نظام التذاكر أو واتساب أو البريد الإلكتروني.</p></details>
     </div>
-    <div class="about-service-final" id="serviceAbout" aria-label="من نحن">
-      <div class="service-about-card">
-        <div class="service-about-icon">✦</div>
-        <h2>من نحن</h2>
-        <p>منصة رقمية متخصصة في تقديم الخدمات الرقمية، نسعى لتوفير خدمات موثوقة وسريعة وتجربة استخدام سهلة وآمنة.</p>
-        <div class="founder-name">Ali Muhannad | علي مهند</div>
-      </div>
+  </section>
+
+  <section class="service-about shell" id="serviceAbout">
+    <div class="service-about-card">
+      <span class="service-about-pill">✦ من نحن</span>
+      <h2>من نحن</h2>
+      <p>منصة رقمية متخصصة في تقديم الخدمات الرقمية، نسعى لتوفير خدمات موثوقة وسريعة وتجربة استخدام سهلة وآمنة.</p>
+      <div class="service-about-founder">Ali Muhannad <span>|</span> علي مهند</div>
     </div>
   </section>
 
@@ -2833,7 +2963,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden!important}
 
     <p>أهلاً بك في هذا المشروع التقني. نقدم لك حلولاً سريعة ومضمونة لتعزيز حضورك الرقمي وتنشيط حساباتك على منصات التواصل الاجتماعي بأفضل الأسعار وأعلى معايير الجودة.</p>
 
-    <p class="founder-line"><b>مؤسس المتجر: علي مهند</b></p>
+    
 
     <p>نضمن لك سرعة التنفيذ، الأمان التام، والدعم المستمر على مدار الساعة.</p>
 
@@ -5718,6 +5848,95 @@ renderChips();
   document.querySelectorAll('.site-links a:not(#servicesLink)').forEach(a=>a.addEventListener('click',()=>{ if(!landing.hidden){ setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),0); }}));
 })();
 
+</script>
+
+
+<!-- إشعار السعر الفوري للزبون -->
+<div id="livePriceNotice" class="live-price-notice" hidden role="status" aria-live="polite">
+  <div class="live-price-icon" aria-hidden="true">💰</div>
+  <div class="live-price-copy">
+    <strong id="livePriceTitle">السعر الحالي</strong>
+    <span id="livePriceText">اختر الخدمة والكمية</span>
+  </div>
+  <div id="livePriceAmount" class="live-price-amount">$0.00</div>
+</div>
+
+
+<script>
+/* إشعار السعر الفوري: يتحدث مباشرة عند اختيار الخدمة أو تغيير الكمية */
+(function setupLivePriceNotice(){
+  const notice = document.getElementById("livePriceNotice");
+  const title = document.getElementById("livePriceTitle");
+  const desc = document.getElementById("livePriceText");
+  const amount = document.getElementById("livePriceAmount");
+  const qty = document.getElementById("quantity");
+  const chips = document.getElementById("chips");
+  const serviceTextEl = document.getElementById("serviceText");
+  const servicePanel = document.getElementById("servicePanel");
+
+  if(!notice || !qty) return;
+
+  let lastKey = "";
+
+  function refresh(){
+    let service = null;
+    try{
+      if(typeof selectedService === "function") service = selectedService();
+    }catch(e){}
+
+    const q = Number(qty.value || 0);
+
+    if(!service){
+      notice.hidden = true;
+      lastKey = "";
+      return;
+    }
+
+    const rate = Number(service.sell_rate || 0);
+    const total = rate * q / 1000;
+    const serviceName = service.name || "الخدمة المختارة";
+    const qText = q > 0 ? q.toLocaleString("en-US") : "—";
+
+    notice.hidden = false;
+    title.textContent = q > 0 ? "تم تحديث السعر" : "تم اختيار الخدمة";
+    desc.textContent = q > 0
+      ? "الكمية " + qText + " • السعر الإجمالي حسب الكمية"
+      : "اختر الكمية حتى يظهر السعر النهائي";
+
+    if(q > 0){
+      amount.textContent = typeof money === "function"
+        ? "$" + money(total)
+        : "$" + total.toFixed(2);
+    }else{
+      amount.textContent = typeof fmtRate === "function"
+        ? fmtRate(service)
+        : "$0.00";
+    }
+
+    const key = String(service.id || serviceName) + "|" + q + "|" + total;
+    if(key !== lastKey){
+      notice.classList.remove("pop");
+      void notice.offsetWidth;
+      notice.classList.add("pop");
+      lastKey = key;
+    }
+  }
+
+  qty.addEventListener("input", refresh);
+  chips?.addEventListener("click", ()=>setTimeout(refresh,0));
+  servicePanel?.addEventListener("click", ()=>setTimeout(refresh,0));
+
+  /* تتبع تغيّر الخدمة تلقائياً عند تبديل المنصة/القسم */
+  if(serviceTextEl){
+    new MutationObserver(refresh).observe(serviceTextEl,{
+      childList:true,
+      characterData:true,
+      subtree:true
+    });
+  }
+
+  setTimeout(refresh,300);
+})();
 </script>
 
 </body>
