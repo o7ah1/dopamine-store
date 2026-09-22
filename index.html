@@ -2268,7 +2268,12 @@ html, body{
 }
 #servicePage .service-about h2,#servicePage .service-about h3{
   text-align:center!important;
-}</style></head>
+}</style>
+<style id="usd-only-wallet-fix">
+/* الدولار هو العملة الوحيدة الظاهرة للمحفظة والأسعار؛ الخصم يعرض بسعر الخدمة نفسه. */
+.wallet-line{direction:rtl}
+</style>
+</head>
 <body>
 <header class="site-nav" id="siteNav">
 <div class="site-nav-in">
@@ -2727,58 +2732,49 @@ const sumQty      = $("sumQty");
 const orderMsg    = $("orderMsg");
 
 
-/* ---------- المحفظة (الرصيد بالدينار العراقي) ---------- */
+/* ---------- المحفظة: الدولار فقط ---------- */
 
-let USD_TO_IQD = 1500;      /* يتحدّث من السيرفر (USD_TO_IQD) */
-let walletBalance = null;   /* رصيدك بالدينار، null = غير معروف / غير مسجّل */
-let walletUsd = null;       /* رصيدك بالدولار (حقيقي، منفصل عن الدينار) */
-let walletPending = [];     /* طلبات شحن بانتظار التأكيد */
-let TOPUP_MIN = 10000;      /* تتحدّث من السيرفر */
+let USD_TO_IQD = 1500;
+let walletBalance = null;   /* يبقى للتوافق مع الرد القديم فقط */
+let walletUsd = null;       /* الرصيد المعتمد بالدولار */
+let walletPending = [];
+let TOPUP_MIN = 10000;
 let TOPUP_MAX = 50000;
 let TOPUP_MIN_USD = 5;
 let TOPUP_MAX_USD = 200;
-let MIN_ORDER = 1;          /* الحد الأدنى للطلب بالدولار، يتحدّث من السيرفر */
-let topupCurrency = "IQD";  /* العملة المختارة حالياً بنافذة الشحن */
-
-const fmtIqd = n => Number(n || 0).toLocaleString("en-US") + " د.ع";
+let MIN_ORDER = 1;
+let topupCurrency = "USD";
 
 const fmtUsd = n => "$" + (Number(n || 0) >= 1 ? Number(n).toFixed(2) : String(Number(Number(n || 0).toFixed(4))));
-
 const fmtPts = n => Number(n || 0).toLocaleString("en-US") + " نقطة";
-
-/* "460 د.ع (≈ $0.30)" — الرصيدين الحقيقيين مع بعض بمكان وحد */
-const fmtWallet = () => fmtIqd(walletBalance || 0) + " + " + fmtUsd(walletUsd || 0);
+const fmtWallet = () => fmtUsd(walletUsd || 0);
 
 function renderWalletBtn(){
   const b = $("walletBtn");
   b.hidden = false;
-  $("walletBal").textContent = session ? fmtWallet() : "0";
+  $("walletBal").textContent = session ? fmtWallet() : "$0.00";
 }
 
 function updateWalletLine(){
-
   const service = selectedService();
   const q = Number(quantityBox.value || 0);
   const parts = [];
 
   if(service && q > 0){
     const usd = Number(service.sell_rate || 0) * q / 1000;
-    parts.push("المبلغ: " + fmtUsd(usd) + " (" + fmtIqd(Math.ceil(usd * USD_TO_IQD)) + ")");
+    parts.push("المبلغ: " + fmtUsd(usd));
   }
 
-  if(session && walletBalance !== null){
+  if(session && walletUsd !== null){
     parts.push("رصيدك: " + fmtWallet());
   }
 
   const el = $("walletLine");
-
   el.textContent = parts.join(" • ");
   el.hidden = !parts.length;
-
 }
 
 async function loadWallet(){
-
   if(!session){
     walletBalance = null;
     walletUsd = null;
@@ -2789,27 +2785,17 @@ async function loadWallet(){
   }
 
   try{
-
     const w = await callApi({action:"my_wallet",access_token:session.access_token});
-
-    walletBalance = Number(w.balance_iqd ?? w.balance) || 0;
     walletUsd = Number(w.balance_usd) || 0;
-
+    walletBalance = Number(w.balance_iqd ?? w.balance) || 0;
     walletPending = Array.isArray(w.pending) ? w.pending : [];
-
     return w;
-
   }catch(e){
-
     return null;
-
   }finally{
-
     renderWalletBtn();
     updateWalletLine();
-
   }
-
 }
 
 /* يقبل الأرقام العربية ١٢٣ */
@@ -2825,9 +2811,9 @@ function openTopup(preset,currency){
     return;
   }
 
-  topupCurrency = currency === "USD" ? "USD" : "IQD";
+  topupCurrency = "USD";
 
-  const isUsd = () => topupCurrency === "USD";
+  const isUsd = () => true;
 
   const min = () => isUsd() ? TOPUP_MIN_USD : TOPUP_MIN;
   const max = () => isUsd() ? TOPUP_MAX_USD : TOPUP_MAX;
@@ -2850,7 +2836,7 @@ function openTopup(preset,currency){
     "<h3>طلب شحن رصيد</h3>" +
     "<p>رصيدك الحالي: <b>" + fmtWallet() + "</b></p>" +
     '<div class="chips" id="tpCur" style="margin-bottom:10px">' +
-      '<button type="button" class="chip' + (!isUsd() ? " on" : "") + '" data-c="IQD">دينار عراقي</button>' +
+      '<button type="button" class="chip' + (!isUsd() ? " on" : "") + '" data-c="IQD"></button>' +
       '<button type="button" class="chip' + (isUsd() ? " on" : "") + '" data-c="USD">دولار أمريكي</button>' +
     "</div>" +
     pend +
@@ -3860,7 +3846,7 @@ function showOrderDone(r){
     ? '<span class="modal-tag">🧪 وضع تجريبي</span><br>'
     : "";
 
-  const paidTxt = r.currency === "USD" ? fmtUsd(r.amount_iqd / USD_TO_IQD) : fmtIqd(r.amount_iqd);
+  const paidTxt = fmtUsd(r.price_usd ?? r.amount_usd ?? (Number(selectedService()?.sell_rate || 0) * Number(quantityBox.value || 0) / 1000));
 
   openModal(
     test +
@@ -3883,14 +3869,15 @@ function showNeedFunds(d){
 
   payBody.dataset.lock = "";
 
-  const lack = Math.max(0,Number(d.need) - Number(d.balance_iqd ?? d.balance));
+  const needUsd = Number(d.need_usd ?? d.price_usd ?? (Number(selectedService()?.sell_rate || 0) * Number(quantityBox.value || 0) / 1000));
+  const lackUsd = Math.max(0, needUsd - Number(walletUsd || 0));
 
   openModal(
     '<div class="big">💰</div>' +
     "<h3>رصيدك ما يكفي</h3>" +
-    "<p>سعر الطلب: <b>" + fmtIqd(d.need) + "</b></p>" +
+    "<p>سعر الطلب: <b>" + fmtUsd(needUsd) + "</b></p>" +
     "<p>رصيدك الحالي: <b>" + fmtWallet() + "</b></p>" +
-    '<div class="amt">ينقصك ' + fmtIqd(lack) + "</div>" +
+    '<div class="amt">ينقصك ' + fmtUsd(lackUsd) + "</div>" +
     '<div class="row">' +
       '<button class="btn ghost" type="button" onclick="closeModal()">إغلاق</button>' +
       '<button class="btn primary" type="button" onclick="openTopup(' + lack + ',\'IQD\')">شحن دينار</button>' +
@@ -3976,8 +3963,8 @@ async function submitOrder(){
       access_token: session.access_token
     });
 
-    walletBalance = Number(r.balance_iqd ?? r.balance) || 0;
     walletUsd = Number(r.balance_usd ?? walletUsd) || 0;
+    walletBalance = Number(r.balance_iqd ?? walletBalance) || 0;
 
     renderWalletBtn();
 
@@ -3991,8 +3978,8 @@ async function submitOrder(){
 
     if(d.code === "insufficient_funds"){
 
-      walletBalance = Number(d.balance_iqd ?? d.balance) || 0;
       walletUsd = Number(d.balance_usd ?? walletUsd) || 0;
+      walletBalance = Number(d.balance_iqd ?? walletBalance) || 0;
 
       renderWalletBtn();
 
@@ -4469,6 +4456,8 @@ function renderAuth(view){
       '<input class="auth-in" id="aBusiness" autocomplete="organization" placeholder="مثال: متجر علي">' +
       '<label class="auth-lbl" for="aEmail">البريد الإلكتروني</label>' +
       '<input class="auth-in" id="aEmail" type="email" dir="ltr" autocomplete="email">' +
+      '<label class="auth-lbl" for="aPhone">رقم الهاتف / واتساب <span style="color:#e53935">*</span></label>' +
+      '<input class="auth-in" id="aPhone" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="مثال: 0770xxxxxxx" required>' +
       '<label class="auth-lbl" for="aPass">كلمة المرور (6 أحرف على الأقل)</label>' +
       '<input class="auth-in" id="aPass" type="password" dir="ltr" autocomplete="new-password">' +
       '<div class="auth-err" id="aMsg"></div>' +
@@ -4481,6 +4470,7 @@ function renderAuth(view){
       const name = $("aName").value.trim();
       const businessName = $("aBusiness").value.trim();
       const email = $("aEmail").value.trim();
+      const phone = $("aPhone").value.trim();
       const password = $("aPass").value;
 
       // الاسم الشخصي إجباري ويجب أن يكون مكتوباً بالعربية.
@@ -4489,6 +4479,8 @@ function renderAuth(view){
       if(!name){ authMsg("الاسم إجباري"); return; }
       if(!arabicNamePattern.test(name) || !hasArabicLetter){ authMsg("اكتب الاسم باللغة العربية فقط"); return; }
       if(!email || !password){ authMsg("اكتب البريد وكلمة المرور"); return; }
+      if(!phone){ authMsg("رقم الهاتف إجباري"); return; }
+      if(!/^[0-9+()\-\s]{8,20}$/.test(phone)){ authMsg("اكتب رقم هاتف صحيح"); return; }
 
       setRemember(true);
 
@@ -4496,7 +4488,7 @@ function renderAuth(view){
         email,
         password,
         options:{
-          data:{full_name:name,business_name:businessName},
+          data:{full_name:name,business_name:businessName,phone:phone},
           emailRedirectTo:location.origin + location.pathname
         }
       });
@@ -4513,7 +4505,7 @@ function renderAuth(view){
 
     $("aSwitch").onclick = ()=>renderAuth("login");
 
-    enterToSubmit(["aName","aBusiness","aEmail","aPass"],"aGo");
+    enterToSubmit(["aName","aBusiness","aEmail","aPhone","aPass"],"aGo");
 
   }else if(view === "forgot"){
 
@@ -4575,6 +4567,8 @@ function renderAuth(view){
       google +
       '<label class="auth-lbl" for="aEmail">البريد الإلكتروني</label>' +
       '<input class="auth-in" id="aEmail" type="email" dir="ltr" autocomplete="email">' +
+      '<label class="auth-lbl" for="aPhone">رقم الهاتف / واتساب <span style="color:#e53935">*</span></label>' +
+      '<input class="auth-in" id="aPhone" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="مثال: 0770xxxxxxx">' +
       '<label class="auth-lbl" for="aPass">كلمة المرور</label>' +
       '<input class="auth-in" id="aPass" type="password" dir="ltr" autocomplete="current-password">' +
       '<label class="auth-remember"><input type="checkbox" id="aRemember" checked> تذكرني</label>' +
@@ -4589,15 +4583,34 @@ function renderAuth(view){
     $("aGo").onclick = ()=>withBusy($("aGo"),async ()=>{
 
       const email = $("aEmail").value.trim();
+      const phone = $("aPhone").value.trim();
       const password = $("aPass").value;
 
       if(!email || !password){ authMsg("اكتب البريد وكلمة المرور"); return; }
+      if(!phone){ authMsg("رقم الهاتف إجباري عند تسجيل الدخول"); return; }
+      if(!/^[0-9+()\-\s]{8,20}$/.test(phone)){ authMsg("اكتب رقم هاتف صحيح"); return; }
 
       setRemember($("aRemember") ? $("aRemember").checked : true);
 
-      const {error} = await sbAuth.auth.signInWithPassword({email,password});
+      const {data,error} = await sbAuth.auth.signInWithPassword({email,password});
 
       if(error){ authMsg(authErr(error)); return; }
+
+      /* حفظ رقم الهاتف بعد الدخول حتى يبقى مرتبطاً بالحساب */
+      try{
+        const accessToken = data && data.session ? data.session.access_token : (session && session.access_token);
+        if(!accessToken) throw new Error("no session token");
+        const pr = await callApi({action:"my_profile",access_token:accessToken});
+        await callApi({
+          action:"save_profile",
+          access_token:accessToken,
+          full_name:pr.full_name || "",
+          phone:phone
+        });
+      }catch(e){
+        authMsg("تم تسجيل الدخول، لكن تعذر حفظ رقم الهاتف. حاول مرة ثانية.");
+        return;
+      }
 
       closeAuth();
 
@@ -4606,7 +4619,7 @@ function renderAuth(view){
     $("aSwitch").onclick = ()=>renderAuth("signup");
     $("aForgot").onclick = ()=>renderAuth("forgot");
 
-    enterToSubmit(["aEmail","aPass"],"aGo");
+    enterToSubmit(["aEmail","aPhone","aPass"],"aGo");
 
   }
 
