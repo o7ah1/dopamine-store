@@ -2734,7 +2734,7 @@ const orderMsg    = $("orderMsg");
 
 /* ---------- المحفظة: الدولار فقط ---------- */
 
-let USD_TO_IQD = 1500;
+let USD_TO_IQD = null;
 let walletBalance = null;   /* يبقى للتوافق مع الرد القديم فقط */
 let walletUsd = null;       /* الرصيد المعتمد بالدولار */
 let walletPending = [];
@@ -2804,6 +2804,120 @@ const parseNum = v => Number(
 );
 
 /* طلب شحن رصيد: مبلغ من TOPUP_MIN إلى TOPUP_MAX، والنقاط = نفس المبلغ */
+/* ---------- سعر الدولار مقابل الدينار العراقي: مصدر حي ---------- */
+let USD_RATE_UPDATED_AT = null;
+let USD_RATE_LOADING = false;
+let USD_RATE_ERROR = null;
+let USD_RATE_SOURCE = "";
+let TOPUP_RATE_TIMER = null;
+
+async function refreshUsdIqdRate(){
+  if(USD_RATE_LOADING) return false;
+  USD_RATE_LOADING = true;
+  USD_RATE_ERROR = null;
+
+  const toNumber = value => {
+    if(value == null) return NaN;
+    const digits = String(value)
+      .replace(/[٠-٩]/g, d => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+      .replace(/[^0-9.]/g, "");
+    return Number(digits);
+  };
+
+  const parseAtaDawul = text => {
+    if(!text) return NaN;
+    const clean = String(text).replace(/\s+/g, " ");
+
+    /* الصفحة تعرض السعر الأساسي بصيغة:
+       سعر 100 دولار في بورصة بغداد هو 158,600 دينار */
+    const patterns = [
+      /سعر\s*100\s*دولار\s*في\s*بورصة\s*بغداد\s*هو\s*([0-9٠-٩][0-9٠-٩,\. ]*)/i,
+      /بورصة\s*بغداد[\s\S]{0,180}?([0-9٠-٩][0-9٠-٩,\. ]*)\s*دينار\s*لكل\s*100\s*دولار/i
+    ];
+
+    for(const re of patterns){
+      const m = clean.match(re);
+      if(m){
+        const n = toNumber(m[1]);
+        if(Number.isFinite(n) && n > 10000) return n;
+      }
+    }
+    return NaN;
+  };
+
+  try{
+    let rawPrice100 = NaN;
+
+    /* المصدر الوحيد للسعر: أتا دَوال — بورصة بغداد.
+       نجرب الاتصال المباشر أولاً، ثم نفس الصفحة عبر قارئ نصي فقط لتجاوز CORS.
+       لا نستخدم أي مصدر آخر حتى لا يتغيّر السعر إلى مزود مختلف. */
+    const urls = [
+      "https://atadawul.org/dollar/",
+      "https://r.jina.ai/https://atadawul.org/dollar/"
+    ];
+
+    for(const url of urls){
+      if(Number.isFinite(rawPrice100) && rawPrice100 > 0) break;
+      try{
+        const ctrl = new AbortController();
+        const timer = setTimeout(()=>ctrl.abort(),10000);
+        const res = await fetch(url,{
+          method:"GET",
+          cache:"no-store",
+          signal:ctrl.signal,
+          headers:{"Accept":"text/html,text/plain;q=0.9,*/*;q=0.8"}
+        });
+        clearTimeout(timer);
+        if(!res.ok) continue;
+        const text = await res.text();
+        rawPrice100 = parseAtaDawul(text);
+      }catch(_){
+        /* جرّب الرابط التالي لنفس المصدر */
+      }
+    }
+
+    if(!Number.isFinite(rawPrice100) || rawPrice100 <= 0){
+      throw new Error("تعذر جلب سعر الدولار من أتا دَوال حالياً");
+    }
+
+    /* السعر كما نشره أتا دَوال لكل 100 دولار، بدون تقريب مصطنع. */
+    const price100 = Math.round(rawPrice100);
+    const rate = price100 / 100;
+
+    if(!Number.isFinite(rate) || rate <= 0){
+      throw new Error("سعر الدولار من أتا دَوال غير صالح");
+    }
+
+    USD_TO_IQD = rate;
+    USD_RATE_UPDATED_AT = new Date().toISOString();
+    USD_RATE_SOURCE = "أتا دَوال — بورصة بغداد";
+    return true;
+  }catch(e){
+    USD_RATE_ERROR = e?.name === "AbortError"
+      ? "انتهت مهلة جلب سعر الدولار من أتا دَوال"
+      : (e?.message || "تعذر تحديث سعر الدولار من أتا دَوال");
+    return false;
+  }finally{
+    USD_RATE_LOADING = false;
+  }
+}
+
+function usdRateLabel(){
+  if(USD_RATE_LOADING) return "جاري تحديث سعر الدولار...";
+  if(USD_RATE_ERROR && (!Number.isFinite(Number(USD_TO_IQD)) || Number(USD_TO_IQD) <= 0)) return "تعذر تحديث سعر الدولار حالياً";
+  if(!Number.isFinite(Number(USD_TO_IQD)) || Number(USD_TO_IQD) <= 0) return "سعر الدولار غير متوفر";
+  const rate = Number(USD_TO_IQD);
+  const price100 = Math.round(rate * 100);
+  const rateText = Number.isInteger(rate) ? rate.toLocaleString("en-US") : rate.toLocaleString("en-US",{minimumFractionDigits:1,maximumFractionDigits:2});
+  const d = USD_RATE_UPDATED_AT ? new Date(USD_RATE_UPDATED_AT) : null;
+  const stamp = d && !isNaN(d.getTime()) ? "آخر تحديث: " + d.toLocaleDateString("en-GB") : "";
+  const source = USD_RATE_SOURCE ? " • " + USD_RATE_SOURCE : "";
+  return "سعر سوق بغداد: 1$ = " + rateText + " د.ع<br>100$ = " + price100.toLocaleString("en-US") + " د.ع" + (stamp ? "<br><small>" + stamp + source + "</small>" : "");
+}
+
+refreshUsdIqdRate();
+setInterval(refreshUsdIqdRate, 15 * 60 * 1000);
+
 function openTopup(preset,currency){
 
   if(!session){
@@ -2817,22 +2931,27 @@ function openTopup(preset,currency){
   const min = () => TOPUP_MIN_USD;
   const max = () => TOPUP_MAX_USD;
   const step = () => 5;
-  const iqd = usd => Math.round(Number(usd || 0) * Number(USD_TO_IQD || 1500));
+  const iqd = usd => Math.round(Number(usd || 0) * Number(USD_TO_IQD || 0));
 
   let amt = Math.min(max(),Math.max(min(),Number(preset) || min()));
 
   const pend = walletPending.length
-    ? "<p>عندك طلب معلّق: <b>#" + walletPending[0].id + "</b> (" +
-      fmtUsd(walletPending[0].amount) + ")</p>"
+    ? "<p>عندك طلب معلّق: <b>#" + walletPending[0].id + "</b> — مبلغ التحويل: " +
+      Number(walletPending[0].amount || 0).toLocaleString("en-US") + " د.ع</p>"
     : "";
 
   payBody.dataset.lock = "";
+
+  if(TOPUP_RATE_TIMER){
+    clearInterval(TOPUP_RATE_TIMER);
+    TOPUP_RATE_TIMER = null;
+  }
 
   openModal(
     '<div class="big">💰</div>' +
     "<h3>طلب شحن رصيد</h3>" +
     "<p>رصيدك الحالي: <b>" + fmtWallet() + "</b></p>" +
-    '<div style="margin-bottom:12px;padding:12px 14px;border:1px solid rgba(90,60,240,.18);border-radius:16px;background:rgba(90,60,240,.06);text-align:center"><b>💵 الدولار الأمريكي فقط</b><br><small>الدفع يتم بالدينار العراقي حسب سعر الدولار المعتمد</small></div>' +
+    '<div style="margin-bottom:12px;padding:12px 14px;border:1px solid rgba(90,60,240,.18);border-radius:16px;background:rgba(90,60,240,.06);text-align:center"><b>💵 الدولار الأمريكي فقط</b><br><small>الدفع يتم بالدينار العراقي حسب سعر سوق بغداد المحدث</small><br><strong id="tpRate" style="display:block;margin-top:6px">جاري تحديث سعر الدولار...</strong></div>' +
     pend +
     '<div class="chips tp-chips" id="tpChips"></div>' +
     '<input class="auth-in" id="tpAmt" type="text" inputmode="decimal" dir="ltr" style="margin-top:12px;text-align:center" autocomplete="off">' +
@@ -2856,6 +2975,8 @@ function openTopup(preset,currency){
   const inp = $("tpAmt");
 
   const paint = ()=>{
+    const rateEl = $("tpRate");
+    if(rateEl) rateEl.innerHTML = usdRateLabel();
     $("tpPts").textContent = fmtUsd(amt);
     $("tpHint").textContent =
       "من " + fmtUsd(min()) + " إلى " + fmtUsd(max()) + " بكل طلب • الدفع: " + iqd(amt).toLocaleString("en-US") + " د.ع";
@@ -2865,6 +2986,18 @@ function openTopup(preset,currency){
       b.classList.toggle("on",Number(b.dataset.a) === amt);
     });
   };
+
+  /* تحديث سعر الصرف والـIQD المعروض تلقائياً والنافذة مفتوحة */
+  TOPUP_RATE_TIMER = setInterval(async ()=>{
+    if(payModal.hidden){
+      clearInterval(TOPUP_RATE_TIMER);
+      TOPUP_RATE_TIMER = null;
+      return;
+    }
+    const ok = await refreshUsdIqdRate();
+    if(ok) paint();
+    else if($("tpMsg")) $("tpMsg").textContent = USD_RATE_ERROR || "تعذر تحديث سعر الدولار";
+  }, 5 * 60 * 1000);
 
   const buildChips = ()=>{
     box.innerHTML = "";
@@ -2886,6 +3019,13 @@ function openTopup(preset,currency){
 
   buildChips();
   inp.value = amt;
+  const sendBtn = $("tpSend");
+  sendBtn.disabled = true;
+  refreshUsdIqdRate().then(ok=>{
+    paint();
+    sendBtn.disabled = !ok;
+    if(!ok) $("tpMsg").textContent = USD_RATE_ERROR || "تعذر تحديث سعر الدولار";
+  });
 
   inp.addEventListener("input",()=>{
     amt = parseNum(inp.value) || 0;
@@ -2907,12 +3047,25 @@ function openTopup(preset,currency){
     btn.disabled = true;
 
     try{
+      /* تحديث السعر لحظة الإرسال حتى يعتمد الطلب على آخر سعر متاح */
+      const rateOk = await refreshUsdIqdRate();
+      if(!rateOk) throw new Error(USD_RATE_ERROR || "تعذر تحديث سعر الدولار، حاول مرة ثانية");
+      paint();
+      const iqdAmount = Math.round(amt * Number(USD_TO_IQD));
+
       const r = await callApi({
         action:"request_topup",
         access_token:session.access_token,
-        amount:amt,
-        currency:"USD"
+        amount_usd:amt,
+        amount_iqd:iqdAmount,
+        currency:"IQD"
       });
+
+      /* واجهة الطلب تبقى بالدولار، والدفع/الرصيد المحاسبي بالدينار العراقي */
+      r.currency = "USD";
+      r.amount_usd = Number(r.amount_usd ?? amt);
+      r.amount = r.amount_usd;
+      r.iqd_amount = Number(r.amount_iqd ?? iqdAmount);
 
       loadWallet();
       showTopupSent(r);
@@ -2925,8 +3078,8 @@ function openTopup(preset,currency){
 
 function showTopupSent(r){
 
-  const usd = Number(r.amount || 0);
-  const iqdAmount = Math.round(usd * Number(USD_TO_IQD || 1500));
+  const usd = Number(r.amount_usd ?? r.amount ?? 0);
+  const iqdAmount = Number(r.amount_iqd ?? r.iqd_amount ?? Math.round(usd * Number(USD_TO_IQD || 0)));
 
   openModal(
     '<div class="big">💳</div>' +
@@ -2940,7 +3093,7 @@ function showTopupSent(r){
     "</div>" +
     '<div class="row">' +
       '<button class="btn ghost" type="button" onclick="closeModal()">إغلاق</button>' +
-      '<a class="btn primary" target="_blank" rel="noopener" href="' + esc(topupUrl(usd,r.id)) + '">إرسال عبر واتساب</a>' +
+      '<a class="btn primary" target="_blank" rel="noopener" href="' + esc(topupUrl(r.iqd_amount || Math.round(usd * Number(USD_TO_IQD || 0)),r.id,usd)) + '">إرسال عبر واتساب</a>' +
     "</div>"
   );
 
@@ -2948,7 +3101,7 @@ function showTopupSent(r){
 
 
 /* رابط واتساب لطلب شحن الرصيد (فيه بريد ورقم حساب الزبون حتى تعرف تشحنله) */
-function topupUrl(amount,reqId){
+function topupUrl(iqdAmount,reqId,usdAmount){
 
   const u = session && session.user;
 
@@ -2956,7 +3109,7 @@ function topupUrl(amount,reqId){
     "السلام عليكم، أريد شحن رصيدي في Dopamine Store.\n" +
     (u ? "بريد الحساب: " + (u.email || "") + "\nرقم الحساب: " + u.id + "\n" : "") +
     (reqId ? "رقم طلب الشحن: #" + reqId + "\n" : "") +
-    (amount ? "المبلغ المحوّل: " + Math.round(Number(amount) * Number(USD_TO_IQD || 1500)).toLocaleString("en-US") + " د.ع (مقابل " + fmtUsd(amount) + ")\n" : "المبلغ المحوّل: ") +
+    (iqdAmount ? "المبلغ المحوّل: " + Math.round(Number(iqdAmount)).toLocaleString("en-US") + " د.ع" + (usdAmount ? " (مقابل " + fmtUsd(usdAmount) + ")" : "") + "\n" : "المبلغ المحوّل: ") +
     "طريقة الدفع: ماستر\n" +
     "رقم الماستر: **** **** 1035\n" +
     "أرفقت إثبات التحويل، يرجى مراجعة الطلب والموافقة عليه.";
@@ -2972,7 +3125,7 @@ fetch(API,{
 })
   .then(r => r.json())
   .then(c =>{
-    USD_TO_IQD = Number(c.usd_to_iqd) || USD_TO_IQD;
+    /* لا نستبدل سعر السوق الحي بسعر ثابت من public_config */
     TOPUP_MIN = Number(c.topup_min) || TOPUP_MIN;
     TOPUP_MAX = Number(c.topup_max) || TOPUP_MAX;
     TOPUP_MIN_USD = Number(c.topup_min_usd) || TOPUP_MIN_USD;
@@ -3770,6 +3923,10 @@ function openModal(html){
 
 function closeModal(){
   payModal.hidden = true;
+  if(TOPUP_RATE_TIMER){
+    clearInterval(TOPUP_RATE_TIMER);
+    TOPUP_RATE_TIMER = null;
+  }
 }
 
 payModal.addEventListener("click",e=>{
@@ -4241,10 +4398,24 @@ const TX_T = {
 
 function walletCardHtml(w){
 
+  const rate = Number(USD_TO_IQD);
+  const rateText = Number.isFinite(rate) && rate > 0
+    ? Math.round(rate).toLocaleString("en-US") + " د.ع"
+    : "غير متوفر حالياً";
+  const usd100 = Number.isFinite(rate) && rate > 0
+    ? Math.round(rate * 100).toLocaleString("en-US") + " د.ع"
+    : "غير متوفر حالياً";
+
   return '<div class="wallet-card">' +
     "<small>رصيدك الحالي</small>" +
     "<b>" + fmtIqd(w.balance_iqd ?? w.balance) + "</b>" +
     "<small>+ " + fmtUsd(w.balance_usd) + " (رصيد دولاري حقيقي منفصل)</small>" +
+    '<div style="margin-top:12px;padding:12px 13px;border:1px solid rgba(90,60,240,.18);border-radius:14px;background:rgba(90,60,240,.06);text-align:center">' +
+      '<b style="display:block;font-size:14px">💵 سعر الدولار — سوق بغداد</b>' +
+      '<span style="display:block;margin-top:5px;font-size:13px">1$ = <strong>' + rateText + '</strong></span>' +
+      '<span style="display:block;margin-top:3px;font-size:13px">100$ = <strong>' + usd100 + '</strong></span>' +
+      '<small style="display:block;margin-top:5px;opacity:.75">يتحدث السعر تلقائياً</small>' +
+    '</div>' +
     '<div class="row" style="margin-top:8px">' +
       '<button class="btn" type="button" id="wTopup">شحن دينار</button>' +
       '<button class="btn" type="button" id="wTopupUsd">شحن دولار</button>' +
@@ -4628,7 +4799,8 @@ async function renderAccount(){
     const [pr,or,wl] = await Promise.all([
       callApi({action:"my_profile",access_token:token}),
       callApi({action:"my_orders",access_token:token}),
-      callApi({action:"my_wallet",access_token:token}).catch(()=>null)
+      callApi({action:"my_wallet",access_token:token}).catch(()=>null),
+      refreshUsdIqdRate()
     ]);
 
     prof = pr;

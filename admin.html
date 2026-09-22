@@ -2276,7 +2276,7 @@ async function loadTopups(){
       <td class="num">${escapeHtml(fmtDate(t.created_at))}</td>
       <td class="nm">${escapeHtml(t.full_name || "—")}<small dir="ltr">${escapeHtml(t.user_email || "")}</small></td>
       <td class="num">${escapeHtml(t.phone || "—")}</td>
-      <td class="num g">${fmtDual(t.amount)}</td>
+      <td class="num g">$${Number(t.amount_usd || 0).toFixed(2)}<small style="display:block;color:var(--muted)">${fmtInt(t.amount_iqd ?? t.amount)} د.ع</small></td>
       <td>
         <button class="tog" data-tp="1" data-id="${t.id}">✅ استلمت، اشحن</button>
         <button class="b-red tog" data-tp="0" data-id="${t.id}">✖ رفض</button>
@@ -2314,7 +2314,7 @@ async function decideTopup(id,approve){
 
     const r = await api("topup_decide",{id,approve});
 
-    toast(approve ? "تم الشحن ✅ الرصيد الجديد: " + fmtInt(r.balance) + " د.ع" : "تم الرفض");
+    toast(approve ? "تم الشحن بالدولار ✅ الرصيد الجديد: $" + Number(r.balance_usd ?? r.balance ?? 0).toFixed(2) : "تم الرفض");
 
     loadTopups();
 
