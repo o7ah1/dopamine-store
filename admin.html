@@ -2155,8 +2155,15 @@ function fmtDual(iqd){
 
 }
 
+/* يعرض الرصيدين الحقيقيين مع بعض (مو تقريب واحد للثاني) */
+function fmtBalances(u){
+  return fmtInt(u.balance) + " د.ع + $" + Number(u.balance_usd || 0).toFixed(2);
+}
+
 
 /* يقبل مبلغ بالدينار "10000" أو بالدولار "$10" أو "10$" ويرجعه دينار صحيح */
+/* يقبل "10000" (دينار حقيقي) أو "$10" / "10$" (دولار حقيقي، بدون تحويل قسري)
+   يرجّع {amount, currency} — العملة تبقى كما كتبها الأدمن */
 function parseIqdOrUsd(raw){
 
   const s = String(raw)
@@ -2167,14 +2174,10 @@ function parseIqdOrUsd(raw){
   const usdMatch = s.match(/^-?\$\s*\d+(\.\d+)?$|^-?\d+(\.\d+)?\$$/);
 
   if(usdMatch){
-
-    const usd = Number(s.replace(/\$/g,""));
-
-    return Math.trunc(usd * RATE);
-
+    return { amount:Number(Number(s.replace(/\$/g,"")).toFixed(2)), currency:"USD" };
   }
 
-  return Math.trunc(Number(s));
+  return { amount:Math.trunc(Number(s)), currency:"IQD" };
 
 }
 
@@ -2376,7 +2379,7 @@ function renderUsers(items){
       <td class="num">${u.last_sign_in_at ? escapeHtml(fmtDate(u.last_sign_in_at)) : "—"}</td>
       <td class="num">${fmtInt(u.orders_count)}</td>
       <td class="num ${spent > 0 ? "g" : ""}">${fmtMoney(spent)}</td>
-      <td class="num ${Number(u.balance) > 0 ? "g" : ""}">${fmtDual(u.balance)}</td>
+      <td class="num ${Number(u.balance) > 0 || Number(u.balance_usd) > 0 ? "g" : ""}">${fmtBalances(u)}</td>
       <td><button class="b-blue tog" data-act="wallet" data-id="${escapeHtml(u.id)}" data-email="${escapeHtml(u.email || "")}">💰 رصيد</button>
         <button class="b-amber tog" data-act="pass" data-id="${escapeHtml(u.id)}" data-email="${escapeHtml(u.email || "")}">🔑 كلمة مرور</button></td>
     </tr>`;
@@ -2423,35 +2426,36 @@ async function adjustWallet(id,email){
 
   const raw = prompt(
     "شحن / خصم رصيد للحساب:\n" + email +
-    "\n\nاكتب المبلغ بالدينار أو بالدولار.\n" +
+    "\n\nاكتب المبلغ بالدينار أو بالدولار (كل عملة رصيدها حقيقي منفصل).\n" +
     "موجب = شحن، سالب = خصم\n" +
-    "أمثلة: 10000  ،  -5000  ،  $10  ،  -$5\n" +
-    "(1$ = " + fmtInt(RATE) + " د.ع)"
+    "أمثلة: 10000 (دينار)  ،  -5000  ،  $10 (دولار)  ،  -$5"
   );
 
   if(raw === null) return;
 
-  const amount = parseIqdOrUsd(raw);
+  const { amount, currency } = parseIqdOrUsd(raw);
 
   if(!Number.isFinite(amount) || amount === 0){
     toast("اكتب مبلغاً صحيحاً",true);
     return;
   }
 
+  const shown = currency === "USD" ? "$" + Math.abs(amount).toFixed(2) : fmtInt(Math.abs(amount)) + " د.ع";
+
   const note = prompt("ملاحظة (اختياري)، مثلاً: كاش استلمته","");
 
   if(note === null) return;
 
   if(!confirm(
-    (amount > 0 ? "شحن " : "خصم ") + fmtDual(Math.abs(amount)) + " " +
+    (amount > 0 ? "شحن " : "خصم ") + shown + " (" + currency + ") " +
     (amount > 0 ? "إلى " : "من ") + email + "؟"
   )) return;
 
   try{
 
-    const r = await api("wallet_adjust",{id,amount,note:note.trim()});
+    const r = await api("wallet_adjust",{id,amount,currency,note:note.trim()});
 
-    toast("تم ✅ الرصيد الجديد: " + fmtDual(r.balance));
+    toast("تم ✅ الرصيد الجديد: " + fmtInt(r.balance_iqd) + " د.ع + $" + Number(r.balance_usd).toFixed(2));
 
     loadUsers();
 
