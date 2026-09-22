@@ -1415,6 +1415,196 @@ body{
 #servicePage .login-hint{color:rgba(255,255,255,.8)}
 @media(max-width:900px){#servicePage .service-topbar{padding-inline:14px}.service-tools{padding-inline:14px!important;overflow:auto;justify-content:flex-start!important}.service-tools span{white-space:nowrap}.layout{grid-template-columns:1fr!important}.summary{position:static!important;order:-1}.steps{order:2}}
 @media(max-width:560px){#servicePage .service-head-icon{width:38px;height:38px}.service-tools span{font-size:11px;padding:7px 10px}#servicePage .step{padding:16px;border-radius:20px}#servicePage .plat{min-width:78px;padding:9px 6px}#servicePage .plat .ico{width:40px;height:40px}#servicePage .price{font-size:35px}}
+
+/* واجهة الخدمات الرئيسية */
+.services-showcase{
+  max-width:1180px;
+  margin:28px auto 10px;
+  padding:0 24px;
+}
+.services-showcase-card{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  min-height:150px;
+  padding:26px 30px;
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 88% 18%,rgba(255,215,59,.30),transparent 25%),
+    radial-gradient(circle at 10% 90%,rgba(113,83,244,.22),transparent 30%),
+    linear-gradient(135deg,#4d2bd5 0%,#6344e8 55%,#755cf3 100%);
+  color:#fff;
+  box-shadow:0 24px 55px rgba(76,42,210,.24);
+  isolation:isolate;
+}
+.services-showcase-card:before,
+.services-showcase-card:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:-1;
+}
+.services-showcase-card:before{
+  width:230px;height:230px;
+  left:-95px;bottom:-145px;
+  background:rgba(255,255,255,.08);
+}
+.services-showcase-card:after{
+  width:150px;height:150px;
+  right:12%;top:-95px;
+  background:rgba(255,255,255,.07);
+}
+.services-showcase-copy{display:flex;align-items:center;gap:17px;direction:rtl}
+.services-showcase-icon{
+  width:66px;height:66px;flex:0 0 66px;
+  display:grid;place-items:center;
+  border-radius:21px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18);
+  font-size:31px;
+}
+.services-showcase-copy h2{
+  margin:0 0 5px;
+  font-size:25px;
+  font-weight:950;
+  letter-spacing:-.4px;
+}
+.services-showcase-copy p{
+  margin:0;
+  color:rgba(255,255,255,.84);
+  font-size:13.5px;
+  line-height:1.7;
+}
+.services-showcase-action{
+  display:flex;align-items:center;gap:10px;
+  direction:rtl;
+}
+.services-showcase-btn{
+  min-width:175px;
+  min-height:52px;
+  padding:0 22px;
+  border:0;
+  border-radius:16px;
+  background:#ffd43b;
+  color:#24164d;
+  font-weight:950;
+  font-size:14px;
+  cursor:pointer;
+  box-shadow:0 13px 28px rgba(0,0,0,.16);
+  transition:.2s;
+}
+.services-showcase-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 17px 32px rgba(0,0,0,.20);
+}
+.services-showcase-arrow{
+  width:42px;height:42px;
+  display:grid;place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.11);
+  border:1px solid rgba(255,255,255,.16);
+  font-size:20px;
+}
+.services-showcase-mini{
+  position:absolute;
+  top:15px;left:20px;
+  padding:7px 11px;
+  border-radius:999px;
+  background:rgba(255,255,255,.11);
+  border:1px solid rgba(255,255,255,.15);
+  font-size:10px;
+  font-weight:900;
+  color:rgba(255,255,255,.9);
+}
+@media(max-width:700px){
+  .services-showcase{padding:0 14px;margin-top:20px}
+  .services-showcase-card{min-height:auto;padding:22px 18px;flex-direction:column;align-items:stretch;gap:18px;border-radius:24px}
+  .services-showcase-copy h2{font-size:21px}
+  .services-showcase-copy p{font-size:12.5px}
+  .services-showcase-icon{width:56px;height:56px;flex-basis:56px;border-radius:18px;font-size:27px}
+  .services-showcase-action{width:100%}
+  .services-showcase-btn{width:100%}
+  .services-showcase-arrow{display:none}
+}
+
+
+/* تحسين تجربة الهاتف */
+@media (max-width: 700px){
+  html,body{width:100%;max-width:100%;overflow-x:hidden}
+  *{box-sizing:border-box}
+  body{font-size:14px}
+  .container,.wrap,.page,.main,.content,.section{width:100%;max-width:100%;padding-left:14px;padding-right:14px}
+  header,nav{max-width:100%;overflow:hidden}
+  .nav,.navbar,.topbar{gap:7px!important;padding-left:10px!important;padding-right:10px!important}
+  .nav a,.navbar a,.topbar a{white-space:nowrap;font-size:12px}
+  .hero,.hero-card,.hero-inner{margin:12px 14px!important;width:auto!important;border-radius:22px!important}
+  .hero{padding:24px 18px!important;min-height:auto!important}
+  .hero h1{font-size:28px!important;line-height:1.25!important}
+  .hero h2{font-size:22px!important}
+  .hero p{font-size:13px!important;line-height:1.8!important}
+  .services-showcase{padding:0 14px!important;margin:18px auto!important}
+  .services-showcase-card{padding:22px 17px!important;gap:20px!important;border-radius:22px!important}
+  .services-showcase-copy{align-items:flex-start!important;gap:12px!important}
+  .services-showcase-copy h2{font-size:20px!important}
+  .services-showcase-copy p{font-size:12px!important;line-height:1.8!important}
+  .services-showcase-action{margin-top:2px!important}
+  .services-showcase-btn{min-height:50px!important;font-size:13px!important}
+  .contact-grid,.features-grid,.cards-grid,.payment-grid,.social-grid,.faq-grid,.about-grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:14px!important;
+    margin-left:14px!important;
+    margin-right:14px!important;
+  }
+  .contact-grid>*,.features-grid>*,.cards-grid>*,.payment-grid>*,.social-grid>*,.faq-grid>*,.about-grid>*{
+    width:100%!important;
+    min-width:0!important;
+  }
+  .card,.contact-card,.feature-card,.payment-card,.faq-card,.about-card{
+    padding:18px!important;
+    border-radius:18px!important;
+    min-height:auto!important;
+  }
+  .payment-card{margin-bottom:0!important}
+  .payment-card img,.payment-card svg{max-width:58px;height:auto}
+  .section-title{font-size:22px!important;line-height:1.4!important;margin-bottom:12px!important}
+  .section-subtitle{font-size:12px!important;line-height:1.8!important}
+  .services-page,.service-page{padding:14px!important}
+  .services-page .tabs,.service-page .tabs,.platform-tabs{
+    display:flex!important;
+    flex-wrap:wrap!important;
+    gap:8px!important;
+    padding:4px!important;
+  }
+  .services-page .tabs>*,.service-page .tabs>*{
+    flex:1 1 calc(50% - 8px)!important;
+    min-width:0!important;
+  }
+  .service-card,.service-item{
+    width:100%!important;
+    margin:0 0 12px!important;
+    padding:16px!important;
+    border-radius:18px!important;
+  }
+  .service-card h3,.service-item h3{font-size:14px!important;line-height:1.55!important}
+  .service-card p,.service-item p{font-size:12px!important;line-height:1.7!important}
+  input,select,textarea,button{max-width:100%;font-size:14px}
+  input,select,textarea{padding:12px 13px!important}
+  button{min-height:44px}
+  .modal,.dialog,.popup{
+    width:calc(100% - 24px)!important;
+    max-width:calc(100% - 24px)!important;
+    margin:12px!important;
+    border-radius:20px!important;
+  }
+  footer{padding:24px 14px!important}
+}
+
 </style>
 </head>
 
@@ -1461,7 +1651,24 @@ body{
     </div>
   </section>
 
-  <section class="contact-grid" id="aboutLanding" style="scroll-margin-top:90px">
+  <section class="services-showcase" aria-label="خدمات Dopamine Store">
+    <div class="services-showcase-card">
+      <span class="services-showcase-mini">⚡ خدمات رقمية جاهزة</span>
+      <div class="services-showcase-copy">
+        <span class="services-showcase-icon">🛒</span>
+        <div>
+          <h2>اكتشف خدماتنا</h2>
+          <p>كل خدماتك الرقمية بمكان واحد — اختر المنصة، حدد الخدمة، وابدأ طلبك بسهولة.</p>
+        </div>
+      </div>
+      <div class="services-showcase-action">
+        <button class="services-showcase-btn" id="heroServicesBtn" type="button">استعرض الخدمات الآن <span>←</span></button>
+        <span class="services-showcase-arrow">↙</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-grid" id="aboutLanding style="scroll-margin-top:90px">
     <article class="support-card">
       <span class="hero-pill">▣ تواصل معنا</span>
       <h2>نحن دائماً في خدمتك</h2>
@@ -4724,6 +4931,7 @@ renderChips();
   window.scrollTo({top:0,behavior:'smooth'});
 }
   navServices?.addEventListener('click',showServices);
+  document.getElementById('heroServicesBtn')?.addEventListener('click',showServices);
   back?.addEventListener('click',showHome);
   home?.addEventListener('click',showHome);
   document.querySelectorAll('.site-links a:not(#servicesLink)').forEach(a=>a.addEventListener('click',()=>{ if(!landing.hidden){ setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),0); }}));
