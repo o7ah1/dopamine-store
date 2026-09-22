@@ -1810,6 +1810,8 @@ body{
   }
 }
 
+</style>
+
 <style id="service-panel-large-mobile">
 /* عند فتح قائمة الخدمات على الهاتف: مساحة أكبر للقراءة والاختيار */
 @media (max-width:700px){
@@ -1883,8 +1885,8 @@ body{
 </style>
 
 <style id="tickets-faq-visibility-fix">
-/* إبقاء التذاكر والأسئلة الشائعة ظاهرة داخل صفحة الخدمات */
-#servicePage #ticketsLanding{
+/* إبقاء التذاكر والأسئلة الشائعة ظاهرة دايمًا (مستقلة عن قسم الخدمات) */
+#ticketsLanding{
   display:grid !important;
   visibility:visible !important;
   opacity:1 !important;
@@ -1892,7 +1894,7 @@ body{
   max-width:1180px;
   margin:28px auto !important;
 }
-#servicePage #faqServices{
+#faqServices{
   display:block !important;
   visibility:visible !important;
   opacity:1 !important;
@@ -1900,21 +1902,37 @@ body{
   max-width:1180px;
   margin:28px auto !important;
 }
-#servicePage #ticketsLanding[hidden],
-#servicePage #faqServices[hidden]{
-  display:block !important;
-}
 @media(max-width:900px){
-  #servicePage #ticketsLanding{
+  #ticketsLanding{
     grid-template-columns:1fr !important;
     margin:22px 12px !important;
     padding:18px !important;
   }
-  #servicePage #faqServices{
+  #faqServices{
     margin:22px 12px !important;
   }
 }
 </style>
+
+<style id="final-real-fix">
+/* عرض قائمة الخدمات كاملة بدون أن تنقص بسبب overflow داخل بطاقة الخطوة */
+#servicePage .step:nth-child(2){overflow:visible!important;z-index:50!important;}
+#servicePanel.combo-panel{z-index:9999!important;max-height:min(70vh,620px)!important;overflow-y:auto!important;overflow-x:hidden!important;}
+#servicePanel .opt{min-height:46px!important;}
+
+/* تنبيه مبلغ الطلب: يبقى ظاهرًا عند اختيار الخدمة أو تغيير الكمية */
+#priceQuickToast{
+  position:fixed!important;top:76px!important;left:50%!important;transform:translateX(-50%)!important;
+  z-index:2147483647!important;display:none!important;direction:rtl!important;
+  background:#fff!important;color:#241268!important;border:2px solid #e7d86a!important;
+  border-radius:14px!important;padding:10px 16px!important;box-shadow:0 12px 32px rgba(20,15,80,.20)!important;
+  font-size:14px!important;font-weight:900!important;white-space:nowrap!important;
+  max-width:calc(100vw - 24px)!important;
+}
+#priceQuickToast.show{display:block!important;animation:priceToastIn .22s ease!important;}
+@media(max-width:700px){#priceQuickToast{top:60px!important;font-size:12px!important;padding:8px 12px!important;}#servicePanel.combo-panel{max-height:68vh!important;}}
+</style>
+
 </head>
 
 <body>
@@ -1979,7 +1997,7 @@ body{
     </div>
   </section>
 
-  <section class="contact-grid" id="aboutLanding style="scroll-margin-top:90px">
+  <section class="contact-grid" id="aboutLanding" style="scroll-margin-top:90px">
     <article class="support-card">
       <span class="hero-pill">▣ تواصل معنا</span>
       <h2>نحن دائماً في خدمتك</h2>
@@ -2162,40 +2180,39 @@ body{
 
   </main>
 
-  <section class="ticket-section" id="ticketsLanding">
-    <div class="ticket-intro">
-      <span class="hero-pill">🎫 نظام التذاكر</span>
-      <h2>تواصل معنا عبر تذكرة</h2>
-      <p>عندك مشكلة أو استفسار؟ افتح تذكرة واكتب التفاصيل، وراح تقدر تتابع حالة التذكرة من نفس المكان.</p>
-      <div class="ticket-points"><span>⚡ متابعة سريعة للطلبات والاستفسارات</span><span>🔒 كل تذكرة مرتبطة بحسابك</span><span>💬 تقدر تتابع الردود والحالة</span></div>
-    </div>
-    <div class="ticket-panel">
-      <h3>🎟️ إنشاء تذكرة جديدة</h3>
-      <div id="ticketGuest" class="ticket-login" hidden>سجّل دخولك حتى تقدر تنشئ وتتابع التذاكر.<br><button id="ticketLoginBtn" type="button">تسجيل الدخول</button></div>
-      <form id="ticketForm" class="ticket-form" hidden>
-        <input id="ticketSubject" maxlength="100" placeholder="عنوان المشكلة أو الاستفسار" required>
-        <select id="ticketCategory"><option value="طلب">استفسار عن طلب</option><option value="خدمة">استفسار عن خدمة</option><option value="دفع">الدفع / المحفظة</option><option value="أخرى">أخرى</option></select>
-        <textarea id="ticketMessage" maxlength="1000" placeholder="اكتب تفاصيل المشكلة هنا..." required></textarea>
-        <button class="ticket-submit" id="ticketSubmit" type="submit">+ فتح تذكرة</button>
-      </form>
-      <div class="ticket-list" id="ticketList"></div>
-    </div>
-  </section>
-
-  <section class="service-faq shell" id="faqServices">
-    <div class="sec-head"><span class="hero-pill">✦ الأسئلة الشائعة</span><h2>الأسئلة الشائعة</h2><p>إجابات سريعة على أكثر الأسئلة التي تهمك قبل الطلب.</p></div>
-    <div class="landing-faq-grid">
-      <details><summary>كيف أطلب خدمة؟</summary><p>ادخل إلى قسم الخدمات، اختر المنصة والخدمة، ثم ضع الرابط والكمية وشاهد السعر قبل إتمام الطلب.</p></details>
-      <details><summary>هل أحتاج إلى كلمة مرور حسابي؟</summary><p>لا، لا نحتاج إلى كلمة المرور. المطلوب هو رابط الحساب أو المنشور فقط.</p></details>
-      <details><summary>هل يجب أن يكون الحساب عاماً؟</summary><p>نعم، يجب أن يكون الحساب أو المنشور عاماً أثناء تنفيذ الخدمة.</p></details>
-      <details><summary>متى يتم تنفيذ الطلب؟</summary><p>تختلف السرعة حسب الخدمة، وستظهر تفاصيل السرعة والضمان ضمن معلومات الخدمة.</p></details>
-      <details><summary>هل توجد خدمات بضمان؟</summary><p>نعم، بعض الخدمات تتضمن إعادة تعبئة أو ضماناً حسب تفاصيل الخدمة المختارة.</p></details>
-      <details><summary>كيف أتواصل مع الدعم؟</summary><p>يمكنك التواصل معنا عبر نظام التذاكر أو واتساب أو البريد الإلكتروني.</p></details>
-    </div>
-  </section>
-
 </div>
 
+<section class="ticket-section shell" id="ticketsLanding">
+  <div class="ticket-intro">
+    <span class="hero-pill">🎫 نظام التذاكر</span>
+    <h2>تواصل معنا عبر تذكرة</h2>
+    <p>عندك مشكلة أو استفسار؟ افتح تذكرة واكتب التفاصيل، وراح تقدر تتابع حالة التذكرة من نفس المكان.</p>
+    <div class="ticket-points"><span>⚡ متابعة سريعة للطلبات والاستفسارات</span><span>🔒 كل تذكرة مرتبطة بحسابك</span><span>💬 تقدر تتابع الردود والحالة</span></div>
+  </div>
+  <div class="ticket-panel">
+    <h3>🎟️ إنشاء تذكرة جديدة</h3>
+    <div id="ticketGuest" class="ticket-login" hidden>سجّل دخولك حتى تقدر تنشئ وتتابع التذاكر.<br><button id="ticketLoginBtn" type="button">تسجيل الدخول</button></div>
+    <form id="ticketForm" class="ticket-form" hidden>
+      <input id="ticketSubject" maxlength="100" placeholder="عنوان المشكلة أو الاستفسار" required>
+      <select id="ticketCategory"><option value="طلب">استفسار عن طلب</option><option value="خدمة">استفسار عن خدمة</option><option value="دفع">الدفع / المحفظة</option><option value="أخرى">أخرى</option></select>
+      <textarea id="ticketMessage" maxlength="1000" placeholder="اكتب تفاصيل المشكلة هنا..." required></textarea>
+      <button class="ticket-submit" id="ticketSubmit" type="submit">+ فتح تذكرة</button>
+    </form>
+    <div class="ticket-list" id="ticketList"></div>
+  </div>
+</section>
+
+<section class="service-faq shell" id="faqServices">
+  <div class="sec-head"><span class="hero-pill">✦ الأسئلة الشائعة</span><h2>الأسئلة الشائعة</h2><p>إجابات سريعة على أكثر الأسئلة التي تهمك قبل الطلب.</p></div>
+  <div class="landing-faq-grid">
+    <details><summary>كيف أطلب خدمة؟</summary><p>ادخل إلى قسم الخدمات، اختر المنصة والخدمة، ثم ضع الرابط والكمية وشاهد السعر قبل إتمام الطلب.</p></details>
+    <details><summary>هل أحتاج إلى كلمة مرور حسابي؟</summary><p>لا، لا نحتاج إلى كلمة المرور. المطلوب هو رابط الحساب أو المنشور فقط.</p></details>
+    <details><summary>هل يجب أن يكون الحساب عاماً؟</summary><p>نعم، يجب أن يكون الحساب أو المنشور عاماً أثناء تنفيذ الخدمة.</p></details>
+    <details><summary>متى يتم تنفيذ الطلب؟</summary><p>تختلف السرعة حسب الخدمة، وستظهر تفاصيل السرعة والضمان ضمن معلومات الخدمة.</p></details>
+    <details><summary>هل توجد خدمات بضمان؟</summary><p>نعم، بعض الخدمات تتضمن إعادة تعبئة أو ضماناً حسب تفاصيل الخدمة المختارة.</p></details>
+    <details><summary>كيف أتواصل مع الدعم؟</summary><p>يمكنك التواصل معنا عبر نظام التذاكر أو واتساب أو البريد الإلكتروني.</p></details>
+  </div>
+</section>
 
 <section class="shell trial id="trial" hidden>
 
@@ -3512,13 +3529,18 @@ function showPriceQuickToast(){
   const el = $("priceQuickToast");
   if(!el) return;
   const service = selectedService();
-  const quantity = Number(quantityBox.value || 0);
-  if(!service || !quantity){
+  if(!service){
     el.classList.remove("show");
     return;
   }
+  const enteredQty = Number(quantityBox.value || 0);
+  const hasQty = enteredQty > 0;
+  /* لو المستخدم لسه ما كتب الكمية، نعرض السعر التقريبي لكل 1000 حتى يشوف المبلغ فوراً عند اختيار القسم والخدمة */
+  const quantity = hasQty ? enteredQty : 1000;
   const total = Number(service.sell_rate || 0) * quantity / 1000;
-  el.textContent = "💰 المبلغ الحالي: $" + money(total);
+  el.textContent = hasQty
+    ? "💰 المبلغ الحالي: $" + money(total)
+    : "💰 السعر لكل 1000: $" + money(total);
   el.classList.remove("show");
   void el.offsetWidth;
   el.classList.add("show");
@@ -5269,13 +5291,11 @@ renderChips();
 
   document.getElementById('ticketsLink')?.addEventListener('click',e=>{
     e.preventDefault();
-    showServices();
-    setTimeout(()=>document.getElementById('ticketsLanding')?.scrollIntoView({behavior:'smooth',block:'start'}),80);
+    document.getElementById('ticketsLanding')?.scrollIntoView({behavior:'smooth',block:'start'});
   });
   document.getElementById('faqLink')?.addEventListener('click',e=>{
     e.preventDefault();
-    showServices();
-    setTimeout(()=>document.getElementById('faq')?.scrollIntoView({behavior:'smooth',block:'start'}),80);
+    document.getElementById('faqServices')?.scrollIntoView({behavior:'smooth',block:'start'});
   });
 
   /* عند فتح الموقع: نبدأ مباشرة بصفحة الخدمات.
