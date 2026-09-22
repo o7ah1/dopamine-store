@@ -2253,13 +2253,22 @@ html, body{
   #priceQuickToast{
     right:8px!important;
     bottom:8px!important;
-    font-size:9px!important;
-    padding:5px 8px!important;
-    border-radius:9px!important;
+    font-size:13px!important;
+    padding:9px 13px!important;
+    border-radius:12px!important;
+    min-width:190px!important;
   }
 }
 </style>
-</head>
+<style id="service-about-final-text">#servicePage .service-about p{
+  text-align:center!important;
+  line-height:1.95!important;
+  max-width:760px;
+  margin:10px auto 0!important;
+}
+#servicePage .service-about h2,#servicePage .service-about h3{
+  text-align:center!important;
+}</style></head>
 <body>
 <header class="site-nav" id="siteNav">
 <div class="site-nav-in">
@@ -2325,11 +2334,11 @@ html, body{
 <span class="contact-icon">✉</span><span><b>البريد الإلكتروني</b><small>ye19cm@gmail.com</small><em>تواصل معنا عبر البريد الإلكتروني</em></span><i>‹</i>
 </a>
 <a class="contact-card wa-card" data-wa="" href="#" rel="noopener" target="_blank">
-<span class="contact-icon">◉</span><span><b>واتساب : راسلنا</b><small id="waLandingNum">+9647717885719</small><em>تواصل مباشر وسريع</em></span><i>‹</i>
+<span class="contact-icon">◉</span><span><b>واتساب</b><small id="waLandingNum">+9647717885719</small><em>تواصل مباشر وسريع</em></span><i>‹</i>
 </a>
 <div class="contact-card master-card">
 <span class="contact-icon"><img alt="Mastercard" loading="lazy" src="https://cdn.simpleicons.org/mastercard/17134e" style="width:34px;height:34px"/></span>
-<span><b>معلومات البطاقة</b><span class="master-number"><img alt="بطاقة" class="master-blue-card" loading="lazy" src="https://cdn.simpleicons.org/mastercard/246BFD"/>8855481035</span><span class="master-note">ماستر — عند طلب الرصيد حوّل نفس المبلغ</span></span><i>💳</i>
+<span><b>معلومات البطاقة</b><span class="master-number"><img alt="بطاقة" class="master-blue-card" loading="lazy" src="https://cdn.simpleicons.org/mastercard/246BFD"/>**** **** 1035</span><span class="master-note">ماستر — تبليغ حول المبلغ هنا من أجل شحن الرصيد</span></span><i>💳</i>
 </div>
 </div>
 </section>
@@ -2470,6 +2479,30 @@ html, body{
 <div class="msg" id="orderMsg"></div>
 </aside>
 </main>
+<section class="about reveal service-about" id="about">
+<h2><span>👋</span> من نحن</h2>
+<p class="founder-name"><b>Ali Muhannad | علي مهند</b></p>
+<p>أهلاً بك في عالمك الرقمي.<br/>هنا لنُسطّر معاً نجاح حساباتك بخدمات سريعة، آمنة، ومصممة خصيصاً لتلبي احتياجاتك على مدار الساعة.</p>
+<div class="contacts">
+<a class="contact" data-wa="" href="#" id="waLink" rel="noopener" target="_blank">
+<span class="ci wa">
+<svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.06c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.12-.96-.3-1.66-.6-2.92-1.26-4.82-4.2-4.97-4.4-.14-.2-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.26-.29.57-.36.76-.36l.55.01c.17.01.41-.07.64.49.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.2-.14.32-.28.49l-.42.49c-.14.14-.28.29-.12.57.16.29.71 1.17 1.53 1.9 1.05.93 1.93 1.22 2.21 1.36.27.15.43.12.59-.07.16-.2.68-.79.86-1.07.18-.29.36-.24.61-.14.24.1 1.56.73 1.83.87.27.14.45.2.51.31.07.12.07.68-.17 1.35z"></path></svg>
+</span>
+<span>واتساب <small id="waNum"></small></span>
+</a>
+<div class="contact contact-card-info">
+<span class="ci card-ci">💳</span>
+<span><b>معلومات البطاقة</b><small class="master-number">💳 **** **** 1035</small><em>تبليغ حول المبلغ هنا من أجل شحن الرصيد</em></span>
+</div>
+<a class="contact" href="mailto:ye19cm@gmail.com?subject=%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20-%20Dopamine%20Store">
+<span class="ci em">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="15" rx="3" width="19" x="2.5" y="4.5"></rect><path d="M3 7l9 6 9-6"></path></svg>
+</span>
+<span>البريد الإلكتروني <small>ye19cm@gmail.com</small></span>
+</a>
+</div>
+<p class="foot service-about-foot">© Dopamine Store — جميع الحقوق محفوظة</p>
+</section>
 </div>
 </div>
 <section class="shell trial" hidden="" id="trial">
@@ -2585,35 +2618,7 @@ html, body{
 </div>
 </div>
 </section>
-<div class="shell" hidden="">
-<section class="about reveal" id="about">
-<h2><span>👋</span> من نحن</h2>
-<p>أهلاً بك في هذا المشروع التقني. نقدم لك حلولاً سريعة ومضمونة لتعزيز حضورك الرقمي وتنشيط حساباتك على منصات التواصل الاجتماعي بأفضل الأسعار وأعلى معايير الجودة.</p>
-<p class="founder-line"><b>مؤسس المتجر: علي مهند</b></p>
-<p>نضمن لك سرعة التنفيذ، الأمان التام، والدعم المستمر على مدار الساعة.</p>
-<div class="contacts">
-<a class="contact" data-wa="" href="#" id="waLink" rel="noopener" target="_blank">
-<span class="ci wa">
-<svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.06c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.12-.96-.3-1.66-.6-2.92-1.26-4.82-4.2-4.97-4.4-.14-.2-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.26-.29.57-.36.76-.36l.55.01c.17.01.41-.07.64.49.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.2-.14.32-.28.49l-.42.49c-.14.14-.28.29-.12.57.16.29.71 1.17 1.53 1.9 1.05.93 1.93 1.22 2.21 1.36.27.15.43.12.59-.07.16-.2.68-.79.86-1.07.18-.29.36-.24.61-.14.24.1 1.56.73 1.83.87.27.14.45.2.51.31.07.12.07.68-.17 1.35z"></path></svg>
-</span>
-<span>
-          واتساب: راسلنا مباشرة
-          <small id="waNum"></small>
-</span>
-</a>
-<a class="contact" href="mailto:ye19cm@gmail.com?subject=%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20-%20Dopamine%20Store">
-<span class="ci em">
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="15" rx="3" width="19" x="2.5" y="4.5"></rect><path d="M3 7l9 6 9-6"></path></svg>
-</span>
-<span>
-          البريد الإلكتروني
-          <small>ye19cm@gmail.com</small>
-</span>
-</a>
-</div>
-</section>
-<p class="foot">© Dopamine Store — جميع الحقوق محفوظة</p>
-</div>
+
 <div aria-live="polite" aria-modal="true" class="modal" hidden="" id="payModal" role="dialog">
 <div class="modal-card" id="payBody"></div>
 </div>
@@ -2669,7 +2674,7 @@ const LOGOS = {
    مثال العراق: 9647701234567   */
 const WHATSAPP = "9647717885719";
 
-const WHATSAPP_TEXT = "السلام عليكم، عندي استفسار عن خدمات Dopamine Store";
+const WHATSAPP_TEXT = "السلام عليكم، عندي استفسار عن خدمات Dopamine Store. عند شحن الرصيد يتم التبليغ عن المبلغ هنا. طريقة الدفع: ماستر — الرقم: **** **** 1035";
 
 /* أنواع الخدمات: يتم التعرف عليها من اسم الخدمة أو اسم القسم */
 const TYPES = [
@@ -2855,7 +2860,7 @@ function openTopup(preset,currency){
     '<div style="margin:12px 0;padding:14px;border:1px solid rgba(90,60,240,.18);border-radius:16px;background:rgba(90,60,240,.06);text-align:right">' +
       '<b>💳 طريقة الدفع</b><br>' +
       '<span style="display:block;margin-top:6px">عند طلب الرصيد <b>حوّل نفس المبلغ</b> عن طريق <b>ماستر</b> إلى الرقم:</span>' +
-      '<strong dir="ltr" style="display:block;text-align:center;font-size:20px;margin:8px 0">8855481035</strong>' +
+      '<strong dir="ltr" style="display:block;text-align:center;font-size:20px;margin:8px 0">**** **** 1035</strong>' +
       '<small style="display:block;color:#666">بعد التحويل، أرسل إثبات الدفع عبر واتساب حتى تتم مراجعة الطلب والموافقة عليه.</small>' +
     '</div>' +
     '<p id="tpHint"></p>' +
@@ -2982,7 +2987,7 @@ function showTopupSent(r){
     '<div class="amt">' + shown + "</div>" +
     "<div style=\"margin:12px 0;padding:15px;border-radius:16px;background:rgba(90,60,240,.07);border:1px solid rgba(90,60,240,.18)\">" +
       "<b>عند طلب الرصيد حوّل نفس المبلغ عن طريق ماستر</b>" +
-      "<strong dir=\"ltr\" style=\"display:block;text-align:center;font-size:22px;margin:8px 0\">8855481035</strong>" +
+      "<strong dir=\"ltr\" style=\"display:block;text-align:center;font-size:22px;margin:8px 0\">**** **** 1035</strong>" +
       "<small style=\"display:block;color:#666\">بعد التحويل اضغط «إرسال عبر واتساب» وأرسل إثبات الدفع. لن تتم إضافة الرصيد/النقاط إلا بعد مراجعة التحويل والموافقة على الطلب.</small>" +
     "</div>" +
     '<div class="row">' +
@@ -3005,7 +3010,7 @@ function topupUrl(amount,reqId){
     (reqId ? "رقم طلب الشحن: #" + reqId + "\n" : "") +
     (amount ? "المبلغ المحوّل: " + Number(amount).toLocaleString("en-US") + " د.ع\n" : "المبلغ المحوّل: ") +
     "طريقة الدفع: ماستر\n" +
-    "رقم الماستر: 8855481035\n" +
+    "رقم الماستر: **** **** 1035\n" +
     "أرفقت إثبات التحويل، يرجى مراجعة الطلب والموافقة عليه.";
 
   return "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
@@ -5497,6 +5502,55 @@ renderChips();
 
 </script>
 </body>
+<style id="mobile-content-edge-spacing">
+/* إبعاد النصوص والعناصر عن حواف بطاقات الخدمات بالموبايل */
+@media (max-width:900px){
+  #servicePage .step{
+    padding:20px 18px!important;
+    box-sizing:border-box!important;
+  }
+  #servicePage .step h2{
+    padding-inline:4px!important;
+    margin-bottom:18px!important;
+  }
+  #servicePage .platforms,
+  #servicePage .types,
+  #servicePage .chips{
+    width:100%!important;
+    box-sizing:border-box!important;
+    padding-inline:3px!important;
+  }
+  #servicePage .types .chip,
+  #servicePage .chips .chip{
+    margin-inline:1px!important;
+  }
+  #servicePage .combo,
+  #servicePage .combo-btn,
+  #servicePage .search-box,
+  #servicePage input,
+  #servicePage select{
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+}
+@media (max-width:430px){
+  #servicePage .step{
+    padding:18px 16px!important;
+    border-radius:22px!important;
+  }
+  #servicePage .step h2{
+    padding-inline:5px!important;
+  }
+  #servicePage .platforms{
+    padding-inline:2px!important;
+  }
+  #servicePage .types,
+  #servicePage .chips{
+    padding-inline:4px!important;
+  }
+}
+</style>
 </html><style id="mobile-summary-final-fix">
 /* المربع الكبير الخاص بالإجمالي: أزرق متوسط، أصغر، ويأتي بعد الخدمات */
 @media (max-width:900px){
@@ -5528,5 +5582,154 @@ renderChips();
   #servicePage .summary{padding:14px!important;border-radius:17px!important;}
   #servicePage .summary .price{font-size:25px!important;}
   #servicePage .summary .order{font-size:13px!important;padding:10px 12px!important;}
+}
+</style>
+<style id="final-step-border-cleanup">
+/* تنظيف حواف خطوات الخدمات بالموبايل: بدون الشريط الملون الجانبي */
+#servicePage .step:before{
+  display:none!important;
+  content:none!important;
+}
+#servicePage .step{
+  border:2px solid #e4e6ef!important;
+  border-radius:26px!important;
+  box-shadow:0 10px 28px rgba(43,35,105,.06)!important;
+}
+@media(max-width:900px){
+  #servicePage .steps{
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+  #servicePage .step{
+    width:100%!important;
+    max-width:none!important;
+    border-width:2px!important;
+    border-radius:26px!important;
+    margin-inline:0!important;
+  }
+}
+@media(max-width:430px){
+  #servicePage .steps{
+    padding-left:6px!important;
+    padding-right:6px!important;
+  }
+  #servicePage .step{
+    border-width:2px!important;
+    border-radius:24px!important;
+  }
+}
+</style>
+<style id="about-card-info-final">
+#servicePage .service-about .contact-card-info{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:12px;
+  padding:14px 16px;
+  border:1px solid #e4e6ef;
+  border-radius:18px;
+  background:#fafaff;
+  box-sizing:border-box;
+}
+#servicePage .service-about .contact-card-info .card-ci{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  flex:0 0 42px;
+  border-radius:12px;
+  background:#eef0ff;
+  font-size:22px;
+}
+#servicePage .service-about .contact-card-info > span:last-child{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  min-width:0;
+}
+#servicePage .service-about .contact-card-info b{font-size:15px}
+#servicePage .service-about .contact-card-info small{font-size:15px;font-weight:900;direction:ltr;text-align:right}
+#servicePage .service-about .contact-card-info em{font-size:12px;color:#72798d;font-style:normal}
+@media(max-width:430px){
+  #servicePage .service-about .contact-card-info{padding:12px}
+  #servicePage .service-about .contact-card-info .card-ci{width:38px;height:38px;flex-basis:38px}
+}
+</style>
+<style id="service-about-and-toast-final">
+/* من نحن: داخل صفحة الخدمات وفي الأسفل حصراً */
+#servicePage .service-about{
+  width:100%;
+  max-width:1180px;
+  margin:28px auto 10px;
+  padding:28px 24px;
+  box-sizing:border-box;
+  background:#fff;
+  border:2px solid #e4e6ef;
+  border-radius:26px;
+  box-shadow:0 10px 28px rgba(43,35,105,.06);
+  text-align:right;
+  direction:rtl;
+}
+#servicePage .service-about h2{
+  margin:0 0 14px;
+  font-size:26px;
+  font-weight:950;
+}
+#servicePage .service-about .founder-name{
+  margin:0 0 10px;
+  font-size:18px;
+  color:#4f38d8;
+}
+#servicePage .service-about > p:not(.founder-name):not(.service-about-foot){
+  margin:0;
+  font-size:15px;
+  line-height:2;
+  color:#596176;
+}
+#servicePage .service-about .contacts{
+  margin-top:18px;
+}
+#servicePage .service-about-foot{
+  margin:20px 0 0!important;
+  color:#7a8194!important;
+  font-size:12px!important;
+}
+@media(max-width:900px){
+  #servicePage .service-about{
+    width:calc(100% - 16px);
+    margin:22px 8px 10px;
+    padding:24px 20px;
+    border-radius:24px;
+  }
+  #servicePage .service-about h2{font-size:23px}
+  #servicePage .service-about .founder-name{font-size:16px}
+  #servicePage .service-about > p:not(.founder-name):not(.service-about-foot){font-size:14px;line-height:1.9}
+}
+@media(max-width:430px){
+  #servicePage .service-about{
+    width:calc(100% - 12px);
+    margin:18px 6px 8px;
+    padding:20px 16px;
+    border-radius:22px;
+  }
+  #servicePage .service-about h2{font-size:21px}
+  #servicePage .service-about .founder-name{font-size:15px}
+  #servicePage .service-about > p:not(.founder-name):not(.service-about-foot){font-size:13px}
+}
+/* تكبير تنبيه السعر */
+#priceQuickToast{
+  font-size:13px!important;
+  padding:9px 13px!important;
+  border-radius:12px!important;
+  min-width:190px!important;
+  text-align:center!important;
+}
+@media(max-width:430px){
+  #priceQuickToast{
+    font-size:13px!important;
+    padding:9px 13px!important;
+    min-width:190px!important;
+    max-width:calc(100vw - 16px)!important;
+  }
 }
 </style>
