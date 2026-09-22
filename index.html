@@ -2268,7 +2268,12 @@ html, body{
 }
 #servicePage .service-about h2,#servicePage .service-about h3{
   text-align:center!important;
-}</style></head>
+}</style>
+<style id="usd-only-wallet-fix">
+/* الدولار هو العملة الوحيدة الظاهرة للمحفظة والأسعار؛ الخصم يعرض بسعر الخدمة نفسه. */
+.wallet-line{direction:rtl}
+</style>
+</head>
 <body>
 <header class="site-nav" id="siteNav">
 <div class="site-nav-in">
@@ -2727,62 +2732,49 @@ const sumQty      = $("sumQty");
 const orderMsg    = $("orderMsg");
 
 
-/* ---------- المحفظة (الرصيد بالدينار العراقي) ---------- */
+/* ---------- المحفظة: الدولار فقط ---------- */
 
-let USD_TO_IQD = 1500;      /* يتحدّث من السيرفر (USD_TO_IQD) */
-let walletBalance = null;   /* رصيدك بالدينار، null = غير معروف / غير مسجّل */
-let walletUsd = null;       /* رصيدك بالدولار (حقيقي، منفصل عن الدينار) */
-let walletPending = [];     /* طلبات شحن بانتظار التأكيد */
-let TOPUP_MIN = 10000;      /* تتحدّث من السيرفر */
+let USD_TO_IQD = 1500;
+let walletBalance = null;   /* يبقى للتوافق مع الرد القديم فقط */
+let walletUsd = null;       /* الرصيد المعتمد بالدولار */
+let walletPending = [];
+let TOPUP_MIN = 10000;
 let TOPUP_MAX = 50000;
 let TOPUP_MIN_USD = 5;
 let TOPUP_MAX_USD = 200;
-let MIN_ORDER = 1;          /* الحد الأدنى للطلب بالدولار، يتحدّث من السيرفر */
-let topupCurrency = "IQD";  /* العملة المختارة حالياً بنافذة الشحن */
-
-const fmtIqd = n => Number(n || 0).toLocaleString("en-US") + " د.ع";
+let MIN_ORDER = 1;
+let topupCurrency = "USD";
 
 const fmtUsd = n => "$" + (Number(n || 0) >= 1 ? Number(n).toFixed(2) : String(Number(Number(n || 0).toFixed(4))));
-
 const fmtPts = n => Number(n || 0).toLocaleString("en-US") + " نقطة";
-
-/* "460 د.ع (≈ $0.30)" — الرصيدين الحقيقيين مع بعض بمكان وحد */
-const fmtWallet = () => fmtIqd(walletBalance || 0) + " + " + fmtUsd(walletUsd || 0);
+const fmtWallet = () => fmtUsd(walletUsd || 0);
 
 function renderWalletBtn(){
   const b = $("walletBtn");
   b.hidden = false;
-  /* أيقونة المحفظة تعرض الدولار فقط */
-  const usd = walletUsd !== null && Number.isFinite(Number(walletUsd))
-    ? Number(walletUsd)
-    : (walletBalance !== null ? Number(walletBalance || 0) / Number(USD_TO_IQD || 1500) : 0);
-  $("walletBal").textContent = session ? fmtUsd(usd) : "$0.00";
+  $("walletBal").textContent = session ? fmtWallet() : "$0.00";
 }
 
 function updateWalletLine(){
-
   const service = selectedService();
   const q = Number(quantityBox.value || 0);
   const parts = [];
 
   if(service && q > 0){
     const usd = Number(service.sell_rate || 0) * q / 1000;
-    parts.push("المبلغ: " + fmtUsd(usd) + " (" + fmtIqd(Math.ceil(usd * USD_TO_IQD)) + ")");
+    parts.push("المبلغ: " + fmtUsd(usd));
   }
 
-  if(session && walletBalance !== null){
+  if(session && walletUsd !== null){
     parts.push("رصيدك: " + fmtWallet());
   }
 
   const el = $("walletLine");
-
   el.textContent = parts.join(" • ");
   el.hidden = !parts.length;
-
 }
 
 async function loadWallet(){
-
   if(!session){
     walletBalance = null;
     walletUsd = null;
@@ -2793,27 +2785,17 @@ async function loadWallet(){
   }
 
   try{
-
     const w = await callApi({action:"my_wallet",access_token:session.access_token});
-
-    walletBalance = Number(w.balance_iqd ?? w.balance) || 0;
     walletUsd = Number(w.balance_usd) || 0;
-
+    walletBalance = Number(w.balance_iqd ?? w.balance) || 0;
     walletPending = Array.isArray(w.pending) ? w.pending : [];
-
     return w;
-
   }catch(e){
-
     return null;
-
   }finally{
-
     renderWalletBtn();
     updateWalletLine();
-
   }
-
 }
 
 /* يقبل الأرقام العربية ١٢٣ */
@@ -2829,22 +2811,19 @@ function openTopup(preset,currency){
     return;
   }
 
-  topupCurrency = currency === "USD" ? "USD" : "IQD";
+  /* الشحن بالدولار فقط، والدفع يكون بالدينار العراقي */
+  topupCurrency = "USD";
 
-  const isUsd = () => topupCurrency === "USD";
+  const min = () => TOPUP_MIN_USD;
+  const max = () => TOPUP_MAX_USD;
+  const step = () => 5;
+  const iqd = usd => Math.round(Number(usd || 0) * Number(USD_TO_IQD || 1500));
 
-  const min = () => isUsd() ? TOPUP_MIN_USD : TOPUP_MIN;
-  const max = () => isUsd() ? TOPUP_MAX_USD : TOPUP_MAX;
-  const step = () => isUsd() ? 5 : 10000;
-
-  let amt = isUsd()
-    ? Math.min(max(),Math.max(min(),Number(preset) || min()))
-    : Math.min(max(),Math.max(min(),Math.ceil((Number(preset) || min()) / 1000) * 1000));
+  let amt = Math.min(max(),Math.max(min(),Number(preset) || min()));
 
   const pend = walletPending.length
     ? "<p>عندك طلب معلّق: <b>#" + walletPending[0].id + "</b> (" +
-      (walletPending[0].currency === "USD" ? fmtUsd(walletPending[0].amount) : fmtIqd(walletPending[0].amount)) +
-      ")</p>"
+      fmtUsd(walletPending[0].amount) + ")</p>"
     : "";
 
   payBody.dataset.lock = "";
@@ -2853,17 +2832,15 @@ function openTopup(preset,currency){
     '<div class="big">💰</div>' +
     "<h3>طلب شحن رصيد</h3>" +
     "<p>رصيدك الحالي: <b>" + fmtWallet() + "</b></p>" +
-    '<div class="chips" id="tpCur" style="margin-bottom:10px">' +
-      '<button type="button" class="chip' + (!isUsd() ? " on" : "") + '" data-c="IQD">دينار عراقي</button>' +
-      '<button type="button" class="chip' + (isUsd() ? " on" : "") + '" data-c="USD">دولار أمريكي</button>' +
-    "</div>" +
+    '<div style="margin-bottom:12px;padding:12px 14px;border:1px solid rgba(90,60,240,.18);border-radius:16px;background:rgba(90,60,240,.06);text-align:center"><b>💵 الدولار الأمريكي فقط</b><br><small>الدفع يتم بالدينار العراقي حسب سعر الدولار المعتمد</small></div>' +
     pend +
     '<div class="chips tp-chips" id="tpChips"></div>' +
-    '<input class="auth-in" id="tpAmt" type="text" inputmode="' + (isUsd() ? "decimal" : "numeric") + '" dir="ltr" style="margin-top:12px;text-align:center" autocomplete="off">' +
+    '<input class="auth-in" id="tpAmt" type="text" inputmode="decimal" dir="ltr" style="margin-top:12px;text-align:center" autocomplete="off">' +
     '<div class="amt" id="tpPts"></div>' +
     '<div style="margin:12px 0;padding:14px;border:1px solid rgba(90,60,240,.18);border-radius:16px;background:rgba(90,60,240,.06);text-align:right">' +
       '<b>💳 طريقة الدفع</b><br>' +
-      '<span style="display:block;margin-top:6px">عند طلب الرصيد <b>حوّل نفس المبلغ</b> عن طريق <b>ماستر</b> إلى الرقم:</span>' +
+      '<span style="display:block;margin-top:6px">مبلغ الشحن <b id="tpUsdPay">$' + Number(amt).toFixed(2) + '</b>، والمبلغ المطلوب تحويله هو <b id="tpIqdPay">' + iqd(amt).toLocaleString("en-US") + ' د.ع</b></span>' +
+      '<span style="display:block;margin-top:6px">حوّل المبلغ بالدينار العراقي عن طريق <b>ماستر</b> إلى الرقم:</span>' +
       '<strong dir="ltr" style="display:block;text-align:center;font-size:20px;margin:8px 0">**** **** 1035</strong>' +
       '<small style="display:block;color:#666">بعد التحويل، أرسل إثبات الدفع عبر واتساب حتى تتم مراجعة الطلب والموافقة عليه.</small>' +
     '</div>' +
@@ -2878,48 +2855,36 @@ function openTopup(preset,currency){
   const box = $("tpChips");
   const inp = $("tpAmt");
 
-  const fmtAmt = v => isUsd() ? fmtUsd(v) : fmtIqd(v);
-
   const paint = ()=>{
-
-    $("tpPts").textContent = fmtAmt(amt);
+    $("tpPts").textContent = fmtUsd(amt);
     $("tpHint").textContent =
-      "من " + fmtAmt(min()) + " إلى " + fmtAmt(max()) + " بكل طلب";
-
+      "من " + fmtUsd(min()) + " إلى " + fmtUsd(max()) + " بكل طلب • الدفع: " + iqd(amt).toLocaleString("en-US") + " د.ع";
+    $("tpUsdPay").textContent = fmtUsd(amt);
+    $("tpIqdPay").textContent = iqd(amt).toLocaleString("en-US") + " د.ع";
     box.querySelectorAll(".chip").forEach(b =>{
       b.classList.toggle("on",Number(b.dataset.a) === amt);
     });
-
   };
 
   const buildChips = ()=>{
-
     box.innerHTML = "";
-
     for(let a = min(); a <= max(); a += step()){
-
       const b = document.createElement("button");
-
       b.type = "button";
       b.className = "chip";
       b.dataset.a = a;
-      b.textContent = isUsd() ? "$" + a : a.toLocaleString("en-US");
-
+      b.textContent = "$" + a;
       b.onclick = ()=>{
         amt = a;
         inp.value = a;
         $("tpMsg").textContent = "";
         paint();
       };
-
       box.appendChild(b);
-
     }
-
   };
 
   buildChips();
-
   inp.value = amt;
 
   inp.addEventListener("input",()=>{
@@ -2927,76 +2892,55 @@ function openTopup(preset,currency){
     paint();
   });
 
-  $("tpCur").querySelectorAll(".chip").forEach(b=>{
-    b.onclick = ()=>{
-      topupCurrency = b.dataset.c;
-      $("tpCur").querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));
-      amt = min();
-      inp.value = amt;
-      inp.inputMode = isUsd() ? "decimal" : "numeric";
-      buildChips();
-      paint();
-    };
-  });
-
   paint();
 
   $("tpSend").onclick = async ()=>{
-
-    amt = isUsd() ? Number(parseNum(inp.value).toFixed(2)) : Math.trunc(parseNum(inp.value));
+    amt = Number(parseNum(inp.value).toFixed(2));
 
     if(!(amt >= min() && amt <= max())){
       $("tpMsg").textContent =
-        "المبلغ لازم يكون بين " + fmtAmt(min()) + " و" + fmtAmt(max());
+        "المبلغ لازم يكون بين " + fmtUsd(min()) + " و" + fmtUsd(max());
       return;
     }
 
     const btn = $("tpSend");
-
     btn.disabled = true;
 
     try{
-
       const r = await callApi({
         action:"request_topup",
         access_token:session.access_token,
         amount:amt,
-        currency:topupCurrency
+        currency:"USD"
       });
 
       loadWallet();
-
       showTopupSent(r);
-
     }catch(e){
-
       $("tpMsg").textContent = e.message;
-
       btn.disabled = false;
-
     }
-
   };
-
 }
 
 function showTopupSent(r){
 
-  const shown = r.currency === "USD" ? fmtUsd(r.amount) : fmtIqd(r.amount);
+  const usd = Number(r.amount || 0);
+  const iqdAmount = Math.round(usd * Number(USD_TO_IQD || 1500));
 
   openModal(
     '<div class="big">💳</div>' +
     "<h3>تم تسجيل طلب الشحن</h3>" +
     "<p>رقم الطلب: <b>#" + r.id + "</b></p>" +
-    '<div class="amt">' + shown + "</div>" +
+    '<div class="amt">' + fmtUsd(usd) + "</div>" +
     "<div style=\"margin:12px 0;padding:15px;border-radius:16px;background:rgba(90,60,240,.07);border:1px solid rgba(90,60,240,.18)\">" +
-      "<b>عند طلب الرصيد حوّل نفس المبلغ عن طريق ماستر</b>" +
+      "<b>المبلغ المطلوب تحويله: " + iqdAmount.toLocaleString("en-US") + " د.ع</b>" +
       "<strong dir=\"ltr\" style=\"display:block;text-align:center;font-size:22px;margin:8px 0\">**** **** 1035</strong>" +
-      "<small style=\"display:block;color:#666\">بعد التحويل اضغط «إرسال عبر واتساب» وأرسل إثبات الدفع. لن تتم إضافة الرصيد/النقاط إلا بعد مراجعة التحويل والموافقة على الطلب.</small>" +
+      "<small style=\"display:block;color:#666\">حوّل المبلغ بالدينار العراقي، ثم اضغط «إرسال عبر واتساب» وأرسل إثبات الدفع. لن تتم إضافة الرصيد/النقاط إلا بعد مراجعة التحويل والموافقة على الطلب.</small>" +
     "</div>" +
     '<div class="row">' +
       '<button class="btn ghost" type="button" onclick="closeModal()">إغلاق</button>' +
-      '<a class="btn primary" target="_blank" rel="noopener" href="' + esc(topupUrl(r.amount,r.id)) + '">إرسال عبر واتساب</a>' +
+      '<a class="btn primary" target="_blank" rel="noopener" href="' + esc(topupUrl(usd,r.id)) + '">إرسال عبر واتساب</a>' +
     "</div>"
   );
 
@@ -3012,7 +2956,7 @@ function topupUrl(amount,reqId){
     "السلام عليكم، أريد شحن رصيدي في Dopamine Store.\n" +
     (u ? "بريد الحساب: " + (u.email || "") + "\nرقم الحساب: " + u.id + "\n" : "") +
     (reqId ? "رقم طلب الشحن: #" + reqId + "\n" : "") +
-    (amount ? "المبلغ المحوّل: " + Number(amount).toLocaleString("en-US") + " د.ع\n" : "المبلغ المحوّل: ") +
+    (amount ? "المبلغ المحوّل: " + Math.round(Number(amount) * Number(USD_TO_IQD || 1500)).toLocaleString("en-US") + " د.ع (مقابل " + fmtUsd(amount) + ")\n" : "المبلغ المحوّل: ") +
     "طريقة الدفع: ماستر\n" +
     "رقم الماستر: **** **** 1035\n" +
     "أرفقت إثبات التحويل، يرجى مراجعة الطلب والموافقة عليه.";
@@ -3834,24 +3778,11 @@ payModal.addEventListener("click",e=>{
 
 async function callApi(body){
 
-  /* منع شاشة "جاري التحميل" من البقاء للأبد إذا علقت دالة الخادم أو انقطعت الشبكة */
-  const controller = new AbortController();
-  const timer = setTimeout(()=>controller.abort(),10000);
-
-  let r;
-  try{
-    r = await fetch(API,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(body),
-      signal:controller.signal
-    });
-  }catch(e){
-    if(e && e.name === "AbortError") throw new Error("الخادم تأخر بالرد. تأكد من نشر admin-worker ثم حاول مرة ثانية.");
-    throw new Error("تعذر الاتصال بالخادم. تحقق من الإنترنت ثم حاول مرة ثانية.");
-  }finally{
-    clearTimeout(timer);
-  }
+  const r = await fetch(API,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(body)
+  });
 
   const d = await r.json().catch(()=>({}));
 
@@ -3877,7 +3808,7 @@ function showOrderDone(r){
     ? '<span class="modal-tag">🧪 وضع تجريبي</span><br>'
     : "";
 
-  const paidTxt = r.currency === "USD" ? fmtUsd(r.amount_iqd / USD_TO_IQD) : fmtIqd(r.amount_iqd);
+  const paidTxt = fmtUsd(r.price_usd ?? r.amount_usd ?? (Number(selectedService()?.sell_rate || 0) * Number(quantityBox.value || 0) / 1000));
 
   openModal(
     test +
@@ -3900,14 +3831,15 @@ function showNeedFunds(d){
 
   payBody.dataset.lock = "";
 
-  const lack = Math.max(0,Number(d.need) - Number(d.balance_iqd ?? d.balance));
+  const needUsd = Number(d.need_usd ?? d.price_usd ?? (Number(selectedService()?.sell_rate || 0) * Number(quantityBox.value || 0) / 1000));
+  const lackUsd = Math.max(0, needUsd - Number(walletUsd || 0));
 
   openModal(
     '<div class="big">💰</div>' +
     "<h3>رصيدك ما يكفي</h3>" +
-    "<p>سعر الطلب: <b>" + fmtIqd(d.need) + "</b></p>" +
+    "<p>سعر الطلب: <b>" + fmtUsd(needUsd) + "</b></p>" +
     "<p>رصيدك الحالي: <b>" + fmtWallet() + "</b></p>" +
-    '<div class="amt">ينقصك ' + fmtIqd(lack) + "</div>" +
+    '<div class="amt">ينقصك ' + fmtUsd(lackUsd) + "</div>" +
     '<div class="row">' +
       '<button class="btn ghost" type="button" onclick="closeModal()">إغلاق</button>' +
       '<button class="btn primary" type="button" onclick="openTopup(' + lack + ',\'IQD\')">شحن دينار</button>' +
@@ -3993,8 +3925,8 @@ async function submitOrder(){
       access_token: session.access_token
     });
 
-    walletBalance = Number(r.balance_iqd ?? r.balance) || 0;
     walletUsd = Number(r.balance_usd ?? walletUsd) || 0;
+    walletBalance = Number(r.balance_iqd ?? walletBalance) || 0;
 
     renderWalletBtn();
 
@@ -4008,8 +3940,8 @@ async function submitOrder(){
 
     if(d.code === "insufficient_funds"){
 
-      walletBalance = Number(d.balance_iqd ?? d.balance) || 0;
       walletUsd = Number(d.balance_usd ?? walletUsd) || 0;
+      walletBalance = Number(d.balance_iqd ?? walletBalance) || 0;
 
       renderWalletBtn();
 
@@ -4693,40 +4625,33 @@ async function renderAccount(){
 
   try{
 
-    /* تحميل كل جزء بشكل مستقل حتى لا يتعطل "حسابي" كله إذا تعطل طلب واحد */
-    const results = await Promise.allSettled([
+    const [pr,or,wl] = await Promise.all([
       callApi({action:"my_profile",access_token:token}),
       callApi({action:"my_orders",access_token:token}),
-      callApi({action:"my_wallet",access_token:token})
+      callApi({action:"my_wallet",access_token:token}).catch(()=>null)
     ]);
 
-    const pr = results[0];
-    const or = results[1];
-    const wl = results[2];
+    prof = pr;
 
-    if(pr.status === "fulfilled") prof = pr.value;
-    else problem = pr.reason?.message || "تعذر تحميل معلومات الحساب";
+    orders = or.items || [];
 
-    if(or.status === "fulfilled") orders = or.value?.items || [];
-    else if(!problem) problem = or.reason?.message || "تعذر تحميل الطلبات";
+    if(wl){
 
-    if(wl.status === "fulfilled") {
-      wal = wl.value || {balance:0,items:[]};
-      walletPending = Array.isArray(wal.pending) ? wal.pending : [];
-      walletBalance = Number(wal.balance) || 0;
+      wal = wl;
+
+      walletPending = Array.isArray(wl.pending) ? wl.pending : [];
+
+      walletBalance = Number(wl.balance) || 0;
+
       renderWalletBtn();
-      updateWalletLine();
-    }
 
-    /* إذا فشل أكثر من طلب، نعرض رسالة واحدة واضحة بدل البقاء على التحميل */
-    const failed = results.filter(x=>x.status === "rejected");
-    if(failed.length && !problem){
-      problem = failed[0].reason?.message || "تعذر تحميل بيانات الحساب";
+      updateWalletLine();
+
     }
 
   }catch(e){
 
-    problem = e.message || "تعذر تحميل بيانات الحساب";
+    problem = e.message;
 
   }
 
@@ -4749,7 +4674,6 @@ async function renderAccount(){
     '<label class="auth-lbl" for="pPhone">رقم الهاتف / واتساب</label>' +
     '<input class="auth-in" id="pPhone" dir="ltr" inputmode="tel" autocomplete="tel" value="' + esc(prof.phone) + '">' +
     '<div class="auth-err" id="aMsg">' + esc(problem) + "</div>" +
-    (problem ? '<button class="btn ghost" style="width:100%;margin-bottom:10px" id="pRetry" type="button">إعادة المحاولة</button>' : "") +
     '<button class="btn primary" style="width:100%" id="pSave" type="button">حفظ المعلومات</button>' +
     '<h3 style="margin:20px 0 4px;font-size:16px;text-align:start">طلباتي</h3>' +
     '<div class="ord-list">' + list + "</div>" +
@@ -4761,8 +4685,6 @@ async function renderAccount(){
   authBody.querySelectorAll(".ord[data-oid]").forEach(el =>{
     el.onclick = ()=>openOrder(el.dataset.oid);
   });
-
-  if($("pRetry")) $("pRetry").onclick = ()=>renderAccount();
 
   $("wTopup").onclick = ()=>{
 
@@ -4885,103 +4807,11 @@ $("hintLogin").addEventListener("click",()=>openAuth("login"));
    نظام التذاكر
    ===================================================== */
 const ticketForm = $("ticketForm"), ticketGuest = $("ticketGuest"), ticketList = $("ticketList"), ticketSubject = $("ticketSubject"), ticketCategory = $("ticketCategory"), ticketMessage = $("ticketMessage");
-
-function ticketDate(t){
-  const v = t.updated_at || t.created_at || t.created || "";
-  if(!v)return "";
-  try{return new Date(v).toLocaleString("ar-IQ");}catch(e){return String(v);}
-}
-
-function ticketStatusText(t){
-  if(t.status === "closed")return "مغلقة";
-  if(t.status === "answered")return "تم الرد";
-  return "مفتوحة";
-}
-
-function ticketMessagesHtml(t){
-  const msgs = Array.isArray(t.messages) ? t.messages : [];
-  if(!msgs.length)return "";
-  return msgs.map(m =>
-    '<div class="ticket-note"><b>'+(m.sender_type === "admin" ? "الدعم" : "أنت")+':</b> '+esc(m.message || "")+'</div>'
-  ).join("");
-}
-
-async function renderTickets(){
-  if(!ticketList)return;
-  if(!session){
-    ticketGuest.hidden=false;
-    ticketForm.hidden=true;
-    ticketList.innerHTML="";
-    return;
-  }
-  ticketGuest.hidden=true;
-  ticketForm.hidden=false;
-  ticketList.innerHTML='<div class="ticket-empty">جاري تحميل التذاكر...</div>';
-  try{
-    const r = await callApi({action:"ticket_list",access_token:session.access_token});
-    const items = Array.isArray(r.items) ? r.items.filter(Boolean) : [];
-    if(!items.length){
-      ticketList.innerHTML='<div class="ticket-empty">ما عندك تذاكر حالياً. افتح أول تذكرة من النموذج أعلاه 🎫</div>';
-      return;
-    }
-    ticketList.innerHTML = items.map(t => {
-      const closed = t.status === "closed";
-      const replyBox = closed ? "" :
-        '<div class="ticket-reply-row" style="display:flex;gap:8px;margin-top:10px;align-items:stretch">'+
-          '<input class="auth-in ticket-reply-input" data-ticket-id="'+esc(t.id)+'" type="text" placeholder="اكتب ردك..." autocomplete="off" style="flex:1;margin:0">'+
-          '<button class="btn primary ticket-reply-btn" type="button" data-ticket-id="'+esc(t.id)+'" style="min-width:90px">إرسال</button>'+
-        '</div>';
-      return '<div class="ticket-item">'+
-        '<div class="ticket-item-top"><b>#'+esc(t.id)+' — '+esc(t.subject || "")+'</b><span class="ticket-status '+(closed ? "closed" : "")+'">'+esc(ticketStatusText(t))+'</span></div>'+
-        '<div class="ticket-note">'+esc(t.category || "أخرى")+' · '+esc(ticketDate(t))+'</div>'+
-        ticketMessagesHtml(t)+replyBox+
-      '</div>';
-    }).join("");
-
-    ticketList.querySelectorAll(".ticket-reply-btn").forEach(btn=>{
-      btn.addEventListener("click", async ()=>{
-        const id = btn.dataset.ticketId;
-        const input = Array.from(ticketList.querySelectorAll(".ticket-reply-input")).find(x=>x.dataset.ticketId===id);
-        const message = input ? input.value.trim() : "";
-        if(!message)return;
-        btn.disabled=true;
-        try{
-          await callApi({action:"ticket_reply",access_token:session.access_token,ticket_id:id,message});
-          await renderTickets();
-          if(typeof showNotifToast === "function")showNotifToast({title:"تم إرسال الرد",body:"وصل ردك للدعم"});
-        }catch(e){
-          if(typeof showNotifToast === "function")showNotifToast({title:"تعذر إرسال الرد",body:e.message || "حدث خطأ"});
-          else alert(e.message || "تعذر إرسال الرد");
-          btn.disabled=false;
-        }
-      });
-    });
-  }catch(e){
-    ticketList.innerHTML='<div class="ticket-empty">تعذر تحميل التذاكر: '+esc(e.message || "حدث خطأ")+'</div>';
-  }
-}
-
-if(ticketForm)ticketForm.addEventListener("submit",async e=>{
-  e.preventDefault();
-  if(!session){openAuth("login","سجّل دخولك حتى تفتح تذكرة");return}
-  const subject=ticketSubject.value.trim(), message=ticketMessage.value.trim();
-  if(!subject || !message)return;
-  const btn = ticketForm.querySelector('button[type="submit"]');
-  if(btn)btn.disabled=true;
-  try{
-    const r = await callApi({action:"ticket_create",access_token:session.access_token,subject,category:ticketCategory.value,message});
-    ticketForm.reset();
-    await renderTickets();
-    const id = r.ticket && r.ticket.id ? "#"+r.ticket.id : "";
-    if(typeof showNotifToast === "function")showNotifToast({title:"تم فتح التذكرة",body:"وصلت التذكرة للدعم "+id});
-  }catch(e){
-    if(typeof showNotifToast === "function")showNotifToast({title:"تعذر فتح التذكرة",body:e.message || "حدث خطأ"});
-    else alert(e.message || "تعذر فتح التذكرة");
-  }finally{
-    if(btn)btn.disabled=false;
-  }
-});
-
+function ticketKey(){return "dopamine_tickets_"+(session&&session.user?session.user.id:"guest")}
+function getTickets(){try{return JSON.parse(localStorage.getItem(ticketKey())||"[]")}catch(e){return []}}
+function saveTickets(a){localStorage.setItem(ticketKey(),JSON.stringify(a))}
+function renderTickets(){if(!ticketList)return;if(!session){ticketGuest.hidden=false;ticketForm.hidden=true;ticketList.innerHTML="";return}ticketGuest.hidden=true;ticketForm.hidden=false;const a=getTickets();if(!a.length){ticketList.innerHTML='<div class="ticket-empty">ما عندك تذاكر حالياً. افتح أول تذكرة من النموذج أعلاه 🎫</div>';return}ticketList.innerHTML=a.map(t=>'<div class="ticket-item"><div class="ticket-item-top"><b>#'+esc(t.id)+' — '+esc(t.subject)+'</b><span class="ticket-status '+(t.status==='مغلقة'?'closed':'')+'">'+esc(t.status)+'</span></div><div class="ticket-note">'+esc(t.category)+' · '+esc(t.created)+'</div><div class="ticket-note">'+esc(t.message)+'</div></div>').join("")}
+if(ticketForm)ticketForm.addEventListener("submit",e=>{e.preventDefault();if(!session){openAuth("login","سجّل دخولك حتى تفتح تذكرة");return}const subject=ticketSubject.value.trim(),message=ticketMessage.value.trim();if(!subject||!message)return;const a=getTickets(),t={id:String(Date.now()).slice(-7),subject,category:ticketCategory.value,message,status:"مفتوحة",created:new Date().toLocaleString("ar-IQ")};a.unshift(t);saveTickets(a);ticketForm.reset();renderTickets();if(typeof showNotifToast==="function")showNotifToast({title:"تم فتح تذكرة جديدة",body:"رقم التذكرة #"+t.id})});
 $("ticketLoginBtn")?.addEventListener("click",()=>openAuth("login","سجّل دخولك حتى تفتح وتتابع التذاكر"));
 
 /* =====================================================
