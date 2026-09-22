@@ -1810,7 +1810,7 @@ body{
   }
 }
 
-
+<style id="service-panel-large-mobile">
 /* عند فتح قائمة الخدمات على الهاتف: مساحة أكبر للقراءة والاختيار */
 @media (max-width:700px){
   #servicePanel.combo-panel{max-height:72vh!important;min-height:300px!important;padding:8px!important;border-radius:16px!important;}
@@ -1823,947 +1823,96 @@ body{
 }
 
 
-/* =====================================================
-   خدمات: نفس شكل ملف index.html المرجعي
-   - التعديل بصري فقط داخل صفحة الخدمات
-   - الصفحة الرئيسية وباقي الوظائف بدون تغيير
-   ===================================================== */
-#servicePage{
-  background:var(--paper);
-  min-height:0;
-  padding-bottom:0;
-}
-#servicePage .service-topbar{
-  max-width:1040px;
-  margin:0 auto;
-  padding:14px 16px 8px;
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  direction:rtl;
-}
-#servicePage .service-headline,
-#servicePage .service-tools{
-  display:none;
-}
-#servicePage .back-home{
-  border:1.5px solid var(--line);
-  background:var(--surface);
-  color:var(--ink);
-  border-radius:15px;
-  padding:9px 16px;
-  font:inherit;
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
-  box-shadow:none;
-  transition:border-color .15s,transform .12s,background-color .15s;
-}
-#servicePage .back-home:hover{
-  border-color:var(--primary);
-  transform:none;
-  box-shadow:none;
-  background:var(--field);
-}
-
-#servicePage .shell{
-  max-width:1040px;
-  padding:0 16px;
-}
-
-#servicePage .sec-head{
-  display:block;
-}
-#servicePage .layout{
-  display:grid;
-  gap:20px;
-  align-items:start;
-  max-width:none;
-}
-#servicePage .steps{
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:28px;
-  padding:8px 24px;
-  box-shadow:var(--shadow);
-  display:block;
-  gap:initial;
-}
-#servicePage .step{
-  border:0;
-  border-radius:0;
-  background:transparent;
-  box-shadow:none;
-  padding:22px 0;
-  position:static;
-  overflow:visible;
-}
-#servicePage .step:before{display:none}
-#servicePage .step + .step{
-  border-top:1px solid var(--line);
-}
-#servicePage .step h2{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin:0 0 14px;
-  font-size:17px;
-  font-weight:600;
-  color:var(--ink);
-}
-#servicePage .step h2 b{
-  width:26px;
-  height:26px;
-  border-radius:9px;
-  background:var(--ink);
-  color:var(--surface);
-  display:grid;
-  place-items:center;
-  font-size:13px;
-  font-weight:600;
-}
-
-#servicePage .platforms{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(84px,1fr));
-  gap:10px;
-  padding:2px;
-}
-#servicePage .plat{
-  min-width:0;
-  padding:12px 4px 10px;
-  border:1.5px solid var(--line);
-  border-radius:20px;
-  background:var(--field);
-  color:var(--ink);
-  font:inherit;
-  font-size:12.5px;
-  font-weight:500;
-  line-height:1.3;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:8px;
-  cursor:pointer;
-  transition:border-color .15s,background-color .15s,transform .12s;
-  box-shadow:none;
-}
-#servicePage .plat:hover{
-  border-color:var(--primary);
-  transform:none;
-  box-shadow:none;
-}
-#servicePage .plat[aria-pressed="true"]{
-  border-color:var(--primary);
-  background:var(--surface);
-  box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 22%,transparent);
-  font-weight:600;
-  transform:none;
-}
-#servicePage .plat .ico{
-  width:56px;
-  height:56px;
-  border-radius:16px;
-  display:grid;
-  place-items:center;
-  font-size:26px;
-  line-height:1;
-  color:#fff;
-  margin-bottom:0;
-}
-#servicePage .plat .ico img{
-  width:32px;
-  height:32px;
-  display:block;
-}
-
-#servicePage .field{margin-top:12px}
-#servicePage .field:first-of-type{margin-top:0}
-#servicePage .field label{
-  display:block;
-  margin-bottom:7px;
-  font-size:14px;
-  font-weight:500;
-  color:var(--muted);
-}
-#servicePage input,
-#servicePage select{
-  width:100%;
-  height:52px;
-  padding:0 16px;
-  border:1.5px solid var(--line);
-  border-radius:14px;
-  background:var(--field);
-  color:var(--ink);
-  font:inherit;
-  font-size:16px;
-  box-shadow:none;
-}
-#servicePage input:focus,
-#servicePage select:focus{
-  outline:0;
-  border-color:var(--primary);
-  box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 22%,transparent);
-}
-#servicePage .types{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin:0 0 4px;
-}
-#servicePage .types .chip{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  padding:8px 13px;
-  background:var(--field);
-  border:1.5px solid var(--line);
-  border-radius:999px;
-  color:var(--ink);
-  font:inherit;
-  font-size:14px;
-  cursor:pointer;
-  transition:border-color .15s,background-color .15s;
-}
-#servicePage .types .chip[aria-pressed="true"]{
-  border-color:var(--primary);
-  background:color-mix(in srgb,var(--primary) 14%,transparent);
-  font-weight:600;
-}
-#servicePage .types .chip[aria-pressed="true"] .c{
-  background:var(--primary);
-  color:#fff;
-}
-
-#servicePage .combo{position:relative}
-#servicePage .combo-btn{
-  width:100%;
-  min-height:52px;
-  padding:9px 16px 9px 44px;
-  border:1.5px solid var(--line);
-  border-radius:14px;
-  background:var(--field);
-  color:var(--ink);
-  font:inherit;
-  font-size:15.5px;
-  text-align:start;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  cursor:pointer;
-  box-shadow:none;
-}
-#servicePage .combo-btn:focus-visible,
-#servicePage .combo-btn[aria-expanded="true"]{
-  outline:0;
-  border-color:var(--primary);
-  box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 22%,transparent);
-}
-#servicePage .combo > svg{
-  position:absolute;
-  left:16px;
-  top:26px;
-  width:18px;
-  height:18px;
-  margin-top:-9px;
-  color:var(--muted);
-  pointer-events:none;
-}
-
-#servicePage .summary{
-  position:sticky;
-  top:84px;
-  border:0;
-  border-radius:28px;
-  background:var(--summary);
-  box-shadow:none;
-  color:#fff;
-  padding:26px 24px 24px;
-  overflow:visible;
-}
-#servicePage .summary:before,
-#servicePage .summary:after{
-  display:none;
-}
-#servicePage .summary>*{
-  position:static;
-  z-index:auto;
-}
-#servicePage .summary .label{font-size:14px;opacity:.8}
-#servicePage .price{
-  display:flex;
-  align-items:baseline;
-  gap:6px;
-  margin:4px 0 12px;
-  direction:ltr;
-  justify-content:flex-end;
-  font-variant-numeric:tabular-nums;
-  font-size:initial;
-  font-weight:initial;
-  letter-spacing:normal;
-}
-#servicePage .price #price{
-  font-size:clamp(44px,9vw,60px);
-  font-weight:700;
-  letter-spacing:-.02em;
-  line-height:1.05;
-}
-#servicePage .price .cur{font-size:28px;font-weight:500;opacity:.8}
-#servicePage .rate{
-  display:inline-block;
-  padding:5px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,.16);
-  border:0;
-  font-size:13.5px;
-}
-#servicePage .facts{
-  margin:20px 0 0;
-  padding:16px 0 0;
-  border-top:1px solid rgba(255,255,255,.22);
-  display:grid;
-  gap:10px;
-}
-#servicePage .facts div{
-  display:flex;
-  justify-content:space-between;
-  gap:16px;
-  margin:0;
-  font-size:14px;
-}
-#servicePage .facts dd{
-  margin:0;
-  text-align:left;
-  font-weight:500;
-  overflow:hidden;
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  max-width:none;
-}
-#servicePage .order{
-  width:100%;
-  height:56px;
-  margin-top:22px;
-  border:0;
-  border-radius:16px;
-  background:var(--hit);
-  color:var(--on-hit);
-  font:inherit;
-  font-size:17px;
-  font-weight:700;
-  cursor:pointer;
-  box-shadow:none;
-  transition:transform .12s;
-}
-#servicePage .order:hover{
-  transform:none;
-  box-shadow:none;
-}
-#servicePage .login-hint{color:inherit}
-
-@media(min-width:900px){
-  #servicePage .layout{
-    grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);
-    gap:28px;
-  }
-  #servicePage .summary{position:sticky;top:84px}
-}
-@media(max-width:900px){
-  #servicePage .service-topbar{padding-inline:16px}
-  #servicePage .layout{grid-template-columns:1fr!important}
-  #servicePage .summary{position:static!important;order:initial}
-}
-@media(max-width:560px){
-  #servicePage .service-topbar{padding-inline:12px}
-  #servicePage .shell{padding:0 12px}
-  #servicePage .steps{border-radius:22px;padding:8px 16px}
-  #servicePage .step{padding:18px 0}
-  #servicePage .plat{min-width:0;padding:12px 4px 10px}
-  #servicePage .plat .ico{width:50px;height:50px}
-  #servicePage .plat .ico img{width:30px;height:30px}
-  #servicePage .summary{border-radius:24px}
-}
-
-</style>
-
-<style id="service-final-fix">
-/* Final service-page layout fix: homepage is intentionally untouched. */
-#servicePage,
-#servicePage *{
-  box-sizing:border-box;
-}
-#servicePage{
-  width:100%;
-  max-width:100%;
-  overflow-x:hidden;
-}
-#servicePage .service-topbar{
-  width:100%;
-  max-width:1040px;
-  margin:0 auto;
-  padding:12px 16px 10px;
-  min-height:58px;
-  display:flex !important;
-  align-items:center;
-  justify-content:flex-start !important;
-  direction:rtl;
-}
-#servicePage .service-headline,
-#servicePage .service-tools{
-  display:none !important;
-}
-#servicePage .back-home{
-  display:inline-flex !important;
-  align-items:center;
-  justify-content:center;
-  width:auto;
-  min-height:46px;
-  margin:0;
-  border:1.5px solid var(--line);
-  border-radius:15px;
-  background:var(--surface);
-  color:var(--ink);
-  padding:10px 18px;
-  font:inherit;
-  font-size:15px;
-  font-weight:700;
-  box-shadow:none;
-  transform:none !important;
-}
-#servicePage .shell{
-  width:100%;
-  max-width:1040px;
-  margin-left:auto;
-  margin-right:auto;
-  padding-left:16px;
-  padding-right:16px;
-}
-#servicePage .layout{
-  width:100%;
-  max-width:100%;
-  min-width:0;
-}
-#servicePage .steps,
-#servicePage .summary,
-#servicePage .ticket-section,
-#servicePage .service-faq,
-#servicePage .service-about{
-  min-width:0;
-  max-width:100%;
-}
-#servicePage .step,
-#servicePage .field,
-#servicePage .combo,
-#servicePage .combo-btn,
-#servicePage .combo-panel,
-#servicePage .platforms,
-#servicePage .types{
-  min-width:0;
-  max-width:100%;
-}
-#servicePage input,
-#servicePage select,
-#servicePage textarea{
-  max-width:100%;
-  min-width:0;
-}
-#servicePage .combo-panel{
-  max-width:100%;
-  overflow-x:hidden;
-}
-#servicePage .plat,
-#servicePage .types .chip{
-  min-width:0;
-}
-#servicePage .summary{
-  width:100%;
-}
-#servicePage .service-about{
-  padding-top:0;
-  padding-bottom:28px;
-}
-#servicePage .service-about-card{
-  width:100%;
-  border:1px solid var(--line);
-  border-radius:28px;
-  background:var(--surface);
-  box-shadow:var(--shadow);
-  padding:28px 24px;
-  text-align:center;
-}
-#servicePage .service-about-pill{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:8px 15px;
-  border-radius:999px;
-  background:color-mix(in srgb,var(--primary) 8%,var(--surface));
-  color:var(--primary);
-  font-weight:700;
-  font-size:14px;
-}
-#servicePage .service-about-card h2{
-  margin:14px 0 8px;
-  color:var(--ink);
-  font-size:28px;
-}
-#servicePage .service-about-card p{
-  max-width:760px;
-  margin:0 auto;
-  color:var(--muted);
-  font-size:16px;
-  line-height:1.9;
-}
-#servicePage .service-about-founder{
-  margin-top:16px;
-  color:var(--ink);
-  font-weight:800;
-  font-size:15px;
-}
-#servicePage .service-about-founder span{
-  margin:0 6px;
-  color:var(--muted);
-  font-weight:500;
-}
-
-/* On phones the order summary is the last part of the form, immediately before tickets. */
-@media(max-width:899px){
-  #servicePage .layout{
-    display:flex !important;
-    flex-direction:column !important;
-    gap:16px !important;
-  }
-  #servicePage .steps{
-    order:1 !important;
-    width:100% !important;
-  }
-  #servicePage .summary{
-    order:2 !important;
-    position:static !important;
-    width:100% !important;
-    margin:0 !important;
-  }
-  #servicePage .ticket-section{
-    width:100%;
-    margin-top:0;
-  }
-}
-@media(max-width:560px){
-  #servicePage .service-topbar{
-    padding:10px 12px 8px;
-    min-height:54px;
-  }
-  #servicePage .back-home{
-    min-height:44px;
-    padding:9px 15px;
-    font-size:14px;
-  }
-  #servicePage .shell{
-    padding-left:12px;
-    padding-right:12px;
-  }
-  #servicePage .steps{
-    padding:8px 14px !important;
-    border-radius:22px;
-  }
-  #servicePage .step{
-    padding:18px 0;
-  }
-  #servicePage .platforms{
-    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-    gap:8px;
-  }
-  #servicePage .plat{
-    width:100%;
-    padding:10px 3px 9px;
-    border-radius:17px;
-    font-size:12px;
-  }
-  #servicePage .plat .ico{
-    width:46px;
-    height:46px;
-  }
-  #servicePage .plat .ico img{
-    width:28px;
-    height:28px;
-  }
-  #servicePage .types{
-    gap:7px;
-  }
-  #servicePage .types .chip{
-    padding:8px 11px;
-    font-size:13px;
-  }
-  #servicePage .summary{
-    border-radius:22px !important;
-    padding:22px 18px 20px !important;
-  }
-  #servicePage .service-about-card{
-    border-radius:22px;
-    padding:24px 18px;
-  }
-  #servicePage .service-about-card h2{
-    font-size:25px;
-  }
-  #servicePage .service-about-card p{
-    font-size:15px;
-  }
-}
-</style>
-
-
-<style id="live-price-notice-style">
-/* إشعار السعر الفوري — يظهر للزبون بدون الحاجة للنزول إلى زر إتمام الطلب */
-.live-price-notice{
-  position:fixed;
-  z-index:9999;
-  right:20px;
-  bottom:20px;
-  width:min(440px,calc(100vw - 32px));
-  min-height:68px;
-  box-sizing:border-box;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:12px 14px;
-  direction:rtl;
-  border:1px solid rgba(82,55,210,.18);
-  border-radius:20px;
-  background:rgba(255,255,255,.94);
-  box-shadow:0 14px 40px rgba(38,28,100,.18);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  color:#20203a;
-  pointer-events:none;
-  transform:translateY(0);
-}
-.live-price-notice[hidden]{display:none}
-.live-price-notice.pop{animation:livePricePop .28s ease-out}
-.live-price-icon{
-  width:44px;
-  height:44px;
-  flex:0 0 44px;
-  display:grid;
-  place-items:center;
-  border-radius:14px;
-  background:#f4c83f;
-  font-size:22px;
-}
-.live-price-copy{
-  min-width:0;
-  flex:1;
-}
-.live-price-copy strong{
-  display:block;
-  font-size:14px;
-  font-weight:800;
-  margin-bottom:3px;
-}
-.live-price-copy span{
-  display:block;
-  color:#68687a;
-  font-size:12px;
-  line-height:1.45;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.live-price-amount{
-  flex:0 0 auto;
-  padding:8px 11px;
-  border-radius:13px;
-  background:#f7df88;
-  color:#222;
-  font-size:16px;
-  font-weight:900;
-  direction:ltr;
-  white-space:nowrap;
-}
-@keyframes livePricePop{
-  0%{opacity:.35;transform:translateY(8px) scale(.98)}
-  100%{opacity:1;transform:translateY(0) scale(1)}
-}
-@media (max-width:700px){
-  .live-price-notice{
-    right:10px;
-    left:10px;
-    bottom:max(10px,env(safe-area-inset-bottom));
-    width:auto;
-    min-height:64px;
-    padding:10px 11px;
-    border-radius:18px;
-  }
-  .live-price-icon{width:40px;height:40px;flex-basis:40px;border-radius:12px}
-  .live-price-copy strong{font-size:13px}
-  .live-price-copy span{font-size:11px}
-  .live-price-amount{font-size:15px;padding:7px 9px}
-}
-@media (prefers-reduced-motion:reduce){
-  .live-price-notice.pop{animation:none}
-}
-</style>
-
-
-<style id="mobile-service-compact-fix">
-/* ترتيب مضغوط للجوال داخل صفحة الخدمات فقط */
-@media (max-width:700px){
-  body:has(#servicePage:not([hidden])) .site-nav-in{
-    padding:10px 12px 8px!important;
-    gap:8px!important;
-  }
-  body:has(#servicePage:not([hidden])) .site-brand{
-    font-size:18px!important;
-    gap:6px!important;
-  }
-  body:has(#servicePage:not([hidden])) .site-brand .brand-bolt{
-    width:34px!important;height:34px!important;font-size:18px!important;
-  }
-  body:has(#servicePage:not([hidden])) .site-actions{
-    gap:6px!important; margin-inline-start:auto!important;
-  }
-  body:has(#servicePage:not([hidden])) .site-actions>*{
-    min-height:40px!important; height:40px!important;
-  }
-  body:has(#servicePage:not([hidden])) .site-actions .wallet-top{
-    padding:0 10px!important; font-size:12px!important;
-  }
-  body:has(#servicePage:not([hidden])) .site-actions .bell-top{
-    width:40px!important; padding:0!important;
-  }
-  body:has(#servicePage:not([hidden])) .site-actions .login-btn{
-    padding:0 13px!important; font-size:13px!important;
-  }
-  body:has(#servicePage:not([hidden])) .site-links{
-    order:3!important; width:100%!important;
-    gap:22px!important; padding:4px 0 0!important;
-    font-size:13px!important;
-  }
-  body:has(#servicePage:not([hidden])) .site-links a{
-    padding:5px 2px!important;
-  }
-  body:has(#servicePage:not([hidden])) .service-topbar{
-    margin-bottom:8px!important;
-  }
-  body:has(#servicePage:not([hidden])) .back-home{
-    min-height:40px!important; padding:8px 14px!important; font-size:13px!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .steps{
-    padding:7px 10px!important; border-radius:20px!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .step{
-    padding:13px 0!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .step h2{
-    font-size:15px!important; margin-bottom:10px!important; gap:7px!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .step h2 b{
-    width:26px!important;height:26px!important;border-radius:8px!important;font-size:12px!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .platforms{
-    display:grid!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:7px!important; padding:0!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .plat{
-    min-width:0!important; width:100%!important;
-    min-height:78px!important;
-    padding:7px 3px 6px!important;
-    border-radius:14px!important;
-    font-size:10.5px!important;
-    line-height:1.2!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .plat .ico{
-    width:38px!important;height:38px!important;
-    border-radius:11px!important;margin-bottom:4px!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .plat .ico img{
-    width:23px!important;height:23px!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .plat>span:last-child{
-    font-size:11px!important; font-weight:800!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .types{
-    gap:6px!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .chip{
-    padding:6px 9px!important;font-size:10.5px!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .field{
-    margin-top:10px!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage .field label{
-    font-size:11px!important;margin-bottom:5px!important;
-  }
-  body:has(#servicePage:not([hidden])) #servicePage input,
-  body:has(#servicePage:not([hidden])) #servicePage .combo-btn{
-    min-height:42px!important;border-radius:13px!important;font-size:12px!important;
-  }
-}
-</style>
-
-<style id="final-mobile-notifications-fix">
-/* لا نخفي إشعار السعر أو جرس التنبيهات مع النسخة المضغوطة */
-.live-price-notice{
-  display:flex !important;
-  visibility:visible;
-  z-index:999999 !important;
-}
-.live-price-notice[hidden]{display:none !important}
-
-/* جرس التنبيهات يبقى ظاهراً */
-.bell-top,
-#bellBtn,
-.bell-badge{
-  visibility:visible !important;
-}
-@media (max-width:700px){
-  .live-price-notice{
-    right:10px !important;
-    left:10px !important;
-    bottom:calc(12px + env(safe-area-inset-bottom)) !important;
-    width:auto !important;
-    max-width:none !important;
-  }
-  .live-price-notice .live-price-copy{min-width:0 !important}
-  .live-price-notice .live-price-copy span{white-space:normal !important}
-}
-
-/* إشعار السعر بشكل صغير وأنيق حتى لا يغطي الخدمات */
-@media (max-width:420px){
-  .live-price-notice{
-    min-height:54px !important;
-    padding:8px 9px !important;
-    gap:8px !important;
-    border-radius:15px !important;
-  }
-  .live-price-icon{
-    width:34px !important;
-    height:34px !important;
-    flex-basis:34px !important;
-    border-radius:10px !important;
-    font-size:17px !important;
-  }
-  .live-price-copy strong{font-size:12px !important}
-  .live-price-copy span{font-size:10px !important}
-  .live-price-amount{
-    font-size:14px !important;
-    padding:6px 8px !important;
-    border-radius:10px !important;
-  }
-}
-</style>
-
-<style id="dopamine-header-exact-layout">
-/* ترتيب الهيدر الجديد مطابق لفكرة الصورة المرجعية، بدون المساس بوظائف الموقع */
-.dopamine-header{display:block;max-width:1180px;padding:20px 28px 0;direction:ltr}
-.dopamine-head-main{display:flex;align-items:center;justify-content:space-between;gap:24px}
-.dopamine-head-main .site-brand{margin:0;order:1;direction:ltr;font-size:28px;gap:14px}
-.dopamine-head-main .brand-bolt{width:54px;height:54px;border-radius:18px;font-size:0}
-.dopamine-head-main .brand-bolt:before{font-size:31px}
-.dopamine-wallet{order:2;min-width:170px;min-height:72px;border-radius:28px!important;padding:9px 20px!important;display:flex!important;align-items:center;justify-content:center;gap:10px;font-size:20px!important;position:relative}
-.dopamine-wallet span{font-size:18px!important}
-.dopamine-wallet small{font-size:24px;font-weight:900;direction:ltr;position:absolute;top:8px;right:24px}
-.dopamine-wallet span{margin-top:27px}
-.dopamine-quick-actions{display:flex;align-items:flex-start;justify-content:space-between;gap:28px;margin-top:26px;direction:ltr}
-.dopamine-account{order:1;min-width:300px;height:72px;border-radius:36px!important;font-size:27px!important;display:flex!important;align-items:center;justify-content:center;gap:18px}
-.dopamine-account span{font-size:38px;line-height:1}
-.dopamine-quick{order:2;width:170px;height:112px;border-radius:26px!important;padding:8px!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:7px;position:relative;background:rgba(255,255,255,.72)!important}
-.dopamine-quick .quick-icon{font-size:43px;line-height:1;color:#2f167f;filter:saturate(.8)}
-.dopamine-quick b{font-size:21px;color:#241268;white-space:nowrap}
-.dopamine-quick .bell-badge{position:absolute;top:9px;right:27px;background:#ef233c;color:#fff;border-radius:50%;min-width:16px;height:16px;padding:0 4px;display:grid;place-items:center;font-size:10px;font-weight:900}
-.dopamine-quick[hidden]{display:none!important}
-.dopamine-header .site-links{direction:rtl;justify-content:center;border-top:1px solid #eeeef8;margin-top:28px;padding:24px 0 20px;gap:100px;font-size:25px}
-.dopamine-header .site-links a{padding:0 6px 12px}
-.dopamine-header .site-links a:hover{color:#5128d8}
-@media(max-width:900px){
-  .dopamine-header{padding:12px 14px 0}
-  .dopamine-head-main{gap:10px}
-  .dopamine-head-main .site-brand{font-size:20px;gap:8px}
-  .dopamine-head-main .brand-bolt{width:42px;height:42px;border-radius:14px}
-  .dopamine-head-main .brand-bolt:before{font-size:24px}
-  .dopamine-wallet{min-width:108px;min-height:58px;border-radius:22px!important;padding:6px 12px!important;font-size:16px!important}
-  .dopamine-wallet small{font-size:15px;top:6px;right:13px}
-  .dopamine-wallet span{font-size:14px!important;margin-top:20px}
-  .dopamine-quick-actions{gap:8px;margin-top:14px;align-items:center}
-  .dopamine-account{min-width:0;flex:1;height:58px;border-radius:22px!important;font-size:18px!important;gap:8px}
-  .dopamine-account span{font-size:27px}
-  .dopamine-quick{flex:1;width:auto;height:74px;border-radius:18px!important;gap:3px}
-  .dopamine-quick .quick-icon{font-size:27px}
-  .dopamine-quick b{font-size:12px}
-  .dopamine-quick .bell-badge{top:4px;right:18px}
-  .dopamine-header .site-links{margin-top:14px;padding:14px 0 12px;gap:42px;font-size:18px}
-  .dopamine-header .site-links a{padding-bottom:6px}
-}
-@media(max-width:560px){
-  .dopamine-header .site-links{gap:32px}
-  .dopamine-quick-actions{gap:6px}
-  .dopamine-account{font-size:16px!important}
-  .dopamine-quick b{font-size:11px}
-}
-</style>
-
-<style id="header-80-percent-fix">
-/* تصغير وترتيب أيقونات رأس الصفحة بنسبة تقارب 80% */
-.dopamine-header .dopamine-head-main{gap:8px!important}
-.dopamine-header .site-brand{font-size:18.4px!important;gap:7px!important}
-.dopamine-header .site-brand .brand-bolt{width:30px!important;height:30px!important;border-radius:10px!important}
-.dopamine-header .site-brand .brand-bolt:before{font-size:17px!important}
-.dopamine-header .dopamine-wallet{min-width:136px!important;min-height:52px!important;height:52px!important;border-radius:18px!important;padding:5px 10px!important;font-size:15px!important}
-.dopamine-header .dopamine-wallet small{font-size:12px!important;top:5px!important;right:11px!important}
-.dopamine-header .dopamine-wallet span{font-size:12px!important;margin-top:18px!important}
-.dopamine-header .dopamine-quick-actions{gap:22px!important;margin-top:20px!important}
-.dopamine-header .dopamine-account{min-width:240px!important;height:58px!important;border-radius:29px!important;font-size:22px!important;gap:14px!important}
-.dopamine-header .dopamine-account span{font-size:30px!important}
-.dopamine-header .dopamine-quick{width:136px!important;height:90px!important;border-radius:21px!important;padding:6px!important;gap:5px!important}
-.dopamine-header .dopamine-quick .quick-icon{font-size:34px!important}
-.dopamine-header .dopamine-quick b{font-size:17px!important}
-.dopamine-header .dopamine-quick .bell-badge{top:7px!important;right:21px!important;min-width:13px!important;height:13px!important;font-size:8px!important}
-.dopamine-header .site-links{margin-top:22px!important;padding:19px 0 16px!important;gap:80px!important;font-size:20px!important}
-.dopamine-header .site-links a{padding-bottom:9px!important}
-@media(max-width:900px){
-  .dopamine-header{padding:10px 12px 0!important}
-  .dopamine-header .dopamine-head-main .site-brand{font-size:16px!important;gap:6px!important}
-  .dopamine-header .dopamine-head-main .brand-bolt{width:34px!important;height:34px!important;border-radius:11px!important}
-  .dopamine-header .dopamine-head-main .brand-bolt:before{font-size:19px!important}
-  .dopamine-header .dopamine-wallet{min-width:88px!important;min-height:47px!important;height:47px!important;border-radius:18px!important;font-size:13px!important;padding:4px 9px!important}
-  .dopamine-header .dopamine-wallet small{font-size:12px!important;top:4px!important;right:10px!important}
-  .dopamine-header .dopamine-wallet span{font-size:11px!important;margin-top:16px!important}
-  .dopamine-header .dopamine-quick-actions{gap:6px!important;margin-top:11px!important}
-  .dopamine-header .dopamine-account{height:47px!important;border-radius:18px!important;font-size:15px!important;gap:6px!important}
-  .dopamine-header .dopamine-account span{font-size:22px!important}
-  .dopamine-header .dopamine-quick{height:59px!important;border-radius:15px!important;gap:2px!important}
-  .dopamine-header .dopamine-quick .quick-icon{font-size:22px!important}
-  .dopamine-header .dopamine-quick b{font-size:10px!important}
-  .dopamine-header .dopamine-quick .bell-badge{top:3px!important;right:14px!important}
-  .dopamine-header .site-links{margin-top:10px!important;padding:11px 0 9px!important;gap:34px!important;font-size:15px!important}
-  .dopamine-header .site-links a{padding-bottom:5px!important}
-}
-@media(max-width:560px){
-  .dopamine-header .site-links{gap:27px!important}
-  .dopamine-header .dopamine-quick-actions{gap:5px!important}
-  .dopamine-header .dopamine-account{font-size:14px!important}
-  .dopamine-header .dopamine-quick b{font-size:9px!important}
-}
-</style>
-
-
-<style id="nav-tickets-faq-style">
-/* ترتيب التنقل: الرئيسية | الخدمات | التذاكر | الأسئلة الشائعة */
-.site-links{display:flex;align-items:center;justify-content:center;gap:26px;flex-wrap:wrap}
-.site-links a{white-space:nowrap}
-.nav-extra-page{max-width:1180px;margin:38px auto;padding:0 18px}
-.nav-extra-page .section-anchor-head{text-align:center;margin-bottom:18px}
-.nav-extra-page .section-anchor-head h2{margin:8px 0;font-size:clamp(24px,4vw,38px);color:#25116f}
-.nav-extra-page .section-anchor-head p{margin:0;color:var(--muted,#6a6880)}
-.nav-extra-page .ticket-section{margin:0 auto;max-width:1180px}
-.nav-extra-page .service-faq{margin:0 auto}
+/* إصلاح نهائي: تنبيـه السعر + روابط التذاكر والأسئلة الشائعة */
+#priceQuickToast{
+  position:fixed;top:78px;left:50%;transform:translateX(-50%);
+  z-index:9998;background:rgba(255,255,255,.96);color:#241268;
+  border:1px solid #e4ddff;border-radius:14px;padding:8px 14px;
+  box-shadow:0 10px 28px rgba(35,20,120,.12);
+  font-size:13px;font-weight:800;display:none;direction:rtl;
+  max-width:calc(100vw - 24px);white-space:nowrap;
+}
+#priceQuickToast.show{display:block;animation:priceToastIn .22s ease}
+@keyframes priceToastIn{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}
 @media(max-width:700px){
-  .site-links{gap:10px 16px;padding:8px 10px}
-  .site-links a{font-size:14px}
-  .nav-extra-page{margin:24px auto;padding:0 10px}
-  .nav-extra-page .ticket-section{padding:16px;border-radius:20px;display:block}
-  .nav-extra-page .ticket-intro{margin-bottom:14px}
+  .site-links{gap:5px!important;flex-wrap:wrap}
+  .site-links a{font-size:12px!important;padding:6px 8px!important}
+  #priceQuickToast{top:62px;font-size:12px;padding:7px 11px}
+}
+
+</style>
+
+<style id="header-mobile-fix">
+/* Header compact - safe visual-only override */
+.site-nav{position:relative!important;z-index:1000;background:#f7f8fc!important;border-bottom:1px solid #e8e8f0!important;}
+.site-nav-in{max-width:1200px!important;margin:0 auto!important;padding:10px 18px 8px!important;display:grid!important;grid-template-columns:minmax(220px,1fr) auto!important;grid-template-areas:"brand actions" "links links"!important;align-items:center!important;gap:8px 16px!important;direction:ltr!important;}
+.site-brand{grid-area:brand!important;display:flex!important;align-items:center!important;gap:9px!important;margin:0!important;min-width:0!important;white-space:nowrap!important;font-size:21px!important;font-weight:800!important;color:#191252!important;}
+.site-brand .brand-bolt{width:40px!important;height:40px!important;min-width:40px!important;border-radius:12px!important;font-size:0!important;display:grid!important;place-items:center!important;}
+.site-brand .brand-bolt:before{font-size:22px!important;}
+.site-actions{grid-area:actions!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:7px!important;margin:0!important;min-width:0!important;}
+.site-actions .icon-action,.site-actions .about-action{height:46px!important;min-width:46px!important;width:46px!important;padding:0 8px!important;border:1px solid #e5e5ee!important;border-radius:14px!important;background:#fff!important;color:#24145e!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 4px 12px rgba(40,20,100,.05)!important;font-size:17px!important;font-weight:800!important;}
+.site-actions .about-action{width:auto!important;min-width:92px!important;padding:0 15px!important;background:#4b20cf!important;color:#fff!important;border-color:#4b20cf!important;font-size:15px!important;}
+.site-actions .wallet-top span{font-size:11px!important;margin-inline-start:2px!important;}
+.site-actions .bell-top{position:relative!important;}
+.site-actions .bell-top .bell-badge{top:-4px!important;right:-4px!important;min-width:17px!important;height:17px!important;font-size:10px!important;}
+.site-actions #ordersBtn{display:none!important;}
+.site-links{grid-area:links!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:42px!important;width:100%!important;margin:0!important;padding:3px 0 0!important;font-size:15px!important;font-weight:800!important;}
+.site-links a{text-decoration:none!important;white-space:nowrap!important;}
+/* لا تظهر أدوات الدعم والإعدادات إن كانت موجودة داخل الهيدر */
+.site-nav .support,.site-nav .support-btn,.site-nav .settings,.site-nav .settings-btn{display:none!important;}
+@media(max-width:700px){
+ .site-nav-in{padding:8px 10px 6px!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"brand actions" "links links"!important;gap:7px!important;}
+ .site-brand{font-size:17px!important;gap:6px!important;}
+ .site-brand .brand-bolt{width:34px!important;height:34px!important;min-width:34px!important;border-radius:10px!important;}
+ .site-brand .brand-bolt:before{font-size:19px!important;}
+ .site-actions{gap:4px!important;}
+ .site-actions .icon-action,.site-actions .about-action{height:38px!important;min-width:38px!important;width:38px!important;border-radius:11px!important;padding:0 5px!important;font-size:14px!important;}
+ .site-actions .about-action{width:72px!important;min-width:72px!important;font-size:12px!important;padding:0 7px!important;}
+ .site-actions .wallet-top span{font-size:9px!important;}
+ .site-actions .bell-top .bell-badge{top:-3px!important;right:-3px!important;min-width:15px!important;height:15px!important;font-size:9px!important;}
+ .site-links{gap:28px!important;font-size:13px!important;padding-top:2px!important;}
+}
+@media(max-width:390px){
+ .site-nav-in{padding-inline:7px!important;}
+ .site-brand{font-size:15px!important;}
+ .site-brand .brand-bolt{width:31px!important;height:31px!important;min-width:31px!important;}
+ .site-actions .about-action{width:65px!important;min-width:65px!important;font-size:11px!important;}
+ .site-actions .icon-action{width:34px!important;min-width:34px!important;height:35px!important;font-size:13px!important;}
+ .site-links{gap:22px!important;font-size:12px!important;}
+}
+</style>
+
+<style id="tickets-faq-visibility-fix">
+/* إبقاء التذاكر والأسئلة الشائعة ظاهرة داخل صفحة الخدمات */
+#servicePage #ticketsLanding{
+  display:grid !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:auto;
+  max-width:1180px;
+  margin:28px auto !important;
+}
+#servicePage #faqServices{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:auto;
+  max-width:1180px;
+  margin:28px auto !important;
+}
+#servicePage #ticketsLanding[hidden],
+#servicePage #faqServices[hidden]{
+  display:block !important;
+}
+@media(max-width:900px){
+  #servicePage #ticketsLanding{
+    grid-template-columns:1fr !important;
+    margin:22px 12px !important;
+    padding:18px !important;
+  }
+  #servicePage #faqServices{
+    margin:22px 12px !important;
+  }
 }
 </style>
 </head>
@@ -2771,26 +1920,22 @@ body{
 <body>
 
 <header class="site-nav" id="siteNav">
-  <div class="site-nav-in dopamine-header">
-    <div class="dopamine-head-main">
-      <a class="site-brand" href="#home" id="homeLink" aria-label="Dopamine Store">
-        <span class="brand-bolt">ϟ</span><span>Dopamine Store</span>
-      </a>
-      <button class="icon-action wallet-top dopamine-wallet" id="walletBtn" type="button" aria-label="المحفظة" title="المحفظة">💰 <span id="walletBal">0</span><small>$5.00</small></button>
-    </div>
-    <div class="dopamine-quick-actions">
-      <button class="about-action dopamine-account" type="button" id="acctBtn">👤 حسابي <span>›</span></button>
-      <button class="icon-action dopamine-quick" id="bellBtn" type="button" aria-label="التنبيهات" title="التنبيهات"><span class="quick-icon">🔔</span><b>الإشعارات</b><span class="bell-badge" id="bellBadge" hidden>0</span></button>
-      <button class="icon-action dopamine-quick" id="supportTopBtn" type="button" aria-label="الدعم" title="الدعم"><span class="quick-icon">🎧</span><b>الدعم</b></button>
-      <button class="icon-action dopamine-quick" id="settingsTopBtn" type="button" aria-label="الإعدادات" title="الإعدادات"><span class="quick-icon">⚙️</span><b>الإعدادات</b></button>
-      <button class="icon-action" id="ordersBtn" type="button" aria-label="طلباتي" title="طلباتي" hidden>📦</button>
-    </div>
+  <div class="site-nav-in">
+    <a class="site-brand" href="#home" id="homeLink" aria-label="Dopamine Store">
+      <span class="brand-bolt">ϟ</span><span>Dopamine Store</span>
+    </a>
     <nav class="site-links" aria-label="التنقل">
       <a href="#home">الرئيسية</a>
       <a href="#services" id="servicesLink">الخدمات</a>
-      <a href="#tickets" id="ticketsLink">التذاكر</a>
+      <a href="#ticketsLanding" id="ticketsLink">التذاكر</a>
       <a href="#faq" id="faqLink">الأسئلة الشائعة</a>
     </nav>
+    <div class="site-actions">
+      <button class="icon-action wallet-top" id="walletBtn" type="button" aria-label="المحفظة" title="المحفظة">💰 <span id="walletBal">0</span></button>
+      <button class="icon-action bell-top bell" id="bellBtn" type="button" aria-label="التنبيهات" title="التنبيهات">🔔<span class="bell-badge" id="bellBadge" hidden>0</span></button>
+      <button class="about-action" type="button" id="acctBtn">👤 دخول</button>
+      <button class="icon-action" id="ordersBtn" type="button" aria-label="طلباتي" title="طلباتي" hidden>📦</button>
+    </div>
   </div>
 </header>
 
@@ -2874,66 +2019,7 @@ body{
 
 
 
-  
-<section class="nav-extra-page shell" id="ticketsPageSection">
-  <div class="section-anchor-head">
-    <span class="hero-pill">🎫 نظام التذاكر</span>
-    <h2>التذاكر</h2>
-    <p>تواصل معنا عبر تذكرة وتابع طلبك واستفساراتك بسهولة.</p>
-  </div>
-  <section class="ticket-section" id="ticketsLanding">
-    <div class="ticket-intro">
-      <span class="hero-pill">🎫 نظام التذاكر</span>
-      <h2>تواصل معنا عبر تذكرة</h2>
-      <p>عندك مشكلة أو استفسار؟ افتح تذكرة واكتب التفاصيل، وراح تقدر تتابع حالة التذكرة من نفس المكان.</p>
-      <div class="ticket-points"><span>⚡ متابعة سريعة للطلبات والاستفسارات</span><span>🔒 كل تذكرة مرتبطة بحسابك</span><span>💬 تقدر تتابع الردود والحالة</span></div>
-    </div>
-    <div class="ticket-panel">
-      <h3>🎟️ إنشاء تذكرة جديدة</h3>
-      <div id="ticketGuest" class="ticket-login" hidden>سجّل دخولك حتى تقدر تنشئ وتتابع التذاكر.<br><button id="ticketLoginBtn" type="button">تسجيل الدخول</button></div>
-      <form id="ticketForm" class="ticket-form" hidden>
-        <input id="ticketSubject" maxlength="100" placeholder="عنوان المشكلة أو الاستفسار" required>
-        <select id="ticketCategory"><option value="طلب">استفسار عن طلب</option><option value="خدمة">استفسار عن خدمة</option><option value="دفع">الدفع / المحفظة</option><option value="أخرى">أخرى</option></select>
-        <textarea id="ticketMessage" maxlength="1000" placeholder="اكتب تفاصيل المشكلة هنا..." required></textarea>
-        <button class="ticket-submit" id="ticketSubmit" type="submit">+ فتح تذكرة</button>
-      </form>
-      <div class="ticket-list" id="ticketList"></div>
-    </div>
-  </section>
-
-  
-</section>
-
-<section class="nav-extra-page shell" id="faqPageSection">
-  <div class="section-anchor-head">
-    <span class="hero-pill">✦ الأسئلة الشائعة</span>
-    <h2>الأسئلة الشائعة</h2>
-    <p>إجابات سريعة على أكثر الأسئلة التي تهمك قبل الطلب.</p>
-  </div>
-  <section class="service-faq shell" id="faqServices">
-    <div class="sec-head"><span class="hero-pill">✦ الأسئلة الشائعة</span><h2>الأسئلة الشائعة</h2><p>إجابات سريعة على أكثر الأسئلة التي تهمك قبل الطلب.</p></div>
-    <div class="landing-faq-grid">
-      <details><summary>كيف أطلب خدمة؟</summary><p>ادخل إلى قسم الخدمات، اختر المنصة والخدمة، ثم ضع الرابط والكمية وشاهد السعر قبل إتمام الطلب.</p></details>
-      <details><summary>هل أحتاج إلى كلمة مرور حسابي؟</summary><p>لا، لا نحتاج إلى كلمة المرور. المطلوب هو رابط الحساب أو المنشور فقط.</p></details>
-      <details><summary>هل يجب أن يكون الحساب عاماً؟</summary><p>نعم، يجب أن يكون الحساب أو المنشور عاماً أثناء تنفيذ الخدمة.</p></details>
-      <details><summary>متى يتم تنفيذ الطلب؟</summary><p>تختلف السرعة حسب الخدمة، وستظهر تفاصيل السرعة والضمان ضمن معلومات الخدمة.</p></details>
-      <details><summary>هل توجد خدمات بضمان؟</summary><p>نعم، بعض الخدمات تتضمن إعادة تعبئة أو ضماناً حسب تفاصيل الخدمة المختارة.</p></details>
-      <details><summary>كيف أتواصل مع الدعم؟</summary><p>يمكنك التواصل معنا عبر نظام التذاكر أو واتساب أو البريد الإلكتروني.</p></details>
-    </div>
-  </section>
-
-  
-</section>
-<section class="service-about shell" id="serviceAbout">
-    <div class="service-about-card">
-      <span class="service-about-pill">✦ من نحن</span>
-      <h2>من نحن</h2>
-      <p>منصة رقمية متخصصة في تقديم الخدمات الرقمية، نسعى لتوفير خدمات موثوقة وسريعة وتجربة استخدام سهلة وآمنة.</p>
-      <div class="service-about-founder">Ali Muhannad <span>|</span> علي مهند</div>
-    </div>
-  </section>
-
-<section class="landing-footer" id="faqLanding">
+  <section class="landing-footer" id="faqLanding">
     <div class="footer-social" aria-label="حسابات التواصل">
       <a href="https://t.me/o7ah11" target="_blank" rel="noopener noreferrer" title="Telegram" aria-label="Telegram"><img src="https://cdn.simpleicons.org/telegram/229ED9" alt="Telegram" loading="lazy"></a>
       <a href="https://wa.me/9647717885719" target="_blank" rel="noopener noreferrer" title="WhatsApp" aria-label="WhatsApp"><img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp" loading="lazy"></a>
@@ -3076,7 +2162,39 @@ body{
 
   </main>
 
-  </div>
+  <section class="ticket-section" id="ticketsLanding">
+    <div class="ticket-intro">
+      <span class="hero-pill">🎫 نظام التذاكر</span>
+      <h2>تواصل معنا عبر تذكرة</h2>
+      <p>عندك مشكلة أو استفسار؟ افتح تذكرة واكتب التفاصيل، وراح تقدر تتابع حالة التذكرة من نفس المكان.</p>
+      <div class="ticket-points"><span>⚡ متابعة سريعة للطلبات والاستفسارات</span><span>🔒 كل تذكرة مرتبطة بحسابك</span><span>💬 تقدر تتابع الردود والحالة</span></div>
+    </div>
+    <div class="ticket-panel">
+      <h3>🎟️ إنشاء تذكرة جديدة</h3>
+      <div id="ticketGuest" class="ticket-login" hidden>سجّل دخولك حتى تقدر تنشئ وتتابع التذاكر.<br><button id="ticketLoginBtn" type="button">تسجيل الدخول</button></div>
+      <form id="ticketForm" class="ticket-form" hidden>
+        <input id="ticketSubject" maxlength="100" placeholder="عنوان المشكلة أو الاستفسار" required>
+        <select id="ticketCategory"><option value="طلب">استفسار عن طلب</option><option value="خدمة">استفسار عن خدمة</option><option value="دفع">الدفع / المحفظة</option><option value="أخرى">أخرى</option></select>
+        <textarea id="ticketMessage" maxlength="1000" placeholder="اكتب تفاصيل المشكلة هنا..." required></textarea>
+        <button class="ticket-submit" id="ticketSubmit" type="submit">+ فتح تذكرة</button>
+      </form>
+      <div class="ticket-list" id="ticketList"></div>
+    </div>
+  </section>
+
+  <section class="service-faq shell" id="faqServices">
+    <div class="sec-head"><span class="hero-pill">✦ الأسئلة الشائعة</span><h2>الأسئلة الشائعة</h2><p>إجابات سريعة على أكثر الأسئلة التي تهمك قبل الطلب.</p></div>
+    <div class="landing-faq-grid">
+      <details><summary>كيف أطلب خدمة؟</summary><p>ادخل إلى قسم الخدمات، اختر المنصة والخدمة، ثم ضع الرابط والكمية وشاهد السعر قبل إتمام الطلب.</p></details>
+      <details><summary>هل أحتاج إلى كلمة مرور حسابي؟</summary><p>لا، لا نحتاج إلى كلمة المرور. المطلوب هو رابط الحساب أو المنشور فقط.</p></details>
+      <details><summary>هل يجب أن يكون الحساب عاماً؟</summary><p>نعم، يجب أن يكون الحساب أو المنشور عاماً أثناء تنفيذ الخدمة.</p></details>
+      <details><summary>متى يتم تنفيذ الطلب؟</summary><p>تختلف السرعة حسب الخدمة، وستظهر تفاصيل السرعة والضمان ضمن معلومات الخدمة.</p></details>
+      <details><summary>هل توجد خدمات بضمان؟</summary><p>نعم، بعض الخدمات تتضمن إعادة تعبئة أو ضماناً حسب تفاصيل الخدمة المختارة.</p></details>
+      <details><summary>كيف أتواصل مع الدعم؟</summary><p>يمكنك التواصل معنا عبر نظام التذاكر أو واتساب أو البريد الإلكتروني.</p></details>
+    </div>
+  </section>
+
+</div>
 
 
 <section class="shell trial id="trial" hidden>
@@ -3197,7 +2315,7 @@ body{
 </section>
 
 
-<section class="band" id="faq" hidden>
+<section class="band" id="faq">
   <div class="band-in">
 
     <div class="sec-head reveal">
@@ -3249,7 +2367,7 @@ body{
 
     <p>أهلاً بك في هذا المشروع التقني. نقدم لك حلولاً سريعة ومضمونة لتعزيز حضورك الرقمي وتنشيط حساباتك على منصات التواصل الاجتماعي بأفضل الأسعار وأعلى معايير الجودة.</p>
 
-    
+    <p class="founder-line"><b>مؤسس المتجر: علي مهند</b></p>
 
     <p>نضمن لك سرعة التنفيذ، الأمان التام، والدعم المستمر على مدار الساعة.</p>
 
@@ -3297,6 +2415,7 @@ body{
 </div>
 
 <div class="notif-toast" id="notifToast" hidden role="status" aria-live="polite"></div>
+<div id="priceQuickToast" role="status" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -4389,6 +3508,24 @@ function updatePrice(){
 }
 
 
+function showPriceQuickToast(){
+  const el = $("priceQuickToast");
+  if(!el) return;
+  const service = selectedService();
+  const quantity = Number(quantityBox.value || 0);
+  if(!service || !quantity){
+    el.classList.remove("show");
+    return;
+  }
+  const total = Number(service.sell_rate || 0) * quantity / 1000;
+  el.textContent = "💰 المبلغ الحالي: $" + money(total);
+  el.classList.remove("show");
+  void el.offsetWidth;
+  el.classList.add("show");
+  clearTimeout(window.__priceToastTimer);
+  window.__priceToastTimer = setTimeout(()=>el.classList.remove("show"),3200);
+}
+
 function updatePriceCore(){
 
   const service = selectedService();
@@ -4434,6 +3571,8 @@ function updatePriceCore(){
   sumQty.textContent = quantity
     ? quantity.toLocaleString("en-US")
     : "—";
+
+  showPriceQuickToast();
 
 }
 
@@ -6094,207 +5233,58 @@ renderTabs();
 
 renderChips();
 
-/* Landing / services / tickets / FAQ navigation */
+/* Landing / services page switch */
 (function(){
   const landing=document.getElementById('landingPage');
   const service=document.getElementById('servicePage');
   const navServices=document.getElementById('servicesLink');
-  const ticketsLink=document.getElementById('ticketsLink');
-  const faqLink=document.getElementById('faqLink');
   const back=document.getElementById('backHome');
   const home=document.getElementById('homeLink');
-  const tickets=document.getElementById('ticketsPageSection');
-  const faq=document.getElementById('faqPageSection');
-
+  const nav=document.getElementById('siteNav');
   function showServices(e){
-    if(e)e.preventDefault();
-    landing.hidden=true;
-    service.hidden=false;
-    window.location.hash='services';
-    window.scrollTo({top:0,behavior:'smooth'});
-    tab='all'; selectedType='all'; selectedCat='all'; selectedId=null;
-    renderTabs(); loadServices();
-  }
+  if(e)e.preventDefault();
+  landing.hidden=true;
+  service.hidden=false;
+  window.location.hash='services';
+  window.scrollTo({top:0,behavior:'smooth'});
+  /* عند الدخول للخدمات نعرض كل خدمات الموقع ونطلبها من الخادم من جديد */
+  tab='all';
+  selectedType='all';
+  selectedCat='all';
+  selectedId=null;
+  renderTabs();
+  loadServices();
+}
   function showHome(e){
-    if(e)e.preventDefault();
-    service.hidden=true;
-    landing.hidden=false;
-    window.location.hash='home';
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-  function showLandingSection(e, target, hash){
-    if(e)e.preventDefault();
-    service.hidden=true;
-    landing.hidden=false;
-    window.location.hash=hash;
-    setTimeout(()=>target?.scrollIntoView({behavior:'smooth',block:'start'}),20);
-  }
-
+  if(e)e.preventDefault();
+  service.hidden=true;
+  landing.hidden=false;
+  window.location.hash='home';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
   navServices?.addEventListener('click',showServices);
   document.getElementById('heroServicesBtn')?.addEventListener('click',showServices);
   back?.addEventListener('click',showHome);
   home?.addEventListener('click',showHome);
-  ticketsLink?.addEventListener('click',e=>showLandingSection(e,tickets,'tickets'));
-  faqLink?.addEventListener('click',e=>showLandingSection(e,faq,'faq'));
 
-  /* يبدأ الموقع بالصفحة الرئيسية */
-  service.hidden=true;
-  landing.hidden=false;
-})();
-// أزرار الهيدر العلوية
-  document.getElementById('supportTopBtn')?.addEventListener('click',()=>{
-    const target=document.getElementById('ticketsPageSection');
-    if(target){
-      if(document.getElementById('landingPage')?.hidden){
-        document.getElementById('backHome')?.click();
-        setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'start'}),120);
-      } else target.scrollIntoView({behavior:'smooth',block:'start'});
-    }
+  document.getElementById('ticketsLink')?.addEventListener('click',e=>{
+    e.preventDefault();
+    showServices();
+    setTimeout(()=>document.getElementById('ticketsLanding')?.scrollIntoView({behavior:'smooth',block:'start'}),80);
   });
-  document.getElementById('settingsTopBtn')?.addEventListener('click',()=>{
-    if(typeof openAuth==='function' && !session) openAuth('login');
-    else if(typeof showNotifToast==='function') showNotifToast({title:'الإعدادات',body:'إعدادات الحساب متاحة من قسم حسابي.'});
-    else document.getElementById('acctBtn')?.click();
+  document.getElementById('faqLink')?.addEventListener('click',e=>{
+    e.preventDefault();
+    showServices();
+    setTimeout(()=>document.getElementById('faq')?.scrollIntoView({behavior:'smooth',block:'start'}),80);
   });
 
-
-</script>
-
-
-<!-- إشعار السعر الفوري للزبون -->
-<div id="livePriceNotice" class="live-price-notice" hidden role="status" aria-live="polite">
-  <div class="live-price-icon" aria-hidden="true">💰</div>
-  <div class="live-price-copy">
-    <strong id="livePriceTitle">السعر الحالي</strong>
-    <span id="livePriceText">اختر الخدمة والكمية</span>
-  </div>
-  <div id="livePriceAmount" class="live-price-amount">$0.00</div>
-</div>
-
-
-<script>
-/* إشعار السعر الفوري: يتحدث مباشرة عند اختيار الخدمة أو تغيير الكمية */
-(function setupLivePriceNotice(){
-  const notice = document.getElementById("livePriceNotice");
-  const title = document.getElementById("livePriceTitle");
-  const desc = document.getElementById("livePriceText");
-  const amount = document.getElementById("livePriceAmount");
-  const qty = document.getElementById("quantity");
-  const chips = document.getElementById("chips");
-  const serviceTextEl = document.getElementById("serviceText");
-  const servicePanel = document.getElementById("servicePanel");
-
-  if(!notice || !qty) return;
-
-  let lastKey = "";
-
-  function refresh(){
-    let service = null;
-    try{
-      if(typeof selectedService === "function") service = selectedService();
-    }catch(e){}
-
-    const q = Number(qty.value || 0);
-
-    if(!service){
-      notice.hidden = true;
-      lastKey = "";
-      return;
-    }
-
-    const rate = Number(service.sell_rate || 0);
-    const total = rate * q / 1000;
-    const serviceName = service.name || "الخدمة المختارة";
-    const qText = q > 0 ? q.toLocaleString("en-US") : "—";
-
-    notice.hidden = false;
-    title.textContent = q > 0 ? "تم تحديث السعر" : "تم اختيار الخدمة";
-    desc.textContent = q > 0
-      ? "الكمية " + qText + " • السعر الإجمالي حسب الكمية"
-      : "اختر الكمية حتى يظهر السعر النهائي";
-
-    if(q > 0){
-      amount.textContent = typeof money === "function"
-        ? "$" + money(total)
-        : "$" + total.toFixed(2);
-    }else{
-      amount.textContent = typeof fmtRate === "function"
-        ? fmtRate(service)
-        : "$0.00";
-    }
-
-    const key = String(service.id || serviceName) + "|" + q + "|" + total;
-    if(key !== lastKey){
-      notice.classList.remove("pop");
-      void notice.offsetWidth;
-      notice.classList.add("pop");
-      lastKey = key;
-    }
-  }
-
-  qty.addEventListener("input", refresh);
-  chips?.addEventListener("click", ()=>setTimeout(refresh,0));
-  servicePanel?.addEventListener("click", ()=>setTimeout(refresh,0));
-
-  /* تتبع تغيّر الخدمة تلقائياً عند تبديل المنصة/القسم */
-  if(serviceTextEl){
-    new MutationObserver(refresh).observe(serviceTextEl,{
-      childList:true,
-      characterData:true,
-      subtree:true
-    });
-  }
-
-  setTimeout(refresh,300);
+  /* عند فتح الموقع: نبدأ مباشرة بصفحة الخدمات.
+     تبقى الواجهة الرئيسية الحالية متاحة من زر "الرئيسية". */
+  showServices();
+  document.querySelectorAll('.site-links a:not(#servicesLink)').forEach(a=>a.addEventListener('click',()=>{ if(!landing.hidden){ setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),0); }}));
 })();
+
 </script>
 
-
-<script>
-/* حماية إشعار السعر: يبقى محدثاً مع اختيار الخدمة والكمية حتى مع ضغط واجهة الجوال */
-(function(){
-  const notice = document.getElementById("livePriceNotice");
-  const qty = document.getElementById("quantity");
-  const servicePanel = document.getElementById("servicePanel");
-  if(!notice || !qty) return;
-
-  function update(){
-    let service = null;
-    try { if(typeof selectedService === "function") service = selectedService(); } catch(e){}
-    const q = Number(qty.value || 0);
-    if(!service){
-      notice.hidden = true;
-      return;
-    }
-
-    const rate = Number(service.sell_rate || 0);
-    const total = rate * q / 1000;
-    const title = document.getElementById("livePriceTitle");
-    const desc = document.getElementById("livePriceText");
-    const amount = document.getElementById("livePriceAmount");
-
-    if(title) title.textContent = q > 0 ? "تم تحديث السعر" : "تم اختيار الخدمة";
-    if(desc) desc.textContent = q > 0
-      ? "الكمية " + q.toLocaleString("en-US") + " • السعر الإجمالي"
-      : "اختر الكمية حتى يظهر السعر النهائي";
-    if(amount){
-      amount.textContent = q > 0
-        ? "$" + (typeof money === "function" ? money(total) : total.toFixed(2))
-        : (typeof fmtRate === "function" ? fmtRate(service) : "$0.00");
-    }
-    notice.hidden = false;
-  }
-
-  qty.addEventListener("input", update);
-  qty.addEventListener("change", update);
-  servicePanel?.addEventListener("click", ()=>setTimeout(update,30));
-  servicePanel?.addEventListener("change", ()=>setTimeout(update,30));
-
-  const observer = new MutationObserver(()=>setTimeout(update,20));
-  if(servicePanel) observer.observe(servicePanel,{subtree:true,childList:true,characterData:true,attributes:true});
-  setInterval(update,700);
-  setTimeout(update,200);
-})();
-</script>
 </body>
 </html>
