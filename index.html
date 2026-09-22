@@ -2653,25 +2653,144 @@ body{
   }
 }
 </style>
+
+<style id="dopamine-header-exact-layout">
+/* ترتيب الهيدر الجديد مطابق لفكرة الصورة المرجعية، بدون المساس بوظائف الموقع */
+.dopamine-header{display:block;max-width:1180px;padding:20px 28px 0;direction:ltr}
+.dopamine-head-main{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.dopamine-head-main .site-brand{margin:0;order:1;direction:ltr;font-size:28px;gap:14px}
+.dopamine-head-main .brand-bolt{width:54px;height:54px;border-radius:18px;font-size:0}
+.dopamine-head-main .brand-bolt:before{font-size:31px}
+.dopamine-wallet{order:2;min-width:170px;min-height:72px;border-radius:28px!important;padding:9px 20px!important;display:flex!important;align-items:center;justify-content:center;gap:10px;font-size:20px!important;position:relative}
+.dopamine-wallet span{font-size:18px!important}
+.dopamine-wallet small{font-size:24px;font-weight:900;direction:ltr;position:absolute;top:8px;right:24px}
+.dopamine-wallet span{margin-top:27px}
+.dopamine-quick-actions{display:flex;align-items:flex-start;justify-content:space-between;gap:28px;margin-top:26px;direction:ltr}
+.dopamine-account{order:1;min-width:300px;height:72px;border-radius:36px!important;font-size:27px!important;display:flex!important;align-items:center;justify-content:center;gap:18px}
+.dopamine-account span{font-size:38px;line-height:1}
+.dopamine-quick{order:2;width:170px;height:112px;border-radius:26px!important;padding:8px!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:7px;position:relative;background:rgba(255,255,255,.72)!important}
+.dopamine-quick .quick-icon{font-size:43px;line-height:1;color:#2f167f;filter:saturate(.8)}
+.dopamine-quick b{font-size:21px;color:#241268;white-space:nowrap}
+.dopamine-quick .bell-badge{position:absolute;top:9px;right:27px;background:#ef233c;color:#fff;border-radius:50%;min-width:16px;height:16px;padding:0 4px;display:grid;place-items:center;font-size:10px;font-weight:900}
+.dopamine-quick[hidden]{display:none!important}
+.dopamine-header .site-links{direction:rtl;justify-content:center;border-top:1px solid #eeeef8;margin-top:28px;padding:24px 0 20px;gap:100px;font-size:25px}
+.dopamine-header .site-links a{padding:0 6px 12px}
+.dopamine-header .site-links a:hover{color:#5128d8}
+@media(max-width:900px){
+  .dopamine-header{padding:12px 14px 0}
+  .dopamine-head-main{gap:10px}
+  .dopamine-head-main .site-brand{font-size:20px;gap:8px}
+  .dopamine-head-main .brand-bolt{width:42px;height:42px;border-radius:14px}
+  .dopamine-head-main .brand-bolt:before{font-size:24px}
+  .dopamine-wallet{min-width:108px;min-height:58px;border-radius:22px!important;padding:6px 12px!important;font-size:16px!important}
+  .dopamine-wallet small{font-size:15px;top:6px;right:13px}
+  .dopamine-wallet span{font-size:14px!important;margin-top:20px}
+  .dopamine-quick-actions{gap:8px;margin-top:14px;align-items:center}
+  .dopamine-account{min-width:0;flex:1;height:58px;border-radius:22px!important;font-size:18px!important;gap:8px}
+  .dopamine-account span{font-size:27px}
+  .dopamine-quick{flex:1;width:auto;height:74px;border-radius:18px!important;gap:3px}
+  .dopamine-quick .quick-icon{font-size:27px}
+  .dopamine-quick b{font-size:12px}
+  .dopamine-quick .bell-badge{top:4px;right:18px}
+  .dopamine-header .site-links{margin-top:14px;padding:14px 0 12px;gap:42px;font-size:18px}
+  .dopamine-header .site-links a{padding-bottom:6px}
+}
+@media(max-width:560px){
+  .dopamine-header .site-links{gap:32px}
+  .dopamine-quick-actions{gap:6px}
+  .dopamine-account{font-size:16px!important}
+  .dopamine-quick b{font-size:11px}
+}
+</style>
+
+<style id="header-80-percent-fix">
+/* تصغير وترتيب أيقونات رأس الصفحة بنسبة تقارب 80% */
+.dopamine-header .dopamine-head-main{gap:8px!important}
+.dopamine-header .site-brand{font-size:18.4px!important;gap:7px!important}
+.dopamine-header .site-brand .brand-bolt{width:30px!important;height:30px!important;border-radius:10px!important}
+.dopamine-header .site-brand .brand-bolt:before{font-size:17px!important}
+.dopamine-header .dopamine-wallet{min-width:136px!important;min-height:52px!important;height:52px!important;border-radius:18px!important;padding:5px 10px!important;font-size:15px!important}
+.dopamine-header .dopamine-wallet small{font-size:12px!important;top:5px!important;right:11px!important}
+.dopamine-header .dopamine-wallet span{font-size:12px!important;margin-top:18px!important}
+.dopamine-header .dopamine-quick-actions{gap:22px!important;margin-top:20px!important}
+.dopamine-header .dopamine-account{min-width:240px!important;height:58px!important;border-radius:29px!important;font-size:22px!important;gap:14px!important}
+.dopamine-header .dopamine-account span{font-size:30px!important}
+.dopamine-header .dopamine-quick{width:136px!important;height:90px!important;border-radius:21px!important;padding:6px!important;gap:5px!important}
+.dopamine-header .dopamine-quick .quick-icon{font-size:34px!important}
+.dopamine-header .dopamine-quick b{font-size:17px!important}
+.dopamine-header .dopamine-quick .bell-badge{top:7px!important;right:21px!important;min-width:13px!important;height:13px!important;font-size:8px!important}
+.dopamine-header .site-links{margin-top:22px!important;padding:19px 0 16px!important;gap:80px!important;font-size:20px!important}
+.dopamine-header .site-links a{padding-bottom:9px!important}
+@media(max-width:900px){
+  .dopamine-header{padding:10px 12px 0!important}
+  .dopamine-header .dopamine-head-main .site-brand{font-size:16px!important;gap:6px!important}
+  .dopamine-header .dopamine-head-main .brand-bolt{width:34px!important;height:34px!important;border-radius:11px!important}
+  .dopamine-header .dopamine-head-main .brand-bolt:before{font-size:19px!important}
+  .dopamine-header .dopamine-wallet{min-width:88px!important;min-height:47px!important;height:47px!important;border-radius:18px!important;font-size:13px!important;padding:4px 9px!important}
+  .dopamine-header .dopamine-wallet small{font-size:12px!important;top:4px!important;right:10px!important}
+  .dopamine-header .dopamine-wallet span{font-size:11px!important;margin-top:16px!important}
+  .dopamine-header .dopamine-quick-actions{gap:6px!important;margin-top:11px!important}
+  .dopamine-header .dopamine-account{height:47px!important;border-radius:18px!important;font-size:15px!important;gap:6px!important}
+  .dopamine-header .dopamine-account span{font-size:22px!important}
+  .dopamine-header .dopamine-quick{height:59px!important;border-radius:15px!important;gap:2px!important}
+  .dopamine-header .dopamine-quick .quick-icon{font-size:22px!important}
+  .dopamine-header .dopamine-quick b{font-size:10px!important}
+  .dopamine-header .dopamine-quick .bell-badge{top:3px!important;right:14px!important}
+  .dopamine-header .site-links{margin-top:10px!important;padding:11px 0 9px!important;gap:34px!important;font-size:15px!important}
+  .dopamine-header .site-links a{padding-bottom:5px!important}
+}
+@media(max-width:560px){
+  .dopamine-header .site-links{gap:27px!important}
+  .dopamine-header .dopamine-quick-actions{gap:5px!important}
+  .dopamine-header .dopamine-account{font-size:14px!important}
+  .dopamine-header .dopamine-quick b{font-size:9px!important}
+}
+</style>
+
+
+<style id="nav-tickets-faq-style">
+/* ترتيب التنقل: الرئيسية | الخدمات | التذاكر | الأسئلة الشائعة */
+.site-links{display:flex;align-items:center;justify-content:center;gap:26px;flex-wrap:wrap}
+.site-links a{white-space:nowrap}
+.nav-extra-page{max-width:1180px;margin:38px auto;padding:0 18px}
+.nav-extra-page .section-anchor-head{text-align:center;margin-bottom:18px}
+.nav-extra-page .section-anchor-head h2{margin:8px 0;font-size:clamp(24px,4vw,38px);color:#25116f}
+.nav-extra-page .section-anchor-head p{margin:0;color:var(--muted,#6a6880)}
+.nav-extra-page .ticket-section{margin:0 auto;max-width:1180px}
+.nav-extra-page .service-faq{margin:0 auto}
+@media(max-width:700px){
+  .site-links{gap:10px 16px;padding:8px 10px}
+  .site-links a{font-size:14px}
+  .nav-extra-page{margin:24px auto;padding:0 10px}
+  .nav-extra-page .ticket-section{padding:16px;border-radius:20px;display:block}
+  .nav-extra-page .ticket-intro{margin-bottom:14px}
+}
+</style>
 </head>
 
 <body>
 
 <header class="site-nav" id="siteNav">
-  <div class="site-nav-in">
-    <a class="site-brand" href="#home" id="homeLink" aria-label="Dopamine Store">
-      <span class="brand-bolt">ϟ</span><span>Dopamine Store</span>
-    </a>
+  <div class="site-nav-in dopamine-header">
+    <div class="dopamine-head-main">
+      <a class="site-brand" href="#home" id="homeLink" aria-label="Dopamine Store">
+        <span class="brand-bolt">ϟ</span><span>Dopamine Store</span>
+      </a>
+      <button class="icon-action wallet-top dopamine-wallet" id="walletBtn" type="button" aria-label="المحفظة" title="المحفظة">💰 <span id="walletBal">0</span><small>$5.00</small></button>
+    </div>
+    <div class="dopamine-quick-actions">
+      <button class="about-action dopamine-account" type="button" id="acctBtn">👤 حسابي <span>›</span></button>
+      <button class="icon-action dopamine-quick" id="bellBtn" type="button" aria-label="التنبيهات" title="التنبيهات"><span class="quick-icon">🔔</span><b>الإشعارات</b><span class="bell-badge" id="bellBadge" hidden>0</span></button>
+      <button class="icon-action dopamine-quick" id="supportTopBtn" type="button" aria-label="الدعم" title="الدعم"><span class="quick-icon">🎧</span><b>الدعم</b></button>
+      <button class="icon-action dopamine-quick" id="settingsTopBtn" type="button" aria-label="الإعدادات" title="الإعدادات"><span class="quick-icon">⚙️</span><b>الإعدادات</b></button>
+      <button class="icon-action" id="ordersBtn" type="button" aria-label="طلباتي" title="طلباتي" hidden>📦</button>
+    </div>
     <nav class="site-links" aria-label="التنقل">
       <a href="#home">الرئيسية</a>
       <a href="#services" id="servicesLink">الخدمات</a>
+      <a href="#tickets" id="ticketsLink">التذاكر</a>
+      <a href="#faq" id="faqLink">الأسئلة الشائعة</a>
     </nav>
-    <div class="site-actions">
-      <button class="icon-action wallet-top" id="walletBtn" type="button" aria-label="المحفظة" title="المحفظة">💰 <span id="walletBal">0</span></button>
-      <button class="icon-action bell-top bell" id="bellBtn" type="button" aria-label="التنبيهات" title="التنبيهات">🔔<span class="bell-badge" id="bellBadge" hidden>0</span></button>
-      <button class="about-action" type="button" id="acctBtn">👤 دخول</button>
-      <button class="icon-action" id="ordersBtn" type="button" aria-label="طلباتي" title="طلباتي" hidden>📦</button>
-    </div>
   </div>
 </header>
 
@@ -2755,7 +2874,66 @@ body{
 
 
 
-  <section class="landing-footer" id="faqLanding">
+  
+<section class="nav-extra-page shell" id="ticketsPageSection">
+  <div class="section-anchor-head">
+    <span class="hero-pill">🎫 نظام التذاكر</span>
+    <h2>التذاكر</h2>
+    <p>تواصل معنا عبر تذكرة وتابع طلبك واستفساراتك بسهولة.</p>
+  </div>
+  <section class="ticket-section" id="ticketsLanding">
+    <div class="ticket-intro">
+      <span class="hero-pill">🎫 نظام التذاكر</span>
+      <h2>تواصل معنا عبر تذكرة</h2>
+      <p>عندك مشكلة أو استفسار؟ افتح تذكرة واكتب التفاصيل، وراح تقدر تتابع حالة التذكرة من نفس المكان.</p>
+      <div class="ticket-points"><span>⚡ متابعة سريعة للطلبات والاستفسارات</span><span>🔒 كل تذكرة مرتبطة بحسابك</span><span>💬 تقدر تتابع الردود والحالة</span></div>
+    </div>
+    <div class="ticket-panel">
+      <h3>🎟️ إنشاء تذكرة جديدة</h3>
+      <div id="ticketGuest" class="ticket-login" hidden>سجّل دخولك حتى تقدر تنشئ وتتابع التذاكر.<br><button id="ticketLoginBtn" type="button">تسجيل الدخول</button></div>
+      <form id="ticketForm" class="ticket-form" hidden>
+        <input id="ticketSubject" maxlength="100" placeholder="عنوان المشكلة أو الاستفسار" required>
+        <select id="ticketCategory"><option value="طلب">استفسار عن طلب</option><option value="خدمة">استفسار عن خدمة</option><option value="دفع">الدفع / المحفظة</option><option value="أخرى">أخرى</option></select>
+        <textarea id="ticketMessage" maxlength="1000" placeholder="اكتب تفاصيل المشكلة هنا..." required></textarea>
+        <button class="ticket-submit" id="ticketSubmit" type="submit">+ فتح تذكرة</button>
+      </form>
+      <div class="ticket-list" id="ticketList"></div>
+    </div>
+  </section>
+
+  
+</section>
+
+<section class="nav-extra-page shell" id="faqPageSection">
+  <div class="section-anchor-head">
+    <span class="hero-pill">✦ الأسئلة الشائعة</span>
+    <h2>الأسئلة الشائعة</h2>
+    <p>إجابات سريعة على أكثر الأسئلة التي تهمك قبل الطلب.</p>
+  </div>
+  <section class="service-faq shell" id="faqServices">
+    <div class="sec-head"><span class="hero-pill">✦ الأسئلة الشائعة</span><h2>الأسئلة الشائعة</h2><p>إجابات سريعة على أكثر الأسئلة التي تهمك قبل الطلب.</p></div>
+    <div class="landing-faq-grid">
+      <details><summary>كيف أطلب خدمة؟</summary><p>ادخل إلى قسم الخدمات، اختر المنصة والخدمة، ثم ضع الرابط والكمية وشاهد السعر قبل إتمام الطلب.</p></details>
+      <details><summary>هل أحتاج إلى كلمة مرور حسابي؟</summary><p>لا، لا نحتاج إلى كلمة المرور. المطلوب هو رابط الحساب أو المنشور فقط.</p></details>
+      <details><summary>هل يجب أن يكون الحساب عاماً؟</summary><p>نعم، يجب أن يكون الحساب أو المنشور عاماً أثناء تنفيذ الخدمة.</p></details>
+      <details><summary>متى يتم تنفيذ الطلب؟</summary><p>تختلف السرعة حسب الخدمة، وستظهر تفاصيل السرعة والضمان ضمن معلومات الخدمة.</p></details>
+      <details><summary>هل توجد خدمات بضمان؟</summary><p>نعم، بعض الخدمات تتضمن إعادة تعبئة أو ضماناً حسب تفاصيل الخدمة المختارة.</p></details>
+      <details><summary>كيف أتواصل مع الدعم؟</summary><p>يمكنك التواصل معنا عبر نظام التذاكر أو واتساب أو البريد الإلكتروني.</p></details>
+    </div>
+  </section>
+
+  
+</section>
+<section class="service-about shell" id="serviceAbout">
+    <div class="service-about-card">
+      <span class="service-about-pill">✦ من نحن</span>
+      <h2>من نحن</h2>
+      <p>منصة رقمية متخصصة في تقديم الخدمات الرقمية، نسعى لتوفير خدمات موثوقة وسريعة وتجربة استخدام سهلة وآمنة.</p>
+      <div class="service-about-founder">Ali Muhannad <span>|</span> علي مهند</div>
+    </div>
+  </section>
+
+<section class="landing-footer" id="faqLanding">
     <div class="footer-social" aria-label="حسابات التواصل">
       <a href="https://t.me/o7ah11" target="_blank" rel="noopener noreferrer" title="Telegram" aria-label="Telegram"><img src="https://cdn.simpleicons.org/telegram/229ED9" alt="Telegram" loading="lazy"></a>
       <a href="https://wa.me/9647717885719" target="_blank" rel="noopener noreferrer" title="WhatsApp" aria-label="WhatsApp"><img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp" loading="lazy"></a>
@@ -2898,48 +3076,7 @@ body{
 
   </main>
 
-  <section class="ticket-section" id="ticketsLanding">
-    <div class="ticket-intro">
-      <span class="hero-pill">🎫 نظام التذاكر</span>
-      <h2>تواصل معنا عبر تذكرة</h2>
-      <p>عندك مشكلة أو استفسار؟ افتح تذكرة واكتب التفاصيل، وراح تقدر تتابع حالة التذكرة من نفس المكان.</p>
-      <div class="ticket-points"><span>⚡ متابعة سريعة للطلبات والاستفسارات</span><span>🔒 كل تذكرة مرتبطة بحسابك</span><span>💬 تقدر تتابع الردود والحالة</span></div>
-    </div>
-    <div class="ticket-panel">
-      <h3>🎟️ إنشاء تذكرة جديدة</h3>
-      <div id="ticketGuest" class="ticket-login" hidden>سجّل دخولك حتى تقدر تنشئ وتتابع التذاكر.<br><button id="ticketLoginBtn" type="button">تسجيل الدخول</button></div>
-      <form id="ticketForm" class="ticket-form" hidden>
-        <input id="ticketSubject" maxlength="100" placeholder="عنوان المشكلة أو الاستفسار" required>
-        <select id="ticketCategory"><option value="طلب">استفسار عن طلب</option><option value="خدمة">استفسار عن خدمة</option><option value="دفع">الدفع / المحفظة</option><option value="أخرى">أخرى</option></select>
-        <textarea id="ticketMessage" maxlength="1000" placeholder="اكتب تفاصيل المشكلة هنا..." required></textarea>
-        <button class="ticket-submit" id="ticketSubmit" type="submit">+ فتح تذكرة</button>
-      </form>
-      <div class="ticket-list" id="ticketList"></div>
-    </div>
-  </section>
-
-  <section class="service-faq shell" id="faqServices">
-    <div class="sec-head"><span class="hero-pill">✦ الأسئلة الشائعة</span><h2>الأسئلة الشائعة</h2><p>إجابات سريعة على أكثر الأسئلة التي تهمك قبل الطلب.</p></div>
-    <div class="landing-faq-grid">
-      <details><summary>كيف أطلب خدمة؟</summary><p>ادخل إلى قسم الخدمات، اختر المنصة والخدمة، ثم ضع الرابط والكمية وشاهد السعر قبل إتمام الطلب.</p></details>
-      <details><summary>هل أحتاج إلى كلمة مرور حسابي؟</summary><p>لا، لا نحتاج إلى كلمة المرور. المطلوب هو رابط الحساب أو المنشور فقط.</p></details>
-      <details><summary>هل يجب أن يكون الحساب عاماً؟</summary><p>نعم، يجب أن يكون الحساب أو المنشور عاماً أثناء تنفيذ الخدمة.</p></details>
-      <details><summary>متى يتم تنفيذ الطلب؟</summary><p>تختلف السرعة حسب الخدمة، وستظهر تفاصيل السرعة والضمان ضمن معلومات الخدمة.</p></details>
-      <details><summary>هل توجد خدمات بضمان؟</summary><p>نعم، بعض الخدمات تتضمن إعادة تعبئة أو ضماناً حسب تفاصيل الخدمة المختارة.</p></details>
-      <details><summary>كيف أتواصل مع الدعم؟</summary><p>يمكنك التواصل معنا عبر نظام التذاكر أو واتساب أو البريد الإلكتروني.</p></details>
-    </div>
-  </section>
-
-  <section class="service-about shell" id="serviceAbout">
-    <div class="service-about-card">
-      <span class="service-about-pill">✦ من نحن</span>
-      <h2>من نحن</h2>
-      <p>منصة رقمية متخصصة في تقديم الخدمات الرقمية، نسعى لتوفير خدمات موثوقة وسريعة وتجربة استخدام سهلة وآمنة.</p>
-      <div class="service-about-founder">Ali Muhannad <span>|</span> علي مهند</div>
-    </div>
-  </section>
-
-</div>
+  </div>
 
 
 <section class="shell trial id="trial" hidden>
@@ -5957,45 +6094,69 @@ renderTabs();
 
 renderChips();
 
-/* Landing / services page switch */
+/* Landing / services / tickets / FAQ navigation */
 (function(){
   const landing=document.getElementById('landingPage');
   const service=document.getElementById('servicePage');
   const navServices=document.getElementById('servicesLink');
+  const ticketsLink=document.getElementById('ticketsLink');
+  const faqLink=document.getElementById('faqLink');
   const back=document.getElementById('backHome');
   const home=document.getElementById('homeLink');
-  const nav=document.getElementById('siteNav');
+  const tickets=document.getElementById('ticketsPageSection');
+  const faq=document.getElementById('faqPageSection');
+
   function showServices(e){
-  if(e)e.preventDefault();
-  landing.hidden=true;
-  service.hidden=false;
-  window.location.hash='services';
-  window.scrollTo({top:0,behavior:'smooth'});
-  /* عند الدخول للخدمات نعرض كل خدمات الموقع ونطلبها من الخادم من جديد */
-  tab='all';
-  selectedType='all';
-  selectedCat='all';
-  selectedId=null;
-  renderTabs();
-  loadServices();
-}
+    if(e)e.preventDefault();
+    landing.hidden=true;
+    service.hidden=false;
+    window.location.hash='services';
+    window.scrollTo({top:0,behavior:'smooth'});
+    tab='all'; selectedType='all'; selectedCat='all'; selectedId=null;
+    renderTabs(); loadServices();
+  }
   function showHome(e){
-  if(e)e.preventDefault();
-  service.hidden=true;
-  landing.hidden=false;
-  window.location.hash='home';
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+    if(e)e.preventDefault();
+    service.hidden=true;
+    landing.hidden=false;
+    window.location.hash='home';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function showLandingSection(e, target, hash){
+    if(e)e.preventDefault();
+    service.hidden=true;
+    landing.hidden=false;
+    window.location.hash=hash;
+    setTimeout(()=>target?.scrollIntoView({behavior:'smooth',block:'start'}),20);
+  }
+
   navServices?.addEventListener('click',showServices);
   document.getElementById('heroServicesBtn')?.addEventListener('click',showServices);
   back?.addEventListener('click',showHome);
   home?.addEventListener('click',showHome);
+  ticketsLink?.addEventListener('click',e=>showLandingSection(e,tickets,'tickets'));
+  faqLink?.addEventListener('click',e=>showLandingSection(e,faq,'faq'));
 
-  /* عند فتح الموقع: نبدأ مباشرة بصفحة الخدمات.
-     تبقى الواجهة الرئيسية الحالية متاحة من زر "الرئيسية". */
-  showServices();
-  document.querySelectorAll('.site-links a:not(#servicesLink)').forEach(a=>a.addEventListener('click',()=>{ if(!landing.hidden){ setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),0); }}));
+  /* يبدأ الموقع بالصفحة الرئيسية */
+  service.hidden=true;
+  landing.hidden=false;
 })();
+// أزرار الهيدر العلوية
+  document.getElementById('supportTopBtn')?.addEventListener('click',()=>{
+    const target=document.getElementById('ticketsPageSection');
+    if(target){
+      if(document.getElementById('landingPage')?.hidden){
+        document.getElementById('backHome')?.click();
+        setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'start'}),120);
+      } else target.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+  document.getElementById('settingsTopBtn')?.addEventListener('click',()=>{
+    if(typeof openAuth==='function' && !session) openAuth('login');
+    else if(typeof showNotifToast==='function') showNotifToast({title:'الإعدادات',body:'إعدادات الحساب متاحة من قسم حسابي.'});
+    else document.getElementById('acctBtn')?.click();
+  });
+
 
 </script>
 
