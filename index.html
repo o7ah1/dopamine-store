@@ -2551,6 +2551,66 @@ html, body{
 }
 </style>
 
+<style id="daily-offers-smaller-again">
+/* تصغير عروض اليوم قليلاً مع الحفاظ على وضوح المحتوى */
+#servicePage #dailyOffers .daily-offer-card{
+  min-height:340px!important;
+  padding:16px 16px!important;
+  border-radius:20px!important;
+}
+#servicePage #dailyOffers .daily-offer-name{
+  min-height:88px!important;
+  font-size:14px!important;
+  line-height:1.65!important;
+}
+#servicePage #dailyOffers .daily-offer-prices{
+  gap:6px 10px!important;
+  margin-top:10px!important;
+}
+#servicePage #dailyOffers .daily-offer-old{font-size:12px!important}
+#servicePage #dailyOffers .daily-offer-new{font-size:20px!important}
+#servicePage #dailyOffers .daily-offer-unit{font-size:11px!important;margin-top:5px!important}
+#servicePage #dailyOffers .daily-offer-min{margin-top:9px!important;padding:7px 9px!important;font-size:11px!important}
+#servicePage #dailyOffers .daily-offer-btn{height:40px!important;margin-top:11px!important;font-size:11px!important}
+#servicePage #dailyOffers .daily-offer-app-image{width:46px!important;height:46px!important;margin:2px auto 8px!important;border-radius:12px!important}
+@media(max-width:700px){
+  #servicePage #dailyOffers .daily-offer-card{min-height:0!important;padding:16px 14px!important}
+  #servicePage #dailyOffers .daily-offer-name{min-height:0!important;font-size:14px!important}
+}
+</style>
+
+<style id="bottom-social-all-sections">
+/* تيليجرام + واتساب: في أسفل الأقسام الداخلية فقط، وليس الرئيسية */
+.bottom-social-row{
+  max-width:1180px;
+  margin:18px auto 28px;
+  padding:0 24px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:16px;
+}
+.bottom-social-row a{
+  width:50px;
+  height:50px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  background:#fff;
+  border:1px solid #e5e6ef;
+  box-shadow:0 8px 22px rgba(35,20,120,.09);
+  text-decoration:none;
+  transition:.18s;
+}
+.bottom-social-row a:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(35,20,120,.14)}
+.bottom-social-row img{width:27px;height:27px;display:block;object-fit:contain}
+@media(max-width:560px){
+  .bottom-social-row{margin:14px auto 22px;padding:0 14px;gap:12px}
+  .bottom-social-row a{width:46px;height:46px;border-radius:14px}
+  .bottom-social-row img{width:25px;height:25px}
+}
+</style>
+
 </head>
 <body>
 <header class="site-nav" id="siteNav">
@@ -2647,15 +2707,8 @@ html, body{
 <svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.06c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.12-.96-.3-1.66-.6-2.92-1.26-4.82-4.2-4.97-4.4-.14-.2-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.26-.29.57-.36.76-.36l.55.01c.17.01.41-.07.64.49.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.2-.14.32-.28.49l-.42.49c-.14.14-.28.29-.12.57.16.29.71 1.17 1.53 1.9 1.05.93 1.93 1.22 2.21 1.36.27.15.43.12.59-.07.16-.2.68-.79.86-1.07.18-.29.36-.24.61-.14.24.1 1.56.73 1.83.87.27.14.45.2.51.31.07.12.07.68-.17 1.35z"></path></svg>
 </span>
 <span>واتساب <small></small></span>
-</a><a class="contact" href="https://t.me/o7ah11" rel="noopener noreferrer" target="_blank" title="Telegram">
-<span class="ci tg">
-<svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><path d="M21.8 4.2 18.7 19c-.23 1.05-.84 1.31-1.7.82l-4.68-3.45-2.26 2.18c-.25.25-.46.46-.94.46l.34-4.77 8.68-7.84c.38-.34-.08-.53-.59-.19L6.82 12.95 2.2 11.5c-1-.31-1.02-1 .21-1.49L20.45 3.2c.84-.31 1.58.19 1.35 1z"></path></svg>
-</span>
-<span>تليجرام <small>@o7ah11</small></span>
-</a>
-<div class="contact contact-card-info">
-<span class="ci card-ci">💳</span>
-<span><b>معلومات البطاقة</b><small class="master-number">💳 8855481035</small><em>تبليغ حول المبلغ هنا من أجل شحن الرصيد</em></span>
+</a><div class="contact contact-card-info">
+<span class="ci card-info-icon"><img alt="Mastercard" loading="lazy" src="https://cdn.simpleicons.org/mastercard/17134e" style="width:24px;height:24px"/></span><span><small class="master-number">8855481035</small><em>اسم حامل البطاقة: Ali</em></span>
 </div>
 <a class="contact" href="mailto:ye19cm@gmail.com?subject=%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20-%20Dopamine%20Store">
 <span class="ci em">
@@ -2693,15 +2746,9 @@ html, body{
 <svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.06c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.12-.96-.3-1.66-.6-2.92-1.26-4.82-4.2-4.97-4.4-.14-.2-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.26-.29.57-.36.76-.36l.55.01c.17.01.41-.07.64.49.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.2-.14.32-.28.49l-.42.49c-.14.14-.28.29-.12.57.16.29.71 1.17 1.53 1.9 1.05.93 1.93 1.22 2.21 1.36.27.15.43.12.59-.07.16-.2.68-.79.86-1.07.18-.29.36-.24.61-.14.24.1 1.56.73 1.83.87.27.14.45.2.51.31.07.12.07.68-.17 1.35z"></path></svg>
 </span>
 <span>واتساب <small></small></span>
-</a><a class="contact" href="https://t.me/o7ah11" rel="noopener noreferrer" target="_blank" title="Telegram">
-<span class="ci tg">
-<svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><path d="M21.8 4.2 18.7 19c-.23 1.05-.84 1.31-1.7.82l-4.68-3.45-2.26 2.18c-.25.25-.46.46-.94.46l.34-4.77 8.68-7.84c.38-.34-.08-.53-.59-.19L6.82 12.95 2.2 11.5c-1-.31-1.02-1 .21-1.49L20.45 3.2c.84-.31 1.58.19 1.35 1z"></path></svg>
-</span>
-<span>تليجرام <small>@o7ah11</small></span>
 </a>
 <div class="contact contact-card-info">
-<span class="ci card-ci">💳</span>
-<span><b>معلومات البطاقة</b><small class="master-number">💳 8855481035</small><em>تبليغ حول المبلغ هنا من أجل شحن الرصيد</em></span>
+<span class="ci card-info-icon"><img alt="Mastercard" loading="lazy" src="https://cdn.simpleicons.org/mastercard/17134e" style="width:24px;height:24px"/></span><span><small class="master-number">8855481035</small><em>اسم حامل البطاقة: Ali</em></span>
 </div>
 <a class="contact" href="mailto:ye19cm@gmail.com?subject=%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20-%20Dopamine%20Store">
 <span class="ci em">
@@ -2711,6 +2758,10 @@ html, body{
 </a>
 </div>
 <p class="foot service-about-foot">© Dopamine Store — جميع الحقوق محفوظة</p>
+<div class="bottom-social-row" aria-label="حسابات التواصل">
+<a href="https://t.me/o7ah11" rel="noopener noreferrer" target="_blank" title="Telegram"><img alt="Telegram" loading="lazy" src="https://cdn.simpleicons.org/telegram/229ED9"/></a>
+<a href="https://wa.me/9647717885719" rel="noopener noreferrer" target="_blank" title="WhatsApp"><img alt="WhatsApp" loading="lazy" src="https://cdn.simpleicons.org/whatsapp/25D366"/></a>
+</div>
 </section></div><div hidden="" id="supportPage">
 <section class="ticket-section shell" id="ticketsLanding">
 <div class="ticket-intro">
@@ -2752,15 +2803,9 @@ html, body{
 <svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.06c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.12-.96-.3-1.66-.6-2.92-1.26-4.82-4.2-4.97-4.4-.14-.2-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.26-.29.57-.36.76-.36l.55.01c.17.01.41-.07.64.49.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.2-.14.32-.28.49l-.42.49c-.14.14-.28.29-.12.57.16.29.71 1.17 1.53 1.9 1.05.93 1.93 1.22 2.21 1.36.27.15.43.12.59-.07.16-.2.68-.79.86-1.07.18-.29.36-.24.61-.14.24.1 1.56.73 1.83.87.27.14.45.2.51.31.07.12.07.68-.17 1.35z"></path></svg>
 </span>
 <span>واتساب <small></small></span>
-</a><a class="contact" href="https://t.me/o7ah11" rel="noopener noreferrer" target="_blank" title="Telegram">
-<span class="ci tg">
-<svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><path d="M21.8 4.2 18.7 19c-.23 1.05-.84 1.31-1.7.82l-4.68-3.45-2.26 2.18c-.25.25-.46.46-.94.46l.34-4.77 8.68-7.84c.38-.34-.08-.53-.59-.19L6.82 12.95 2.2 11.5c-1-.31-1.02-1 .21-1.49L20.45 3.2c.84-.31 1.58.19 1.35 1z"></path></svg>
-</span>
-<span>تليجرام <small>@o7ah11</small></span>
 </a>
 <div class="contact contact-card-info">
-<span class="ci card-ci">💳</span>
-<span><b>معلومات البطاقة</b><small class="master-number">💳 8855481035</small><em>تبليغ حول المبلغ هنا من أجل شحن الرصيد</em></span>
+<span class="ci card-info-icon"><img alt="Mastercard" loading="lazy" src="https://cdn.simpleicons.org/mastercard/17134e" style="width:24px;height:24px"/></span><span><small class="master-number">8855481035</small><em>اسم حامل البطاقة: Ali</em></span>
 </div>
 <a class="contact" href="mailto:ye19cm@gmail.com?subject=%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20-%20Dopamine%20Store">
 <span class="ci em">
@@ -2770,6 +2815,10 @@ html, body{
 </a>
 </div>
 <p class="foot service-about-foot">© Dopamine Store — جميع الحقوق محفوظة</p>
+<div class="bottom-social-row" aria-label="حسابات التواصل">
+<a href="https://t.me/o7ah11" rel="noopener noreferrer" target="_blank" title="Telegram"><img alt="Telegram" loading="lazy" src="https://cdn.simpleicons.org/telegram/229ED9"/></a>
+<a href="https://wa.me/9647717885719" rel="noopener noreferrer" target="_blank" title="WhatsApp"><img alt="WhatsApp" loading="lazy" src="https://cdn.simpleicons.org/whatsapp/25D366"/></a>
+</div>
 </section></div>
 <div hidden="" id="servicePage">
 <section id="dailyOffers" aria-label="عروض Dopamine Store اليومية">
@@ -2872,8 +2921,7 @@ html, body{
 <span>واتساب <small id="waNum"></small></span>
 </a>
 <div class="contact contact-card-info">
-<span class="ci card-ci">💳</span>
-<span><b>معلومات البطاقة</b><small class="master-number">💳 8855481035</small><em>تبليغ حول المبلغ هنا من أجل شحن الرصيد</em></span>
+<span class="ci card-info-icon"><img alt="Mastercard" loading="lazy" src="https://cdn.simpleicons.org/mastercard/17134e" style="width:24px;height:24px"/></span><span><small class="master-number">8855481035</small><em>اسم حامل البطاقة: Ali</em></span>
 </div>
 <a class="contact" href="mailto:ye19cm@gmail.com?subject=%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20-%20Dopamine%20Store">
 <span class="ci em">
@@ -2883,7 +2931,12 @@ html, body{
 </a>
 </div>
 <p class="foot service-about-foot">© Dopamine Store — جميع الحقوق محفوظة</p>
+<div class="bottom-social-row" aria-label="حسابات التواصل">
+<a href="https://t.me/o7ah11" rel="noopener noreferrer" target="_blank" title="Telegram"><img alt="Telegram" loading="lazy" src="https://cdn.simpleicons.org/telegram/229ED9"/></a>
+<a href="https://wa.me/9647717885719" rel="noopener noreferrer" target="_blank" title="WhatsApp"><img alt="WhatsApp" loading="lazy" src="https://cdn.simpleicons.org/whatsapp/25D366"/></a>
+</div>
 </section>
+
 </div>
 </div>
 <section class="shell trial" hidden="" id="trial">
