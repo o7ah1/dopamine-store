@@ -1320,71 +1320,121 @@ body{
 .tp-err{min-height:20px;margin:0 0 4px;color:var(--danger);font-size:13.5px}
 .ord .r b.pos{color:#16A34A}
 .ord .r b.neg{color:var(--danger)}
+
+/* ===== Landing redesign matching supplied reference ===== */
+.site-nav{position:sticky;top:0;z-index:100;background:rgba(248,249,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid #eeeef8}
+.site-nav-in{max-width:1180px;margin:auto;padding:16px 22px;display:flex;align-items:center;gap:26px;direction:rtl}
+.site-brand{margin-inline-start:auto;display:flex;align-items:center;gap:9px;text-decoration:none;color:#17104e;font-weight:800;font-size:23px;white-space:nowrap}
+.brand-bolt{width:36px;height:36px;border-radius:12px;background:#ffcc27;color:#fff;display:grid;place-items:center;font-size:27px;box-shadow:0 8px 18px rgba(255,204,39,.28)}
+.site-links{display:flex;gap:27px;align-items:center;font-weight:600;color:#30206e;font-size:14px}
+.site-links a{text-decoration:none;color:inherit}
+.site-actions{display:flex;gap:8px;align-items:center;margin-inline-end:auto}
+.icon-action,.about-action,.wa-mini{border:1px solid #eeeef7;background:#fff;border-radius:14px;padding:9px 14px;font:inherit;color:#24155f;text-decoration:none;cursor:pointer;font-weight:700}
+.about-action{background:#4a22c9;color:#fff;border-color:#4a22c9}.wa-mini{background:#25b866;color:#fff;border-color:#25b866}
+.landing-hero{max-width:1180px;margin:10px auto 24px;border-radius:28px;min-height:420px;padding:38px 48px;display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:center;background:linear-gradient(125deg,#24106d,#3214a0 55%,#23106a);color:#fff;overflow:hidden;position:relative;box-shadow:0 20px 55px rgba(49,24,145,.2)}
+.landing-hero:after{content:"";position:absolute;inset:auto -10% -50% 35%;height:70%;background:radial-gradient(circle,rgba(117,58,255,.5),transparent 65%);pointer-events:none}
+.hero-copy{position:relative;z-index:2;text-align:right}.hero-copy .hero-pill,.support-card .hero-pill,.coming-head .hero-pill{display:inline-flex;background:#ffd32f;color:#2b176f;padding:9px 18px;border-radius:999px;font-weight:800;font-size:14px}
+.hero-copy h1{font-size:42px;margin:18px 0 8px;font-weight:800;line-height:1.15}.hero-copy h1 span{color:#ffd12e}.hero-copy p{font-size:18px;line-height:1.9;max-width:610px;margin:0 0 22px;color:#f3efff}
+.hero-features{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.hero-features div{text-align:center}.hero-features b{width:54px;height:54px;margin:auto auto 8px;border-radius:50%;background:#5121c2;display:grid;place-items:center;font-size:24px}.hero-features strong{font-size:14px;line-height:1.5;display:block}
+.hero-art{position:relative;height:340px;display:grid;place-items:center;z-index:2}.phone{width:150px;height:270px;border-radius:34px;background:linear-gradient(145deg,#5224e0,#281078);border:7px solid #6f44ed;box-shadow:0 24px 50px rgba(0,0,0,.35),inset 0 0 25px rgba(255,255,255,.08);transform:rotate(-5deg);position:relative;display:grid;place-items:center}.phone:before{content:"";position:absolute;inset:18px;border-radius:24px;background:linear-gradient(160deg,#6c39e9,#291173)}.phone-notch{position:absolute;top:9px;width:55px;height:9px;background:#1e0d58;border-radius:0 0 9px 9px;z-index:2}.phone-bolt{z-index:3;font-size:88px;color:#fff;text-shadow:0 0 22px #fff;transform:skew(-8deg)}.orbit{position:absolute;border:2px solid rgba(185,147,255,.55);border-radius:50%;width:300px;height:300px}.o2{width:360px;height:220px;transform:rotate(-25deg);border-color:rgba(255,208,52,.35)}.social{position:absolute;width:58px;height:58px;border-radius:17px;display:grid;place-items:center;font-size:29px;font-weight:900;box-shadow:0 10px 25px rgba(0,0,0,.25);border:3px solid rgba(255,255,255,.12)}.s-tiktok{left:8%;top:19%;background:#111}.s-inst{right:10%;top:18%;background:#e1306c}.s-youtube{left:12%;bottom:23%;background:#f33}.s-telegram{right:13%;bottom:28%;background:#269bd4}.s-snap{left:3%;bottom:6%;background:#ffdc2f;color:#111}.s-x{right:8%;bottom:6%;background:#080808}.crown{position:absolute;top:2%;left:44%;color:#ffd43c;font-size:52px;transform:rotate(12deg)}
+.contact-grid{max-width:1180px;margin:0 auto 28px;display:grid;grid-template-columns:1fr 1fr;gap:24px}.support-card{background:linear-gradient(135deg,#3820c5,#2a18a7);border-radius:28px;color:#fff;padding:34px 38px;min-height:335px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;position:relative}.support-card:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(126,91,255,.22);left:-90px;bottom:-100px}.support-card h2{font-size:34px;margin:20px 0 12px}.support-card p{font-size:17px;line-height:2;max-width:560px}.support-sign{margin-top:18px;color:#ffd32f;font-size:23px;font-weight:800}.contact-stack{display:grid;gap:16px}.contact-card{display:grid;grid-template-columns:64px 1fr 20px;align-items:center;gap:16px;border-radius:24px;padding:22px;background:#fff;border:1px solid #e6e5f2;text-decoration:none;color:#18134e;box-shadow:0 12px 35px rgba(35,20,120,.08)}.contact-card.wa-card{background:linear-gradient(110deg,#eafff4,#f2fff9);border-color:#b9efd2}.contact-icon{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-size:29px;color:#fff;background:#5526df}.wa-card .contact-icon{background:#16c866}.contact-card b{display:block;font-size:19px}.contact-card small{display:block;font-size:16px;margin-top:2px;direction:ltr;text-align:right}.contact-card em{display:block;font-size:12px;color:#6c6b83;font-style:normal;margin-top:3px}.contact-card i{font-style:normal;font-size:34px;color:#34207c}
+.coming{max-width:1180px;margin:0 auto 26px;background:#f5f3ff;border:1px solid #ece8fb;border-radius:28px;padding:26px 28px 28px}.coming-head{text-align:center}.coming-head .hero-pill{background:#5120cf;color:#fff}.coming-head h2{font-size:34px;color:#241268;margin:8px 0 4px}.coming-head p{margin:0 0 20px;color:#5d5b76}.payment-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.pay-card{background:#fff;border:1px solid #e8e6f2;border-radius:18px;padding:20px 10px;text-align:center;box-shadow:0 7px 20px rgba(38,24,120,.05)}.pay-card b{display:block;color:#16104b;margin-top:9px}.pay-card small{display:block;color:#6e6b86;margin-top:2px}.pay-logo{width:58px;height:58px;margin:auto;border-radius:16px;display:grid;place-items:center;font-size:30px;font-weight:900}.google{color:#2e6fe8;background:#eef4ff}.asia{color:#ed243b;background:#fff1f3}.apple{color:#111;background:#f0f0f0}.steam{color:#143e91;background:#eef2ff}.card{color:#5b2be0;background:#f0eaff}.pay-card.soon{background:#eee8ff;border-color:#d9caff}.feature-strip{max-width:1180px;margin:0 auto 26px;background:linear-gradient(120deg,#4723ce,#4a20d3);border-radius:24px;padding:22px 28px;color:#fff;display:grid;grid-template-columns:repeat(4,1fr)}.feature-strip div{text-align:center;padding:8px 20px;border-inline-start:1px solid rgba(255,255,255,.18)}.feature-strip div:first-child{border-inline-start:0}.feature-strip b{display:grid;place-items:center;width:46px;height:46px;margin:0 auto 7px;border-radius:50%;background:#5d31e0;color:#ffd83b;font-size:22px}.feature-strip strong,.feature-strip small{display:block}.feature-strip small{opacity:.85;margin-top:3px}.landing-footer{max-width:1180px;margin:0 auto;padding:22px 0 30px;display:flex;justify-content:space-between;align-items:center;color:#4e4674}.footer-social{display:flex;gap:8px}.footer-social span{width:34px;height:34px;background:#fff;border:1px solid #e8e6f3;border-radius:10px;display:grid;place-items:center;color:#27166e}.footer-brand{text-align:center;color:#2b1975}.footer-brand b{font-size:18px}.footer-brand b span{display:inline-grid;place-items:center;background:#ffce2f;color:#fff;width:32px;height:32px;border-radius:50%}.footer-brand small{display:block}.service-topbar{max-width:1100px;margin:0 auto 18px;padding:20px 10px 0}.service-topbar h1{margin:10px 0 0;color:#25116f}.service-topbar p{margin:0;color:#6a6880}.back-home{border:0;background:#4c23ce;color:#fff;border-radius:14px;padding:10px 18px;font:inherit;font-weight:700;cursor:pointer}
+#servicePage{padding-bottom:40px}#servicePage .about{display:none}#servicePage .foot{display:none}
+@media(max-width:900px){.site-nav-in{flex-wrap:wrap}.site-links{order:3;width:100%;justify-content:center;gap:16px;overflow:auto}.site-actions{margin-inline-end:0}.landing-hero{margin:8px 12px 20px;padding:30px 22px;grid-template-columns:1fr;min-height:auto}.hero-art{order:-1;height:270px}.hero-copy h1{font-size:34px}.hero-features{grid-template-columns:repeat(2,1fr)}.contact-grid,.coming,.feature-strip,.landing-footer{margin-left:12px;margin-right:12px}.contact-grid{grid-template-columns:1fr}.payment-grid{grid-template-columns:repeat(2,1fr)}.payment-grid .pay-card:last-child{grid-column:1/-1}.feature-strip{grid-template-columns:repeat(2,1fr)}.feature-strip div{border:0}.landing-footer{flex-direction:column;gap:16px;text-align:center}.hero-art{transform:scale(.9)}}
+@media(max-width:560px){.site-brand{font-size:19px}.site-actions .icon-action{display:none}.site-links{font-size:12px}.landing-hero{border-radius:22px}.hero-features{gap:10px}.hero-copy p{font-size:15px}.support-card{padding:28px 22px}.support-card h2{font-size:28px}.contact-card{grid-template-columns:52px 1fr 15px;padding:16px}.contact-icon{width:52px;height:52px}.coming{padding:20px 14px}.coming-head h2{font-size:27px}.payment-grid{gap:9px}.pay-card{padding:15px 5px}.feature-strip{padding:14px}.feature-strip div{padding:8px 4px}.service-topbar{padding-inline:14px}}
+
 </style>
 </head>
 
 <body>
 
-<header class="nav">
-  <div class="nav-in">
-    <a class="brand" href="#top" style="text-decoration:none;color:inherit">
-      <span class="mark">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 1.5l2.6 7.4 7.4 2.6-7.4 2.6L12 21.5l-2.6-7.4L2 11.5l7.4-2.6z"/>
-        </svg>
-      </span>
-      Dopamine<small>Store</small>
+<header class="site-nav" id="siteNav">
+  <div class="site-nav-in">
+    <a class="site-brand" href="#home" id="homeLink" aria-label="Dopamine Store">
+      <span class="brand-bolt">ϟ</span><span>Dopamine Store</span>
     </a>
-
-    <nav class="links" aria-label="التنقل">
-      <a href="#order">المتجر</a>
-      <a href="#trial">🎁 تجريبي</a>
-      <a href="#features">المميزات</a>
-      <a href="#faq">الأسئلة الشائعة</a>
-      <a href="#about">من نحن</a>
+    <nav class="site-links" aria-label="التنقل">
+      <a href="#home">الرئيسية</a>
+      <a href="#services" id="servicesLink">الخدمات</a>
+      <a href="#featuresLanding">المميزات</a>
+      <a href="#faqLanding">الأسئلة الشائعة</a>
+      <a href="#aboutLanding">من نحن</a>
     </nav>
-
-    <div class="nav-actions">
-      <button class="btn sm ghost wbtn" id="walletBtn" type="button" aria-label="طلب رصيد" title="طلب شحن رصيد" hidden>💰 <span id="walletBal">0</span></button>
-      <button class="btn sm ghost" id="ordersBtn" type="button" aria-label="طلباتي" hidden>📦 طلباتي</button>
-      <button class="btn sm ghost bell" id="bellBtn" type="button" aria-label="التبليغات" hidden>🔔<span class="bell-badge" id="bellBadge" hidden>0</span></button>
-      <button class="btn sm ghost" id="acctBtn" type="button">👤 دخول</button>
-      <a class="btn sm wa" data-wa href="#" target="_blank" rel="noopener">💬 تواصل معنا</a>
+    <div class="site-actions">
+      <button class="icon-action" type="button" aria-label="البحث">⌕</button>
+      <button class="about-action" type="button" id="acctLanding">👤 من نحن</button>
+      <a class="wa-mini" data-wa href="#" target="_blank" rel="noopener">تواصل</a>
     </div>
   </div>
 </header>
 
-<section class="hero" id="top">
-  <div class="hero-in">
-    <span class="tag">🚀 خدمات السوشيال ميديا</span>
-
-    <h1>زيّد <em>حضورك الرقمي</em> بضغطة زر</h1>
-
-    <p class="lead">متابعين، لايكات، مشاهدات وتعليقات لكل منصاتك، بأسعار مناسبة وتنفيذ سريع ودعم على مدار الساعة.</p>
-
-    <div class="hero-cta">
-      <a class="btn primary" href="#order">ابدأ طلبك الآن ←</a>
-      <a class="btn ghost" data-wa href="#" target="_blank" rel="noopener">راسلنا على واتساب</a>
+<main id="landingPage">
+  <section class="landing-hero" id="home">
+    <div class="hero-copy">
+      <span class="hero-pill">♙ من نحن</span>
+      <h1>إحنا <span>Dopamine Store</span></h1>
+      <p>منصة موثوقة تقدم لك خدمات رقمية مميزة، تساعدك على تعزيز حضورك الرقمي وتنشيط حساباتك بأعلى جودة وأسعار منافسة.</p>
+      <div class="hero-features">
+        <div><b>♢</b><strong>أسعار تنافسية<br>ومناسبة</strong></div>
+        <div><b>ϟ</b><strong>تفعيل فوري<br>بعد الدفع</strong></div>
+        <div><b>♢</b><strong>خدمات آمنة<br>ومضمونة</strong></div>
+        <div><b>♧</b><strong>دعم فني سريع<br>ومستمر</strong></div>
+      </div>
     </div>
-
-    <ul class="trust">
-      <li>⚡ تنفيذ سريع</li>
-      <li>🔒 آمن تماماً</li>
-      <li>💬 دعم مستمر</li>
-    </ul>
-
-    <div class="logos" aria-hidden="true">
-      <span><img src="https://cdn.simpleicons.org/instagram/E1306C" alt="" onerror="this.parentNode.style.display='none'"></span>
-      <span><img src="https://cdn.simpleicons.org/tiktok/000000" alt="" onerror="this.parentNode.style.display='none'"></span>
-      <span><img src="https://cdn.simpleicons.org/youtube/FF0000" alt="" onerror="this.parentNode.style.display='none'"></span>
-      <span><img src="https://cdn.simpleicons.org/facebook/1877F2" alt="" onerror="this.parentNode.style.display='none'"></span>
-      <span><img src="https://cdn.simpleicons.org/x/000000" alt="" onerror="this.parentNode.style.display='none'"></span>
-      <span><img src="https://cdn.simpleicons.org/telegram/26A5E4" alt="" onerror="this.parentNode.style.display='none'"></span>
-      <span style="background:#FFFC00"><img src="https://cdn.simpleicons.org/snapchat/000000" alt="" onerror="this.parentNode.style.display='none'"></span>
+    <div class="hero-art" aria-hidden="true">
+      <div class="orbit o1"></div><div class="orbit o2"></div>
+      <div class="phone"><div class="phone-notch"></div><div class="phone-bolt">ϟ</div></div>
+      <span class="social s-tiktok">♪</span><span class="social s-inst">◎</span>
+      <span class="social s-youtube">▶</span><span class="social s-telegram">➤</span>
+      <span class="social s-snap">●</span><span class="social s-x">𝕏</span>
+      <span class="crown">♛</span>
     </div>
-  </div>
-</section>
+  </section>
 
+  <section class="contact-grid" id="aboutLanding">
+    <article class="support-card">
+      <span class="hero-pill">▣ تواصل معنا</span>
+      <h2>نحن دائماً في خدمتك</h2>
+      <p>إذا كان لديك أي استفسار أو ملاحظة، لا تتردد في التواصل معنا عبر أي من الوسائل التالية، وسنقوم بالرد عليك في أسرع وقت ممكن.</p>
+      <div class="support-sign">♡ متواجدين دائماً</div>
+    </article>
+    <div class="contact-stack">
+      <a class="contact-card email-card" href="mailto:ye19cm@gmail.com">
+        <span class="contact-icon">✉</span><span><b>البريد الإلكتروني</b><small>ye19cm@gmail.com</small><em>تواصل معنا عبر البريد الإلكتروني</em></span><i>‹</i>
+      </a>
+      <a class="contact-card wa-card" data-wa href="#" target="_blank" rel="noopener">
+        <span class="contact-icon">◉</span><span><b>واتساب : راسلنا</b><small id="waLandingNum">+9647717885719</small><em>تواصل مباشر وسريع</em></span><i>‹</i>
+      </a>
+    </div>
+  </section>
+
+  <section class="coming" id="paymentLanding">
+    <div class="coming-head"><span class="hero-pill">✦ قريباً</span><h2>بطائق ستتوفر قريباً</h2><p>نوفر لك عدة طرق دفع آمنة وسهلة تناسب جميع العملاء.</p></div>
+    <div class="payment-grid">
+      <div class="pay-card"><span class="pay-logo google">▶</span><b>Google Play</b><small>بطاقات جوجل بلاي</small></div>
+      <div class="pay-card"><span class="pay-logo asia">A</span><b>Asiacell</b><small>بطاقات آسياسيل</small></div>
+      <div class="pay-card"><span class="pay-logo apple">●</span><b>iTunes</b><small>بطاقات آيتونز</small></div>
+      <div class="pay-card"><span class="pay-logo steam">◉</span><b>Steam</b><small>بطاقات ستيم</small></div>
+      <div class="pay-card soon"><span class="pay-logo card">▣</span><b>ستتوفر قريباً</b><small>بطاقات أخرى</small></div>
+    </div>
+  </section>
+
+  <section class="feature-strip" id="featuresLanding">
+    <div><b>★</b><strong>ثقة العملاء</strong><small>لأنك العملاء سعداء</small></div>
+    <div><b>ϟ</b><strong>تفعيل فوري</strong><small>بعد إتمام الدفع</small></div>
+    <div><b>♢</b><strong>أمان وخصوصية</strong><small>بياناتك في أمان تام</small></div>
+    <div><b>♧</b><strong>دعم فني سريع</strong><small>نحن هنا لمساعدتك</small></div>
+  </section>
+
+  <section class="landing-footer" id="faqLanding">
+    <div class="footer-social"><span>♪</span><span>▶</span><span>◎</span><span>➤</span><span>𝕏</span></div>
+    <div class="footer-brand"><b><span>ϟ</span> Dopamine Store</b><small>متجرك الرقمي الموثوق</small></div>
+    <small>© 2025 Dopamine Store . جميع الحقوق محفوظة.</small>
+  </section>
+</main>
+
+<div id="servicePage" hidden>
+  <div class="service-topbar"><button class="back-home" id="backHome" type="button">← الرئيسية</button><h1>خدمات Dopamine Store</h1><p>اختر المنصة ثم الخدمة لبدء طلبك.</p></div>
 <div class="shell">
 
   <div class="sec-head reveal" id="order">
@@ -1713,6 +1763,8 @@ body{
 
 </div>
 
+
+</div>
 <div class="modal" id="payModal" hidden role="dialog" aria-modal="true" aria-live="polite">
   <div class="modal-card" id="payBody"></div>
 </div>
@@ -4472,6 +4524,23 @@ renderTabs();
 renderChips();
 
 loadServices();
+
+
+/* Landing / services page switch */
+(function(){
+  const landing=document.getElementById('landingPage');
+  const service=document.getElementById('servicePage');
+  const navServices=document.getElementById('servicesLink');
+  const back=document.getElementById('backHome');
+  const home=document.getElementById('homeLink');
+  const nav=document.getElementById('siteNav');
+  function showServices(e){ if(e)e.preventDefault(); landing.hidden=true; service.hidden=false; window.scrollTo({top:0,behavior:'smooth'}); }
+  function showHome(e){ if(e)e.preventDefault(); service.hidden=true; landing.hidden=false; window.location.hash='home'; window.scrollTo({top:0,behavior:'smooth'}); }
+  navServices?.addEventListener('click',showServices);
+  back?.addEventListener('click',showHome);
+  home?.addEventListener('click',showHome);
+  document.querySelectorAll('.site-links a:not(#servicesLink)').forEach(a=>a.addEventListener('click',()=>{ if(!landing.hidden){ setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),0); }}));
+})();
 
 </script>
 
