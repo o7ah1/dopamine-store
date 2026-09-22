@@ -2209,6 +2209,151 @@ body{
 }
 </style>
 
+
+<style id="mobile-layout-final-fix">
+/* إصلاح نهائي للموبايل: منع أي عنصر من توسيع الصفحة أفقياً */
+html,body{width:100%;max-width:100%;overflow-x:hidden!important}
+
+@media(max-width:700px){
+  #servicePage,
+  #servicePage .shell,
+  #servicePage .layout,
+  #servicePage .steps,
+  #servicePage .summary,
+  #servicePage .ticket-section,
+  #servicePage .service-faq{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+
+  #servicePage{overflow-x:hidden!important}
+  #servicePage .shell{margin-left:0!important;margin-right:0!important;padding-left:12px!important;padding-right:12px!important}
+  #servicePage .layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:14px!important}
+  #servicePage .steps{order:2!important;padding:6px 12px!important;overflow:hidden!important}
+  #servicePage .summary{order:1!important;position:static!important;overflow:hidden!important;padding:22px 18px!important}
+  #servicePage .step{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+
+  #servicePage .service-hero{width:calc(100% - 24px)!important;max-width:calc(100% - 24px)!important;min-width:0!important;margin-left:12px!important;margin-right:12px!important;box-sizing:border-box!important}
+  #servicePage .service-topbar{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;padding-left:12px!important;padding-right:12px!important}
+
+  #servicePage .platforms{width:100%!important;max-width:100%!important;min-width:0!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+  #servicePage .plat{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;overflow:hidden!important}
+  #servicePage .plat>span:last-child{max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+
+  #servicePage .types{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:auto!important;overflow-y:hidden!important;box-sizing:border-box!important}
+  #servicePage .types .chip{flex:0 0 auto!important;max-width:100%!important}
+  #servicePage .field,
+  #servicePage .combo,
+  #servicePage .combo-btn,
+  #servicePage input,
+  #servicePage select,
+  #servicePage textarea{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+  #servicePage .combo-panel{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow-x:hidden!important}
+  #servicePage .opt{min-width:0!important;max-width:100%!important;overflow:hidden!important}
+  #servicePage .opt .n{min-width:0!important;overflow-wrap:anywhere!important}
+  #servicePage .opt .p{flex-shrink:0!important;max-width:40%!important}
+
+  #servicePage .chips{width:100%!important;max-width:100%!important;min-width:0!important;display:flex!important;flex-wrap:wrap!important;overflow:hidden!important}
+  #servicePage .chips>*{max-width:100%!important;min-width:0!important}
+
+  #servicePage .ticket-section{margin-left:0!important;margin-right:0!important;padding:14px!important;grid-template-columns:minmax(0,1fr)!important;overflow:hidden!important}
+  #servicePage .ticket-intro,#servicePage .ticket-panel{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+  #servicePage .service-faq{margin-left:0!important;margin-right:0!important;padding:16px!important;overflow:hidden!important}
+  #servicePage .service-faq .landing-faq-grid{grid-template-columns:minmax(0,1fr)!important}
+  #servicePage #faqServices .about-service-final{width:100%!important;min-width:0!important;max-width:100%!important}
+
+  #servicePage .service-about-card{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important}
+  #servicePage .service-about-card p{overflow-wrap:anywhere!important}
+}
+
+@media(max-width:430px){
+  #servicePage .platforms{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #servicePage .plat .ico{width:48px!important;height:48px!important}
+}
+</style>
+
+
+<style id="mobile-service-animation-fix">
+/* إصلاح نهائي للموبايل: إيقاف الحركة التي تسبب تداخل البطاقات والقوائم */
+#servicePage .plat,
+#servicePage .plat[aria-pressed="true"],
+#servicePage .step,
+#servicePage .chip,
+#servicePage .service-card,
+#servicePage .service-item,
+#servicePage .service-socials a {
+  animation: none !important;
+}
+
+/* لا تسمح للحركة أو التحويلات بإخراج العناصر من مكانها */
+#servicePage .plat:hover,
+#servicePage .plat:active,
+#servicePage .plat[aria-pressed="true"],
+#servicePage .plat:hover .ico,
+#servicePage .service-socials a:hover {
+  transform: none !important;
+}
+
+@media (max-width: 700px) {
+  /* قائمة اختيار الخدمة تصبح داخل الصفحة بدل أن تغطي الحقول التي تحتها */
+  #servicePage .combo-panel {
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    max-height: 52vh !important;
+    min-height: 0 !important;
+    margin-top: 8px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  #servicePage .combo {
+    position: relative !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #servicePage .combo-panel .opt {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #servicePage .combo-panel .opt .n {
+    min-width: 0 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  /* منع أي عنصر من صناعة عرض أكبر من شاشة الهاتف */
+  #servicePage,
+  #servicePage .shell,
+  #servicePage .layout,
+  #servicePage .steps,
+  #servicePage .step,
+  #servicePage .field,
+  #servicePage .summary,
+  #servicePage .ticket-section,
+  #servicePage .service-faq {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #servicePage .plat {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+</style>
+
 </head>
 
 <body>
