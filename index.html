@@ -1605,6 +1605,140 @@ body{
   footer{padding:24px 14px!important}
 }
 
+
+/* وضع الهاتف المطابق لهيكل الكمبيوتر بدون تداخل */
+@media (max-width:700px){
+  html,body{overflow-x:hidden}
+  body{min-width:0}
+
+  /* الهيدر: نفس ترتيب الكمبيوتر لكن بعرض الهاتف */
+  header,.header,.topbar,.navbar{
+    width:100%!important;
+  }
+  .navbar,.nav,.topbar{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex-wrap:wrap!important;
+    gap:10px!important;
+    padding:10px 12px!important;
+  }
+
+  /* الأقسام الرئيسية */
+  main,section,.container,.wrap,.page{
+    max-width:100%!important;
+  }
+  section{
+    margin-top:18px!important;
+    margin-bottom:18px!important;
+  }
+
+  /* الهيرو يبقى بنفس فكرة سطح المكتب */
+  .hero,.hero-card,.hero-inner{
+    width:calc(100% - 24px)!important;
+    margin:14px 12px!important;
+    padding:24px 18px!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  .hero h1{font-size:26px!important;line-height:1.3!important}
+  .hero h2{font-size:21px!important}
+  .hero p{line-height:1.75!important}
+
+  /* كل الشبكات تتحول إلى عمود مرتب، وليس عناصر متداخلة */
+  .contact-grid,.features-grid,.cards-grid,.payment-grid,
+  .social-grid,.faq-grid,.about-grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:16px!important;
+    width:calc(100% - 24px)!important;
+    margin-left:12px!important;
+    margin-right:12px!important;
+  }
+
+  /* الخدمات: كل عنصر مستقل */
+  .services-showcase{
+    width:calc(100% - 24px)!important;
+    margin:18px 12px!important;
+    padding:0!important;
+  }
+  .services-showcase-card{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    width:100%!important;
+    padding:22px 18px!important;
+    gap:18px!important;
+  }
+  .services-showcase-copy{
+    display:flex!important;
+    width:100%!important;
+    align-items:center!important;
+  }
+  .services-showcase-action{
+    display:flex!important;
+    width:100%!important;
+    align-items:center!important;
+  }
+  .services-showcase-btn{
+    width:100%!important;
+  }
+
+  /* صفحة الخدمات */
+  .services-page,.service-page{
+    width:100%!important;
+    max-width:100%!important;
+    padding:12px!important;
+    overflow:hidden!important;
+  }
+  .platform-tabs,.services-page .tabs,.service-page .tabs{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:9px!important;
+    width:100%!important;
+  }
+  .platform-tabs>*,
+  .services-page .tabs>*,
+  .service-page .tabs>*{
+    min-width:0!important;
+    width:100%!important;
+  }
+  .service-card,.service-item{
+    display:block!important;
+    width:100%!important;
+    margin:0 0 14px!important;
+    padding:17px!important;
+    min-width:0!important;
+  }
+
+  /* البطاقات والنصوص */
+  .card,.contact-card,.feature-card,.payment-card,.faq-card,.about-card{
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:18px!important;
+  }
+  h1,h2,h3,h4,p,span{max-width:100%}
+  img,svg{max-width:100%;height:auto}
+  button{max-width:100%}
+
+  /* الحقول والنوافذ */
+  input,select,textarea{
+    width:100%!important;
+    max-width:100%!important;
+  }
+  .modal,.dialog,.popup{
+    width:calc(100% - 24px)!important;
+    max-width:calc(100% - 24px)!important;
+    margin:12px!important;
+  }
+
+  footer{
+    width:100%!important;
+    padding:24px 14px!important;
+  }
+}
+
 </style>
 </head>
 
