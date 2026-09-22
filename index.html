@@ -3051,7 +3051,7 @@ const TABS = [
 
 document.documentElement.classList.add("js");
 
-const QUICK = [100,500,1000,5000,10000];
+const QUICK = [10,100,1000,1500,20000];
 
 /* أرقام قسم الإحصائيات: اكتب أرقامك الحقيقية هنا (0 = يختفي الرقم) */
 const STATS_ORDERS = 0;
@@ -3853,29 +3853,24 @@ function applyFilters(){
 
 
 function renderChips(){
-
   const box = $("chips");
-
+  if(!box) return;
+  box.innerHTML = "";
   QUICK.forEach(n=>{
-
     const b = document.createElement("button");
-
     b.type = "button";
     b.className = "chip";
     b.textContent = n.toLocaleString("en-US");
-
     b.onclick = ()=>{
       quantityBox.value = n;
       clearInvalid(quantityBox);
       updatePrice();
     };
-
     box.appendChild(b);
-
   });
-
 }
 
+renderChips();
 
 async function loadServices(){
 
