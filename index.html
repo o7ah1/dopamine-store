@@ -1,39 +1,3 @@
-تمام، فهمتك. عدلتها هسه:
-
-أول ما يفتح الموقع: يدخل مباشرة على الخدمات.
-زر اطلب الآن ما راح يصعد وينزل؛ ينقلك مباشرة لمكان اختيار الخدمة.
-التذاكر صارت بقسم مستقل من زر «التذاكر».
-الأسئلة الشائعة انشالت من الواجهة الرئيسية، وتظهر ضمن قسم التذاكر/الدعم.
-الرئيسية ما راح تعرض التذاكر والأسئلة الشائعة بعد الآن.
-
-تحميل النسخة النهائية
-
-DopamineStore-SERVICES-FIRST-AUTO-SELECT-FINAL.html
-HTML
-نفس الشي كلشي ما اتغير 
-
-إي، وياك حق. النسخة السابقة ما نقلت الأقسام فعليًا، بس أخفتها.
-
-هسه عدلتها من الأساس:
-
-الرئيسية ما بيها التذاكر ولا الأسئلة الشائعة.
-التذاكر صارت صفحة مستقلة من زر التذاكر.
-الأسئلة الشائعة صارت صفحة مستقلة من زر الأسئلة الشائعة.
-الموقع يفتح مباشرة على الخدمات.
-زر اطلب الآن ينزل مباشرة لمكان اختيار الخدمة بدون حركة صعود ثم نزول.
-
-تحميل النسخة المصححة
-
-DopamineStore-SERVICES-FIRST-AUTO-SELECT-FINAL.html
-HTML
-شو الموقع بس صورة بيضة 
-
-إي، المشكلة من النسخة الأخيرة؛ صار خلل بالتحكم بالأقسام وخلا الموقع يطلع أبيض.
-
-صلحتها الآن من نفس الملف، ورجعت الخدمات تظهر مباشرة عند فتح الموقع مع بقاء التذاكر والأسئلة الشائعة بأقسامها.
-
-تحميل النسخة المصححة
-
 <!DOCTYPE html>
 
 <html dir="rtl" lang="ar">
@@ -2309,7 +2273,6 @@ html, body{
 /* الدولار هو العملة الوحيدة الظاهرة للمحفظة والأسعار؛ الخصم يعرض بسعر الخدمة نفسه. */
 .wallet-line{direction:rtl}
 </style>
-
 <style id="daily-offers-section">
 #dailyOffers{
   max-width:1180px;
@@ -2385,7 +2348,32 @@ html, body{
   .daily-offer-btn{height:39px;font-size:11px}
 }
 </style>
-
+<style>.coming{max-width:1180px;margin:-4px auto 26px;background:#f5f3ff;border:1px solid #ece8fb;border-radius:28px;padding:18px 28px 28px}.coming-head{text-align:center}.coming-head .hero-pill{background:#5120cf;color:#fff}.coming-head h2{font-size:34px;color:#241268;margin:3px 0 4px}.payment-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.pay-card{background:#fff;border:1px solid #e8e6f2;border-radius:18px;padding:20px 10px;text-align:center;box-shadow:0 7px 20px rgba(38,24,120,.05)}.pay-card b{display:block;color:#16104b;margin-top:9px}.pay-card small{display:block;color:#6e6b86;margin-top:2px}.pay-logo{width:58px;height:58px;margin:auto;border-radius:16px;display:grid;place-items:center;font-size:30px;font-weight:900}.google{color:#2e6fe8;background:#eef4ff}.apple{color:#111;background:#f0f0f0}.steam{color:#143e91;background:#eef2ff}.card{color:#5b2be0;background:#f0eaff}.pay-card.soon{background:#eee8ff;border-color:#d9caff}.payment-grid .pay-logo img{width:42px;height:42px;object-fit:contain;display:block}.pay-card{position:relative;overflow:hidden}.pay-card.soon:after{content:"سيتوفر قريباً";position:absolute;top:10px;left:10px;background:#5a2bd4;color:#fff;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:800}
+@media(max-width:900px){.coming{margin-left:12px;margin-right:12px}.payment-grid{grid-template-columns:repeat(2,1fr)}.payment-grid .pay-card:last-child{grid-column:1/-1}}
+@media(max-width:560px){.coming{padding:20px 14px}.coming-head h2{font-size:27px}.payment-grid{gap:9px}.pay-card{padding:15px 5px}}
+</style>
+<style id="final-user-ui-fixes">
+/* الهيدر: حسابي أبيض والمحفظة مرتبة بدون خروج الرقم من الحواف */
+.site-actions .about-action{background:#fff!important;color:#24155f!important;border:1px solid #e5e5ee!important;box-shadow:0 4px 12px rgba(40,20,100,.05)!important;}
+.site-actions .wallet-top{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;min-width:74px!important;width:auto!important;max-width:92px!important;padding:0 9px!important;overflow:hidden!important;white-space:nowrap!important;box-sizing:border-box!important;}
+.site-actions .wallet-top span{display:inline-block!important;min-width:0!important;max-width:44px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;direction:ltr!important;}
+/* إزالة العناصر الموجودة فوق المنصة */
+#servicePage .service-topbar,#servicePage .service-tools{display:none!important;}
+#servicePage .shell{margin-top:10px!important;}
+/* ضبط بطاقات الأسئلة على الهاتف حتى لا يخرج المحتوى من الحواف */
+#faqServices .landing-faq-grid{width:100%;box-sizing:border-box;}
+#faqServices details{min-width:0;box-sizing:border-box;overflow:hidden;}
+#faqServices summary{overflow-wrap:anywhere;}
+@media(max-width:560px){
+  .site-actions .wallet-top{min-width:48px!important;width:48px!important;max-width:48px!important;padding:0 4px!important;gap:2px!important;}
+  .site-actions .wallet-top span{max-width:24px!important;font-size:9px!important;}
+  .site-actions .about-action{background:#fff!important;color:#24155f!important;border-color:#e5e5ee!important;}
+  #faqServices{margin-left:8px!important;margin-right:8px!important;padding:18px 12px!important;}
+  #faqServices .landing-faq-grid{grid-template-columns:1fr!important;gap:10px!important;}
+  #faqServices details{padding-inline:14px!important;border-radius:15px!important;}
+  #faqServices summary{padding:15px 2px!important;padding-inline-end:34px!important;}
+}
+</style>
 </head>
 <body>
 <header class="site-nav" id="siteNav">
@@ -2393,7 +2381,7 @@ html, body{
 <a aria-label="Dopamine Store" class="site-brand" href="#home" id="homeLink">
 <span class="brand-bolt">ϟ</span><span>Dopamine Store</span>
 </a>
-<nav aria-label="التنقل" class="site-links"><a href="#home" id="homeNav">الرئيسية</a><a href="#services" id="servicesLink">الخدمات</a><a href="#ticketsLanding" id="ticketsLink">التذاكر</a><a href="#faqServices" id="faqLink">الأسئلة الشائعة</a></nav>
+<nav aria-label="التنقل" class="site-links"><a href="#home" id="homeNav">الرئيسية</a><a href="#services" id="servicesLink">الخدمات</a><a href="#comingSoon" id="comingLink">قريباً</a><a href="#ticketsLanding" id="ticketsLink">التذاكر</a><a href="#faqServices" id="faqLink">الأسئلة الشائعة</a></nav>
 <div class="site-actions">
 <button aria-label="المحفظة" class="icon-action wallet-top" id="walletBtn" title="المحفظة" type="button">💰 <span id="walletBal">0</span></button>
 <button aria-label="التنبيهات" class="icon-action bell-top bell" id="bellBtn" title="التنبيهات" type="button">🔔<span class="bell-badge" hidden="" id="bellBadge">0</span></button>
@@ -2402,7 +2390,22 @@ html, body{
 </div>
 </div>
 </header>
-<main id="landingPage">
+<main id="landingPage"><section aria-label="خدمات Dopamine Store" class="services-showcase">
+<div class="services-showcase-card">
+<span class="services-showcase-mini">⚡ خدمات رقمية جاهزة</span>
+<div class="services-showcase-copy">
+<span class="services-showcase-icon">🛒</span>
+<div>
+<h2>اكتشف خدماتنا</h2>
+<p>كل خدماتك الرقمية بمكان واحد — اختر المنصة، حدد الخدمة، وابدأ طلبك بسهولة.</p>
+</div>
+</div>
+<div class="services-showcase-action">
+<button class="services-showcase-btn" id="heroServicesBtn" type="button">استعرض الخدمات الآن <span>←</span></button>
+<span class="services-showcase-arrow">↙</span>
+</div>
+</div>
+</section>
 <section class="landing-hero" id="home">
 <div class="hero-copy">
 <span class="hero-pill">♙ من نحن</span>
@@ -2424,32 +2427,7 @@ html, body{
 <span class="crown">♛</span>
 </div>
 </section>
-<section aria-label="خدمات Dopamine Store" class="services-showcase">
-<div class="services-showcase-card">
-<span class="services-showcase-mini">⚡ خدمات رقمية جاهزة</span>
-<div class="services-showcase-copy">
-<span class="services-showcase-icon">🛒</span>
-<div>
-<h2>اكتشف خدماتنا</h2>
-<p>كل خدماتك الرقمية بمكان واحد — اختر المنصة، حدد الخدمة، وابدأ طلبك بسهولة.</p>
-</div>
-</div>
-<div class="services-showcase-action">
-<button class="services-showcase-btn" id="heroServicesBtn" type="button">استعرض الخدمات الآن <span>←</span></button>
-<span class="services-showcase-arrow">↙</span>
-</div>
-</div>
-</section>
-
-
-
 <section class="contact-grid" id="aboutLanding" style="scroll-margin-top:90px">
-<article class="support-card">
-<span class="hero-pill">▣ تواصل معنا</span>
-<h2>نحن دائماً في خدمتك</h2>
-<p>إذا كان لديك أي استفسار أو ملاحظة، لا تتردد في التواصل معنا عبر أي من الوسائل التالية، وسنقوم بالرد عليك في أسرع وقت ممكن.</p>
-<div class="support-sign">♡ متواجدين دائماً</div>
-</article>
 <div class="contact-stack">
 <a class="contact-card email-card" href="mailto:ye19cm@gmail.com">
 <span class="contact-icon">✉</span><span><b>البريد الإلكتروني</b><small>ye19cm@gmail.com</small><em>تواصل معنا عبر البريد الإلكتروني</em></span><i>‹</i>
@@ -2463,21 +2441,6 @@ html, body{
 </div>
 </div>
 </section>
-<section class="coming" id="paymentLanding">
-<div class="coming-head"><span class="hero-pill">✦ قريباً</span><h2>بطائق ستتوفر قريباً</h2></div>
-<div class="payment-grid">
-<div class="pay-card"><span class="pay-logo google"><img alt="Google Play" loading="lazy" src="https://cdn.simpleicons.org/googleplay/414141"/></span><b>Google Play</b><small>بطاقات جوجل بلاي</small></div>
-<div class="pay-card"><span class="pay-logo apple"><img alt="iTunes" loading="lazy" src="https://cdn.simpleicons.org/apple/111111"/></span><b>iTunes</b><small>بطاقات آيتونز</small></div>
-<div class="pay-card"><span class="pay-logo steam"><img alt="Steam" loading="lazy" src="https://cdn.simpleicons.org/steam/143e91"/></span><b>Steam</b><small>بطاقات ستيم</small></div>
-<div class="pay-card soon"><span class="pay-logo card"><img alt="بطاقات أخرى" loading="lazy" src="https://cdn.simpleicons.org/visa/5b2be0"/></span><b>ستتوفر قريباً</b><small>بطاقات أخرى</small></div>
-</div>
-</section>
-<section class="feature-strip" id="featuresLanding">
-<div><b>★</b><strong>ثقة العملاء</strong><small>لأنك العملاء سعداء</small></div>
-<div><b>ϟ</b><strong>تفعيل فوري</strong><small>بعد إتمام الدفع</small></div>
-<div><b>♢</b><strong>أمان وخصوصية</strong><small>بياناتك في أمان تام</small></div>
-<div><b>♧</b><strong>دعم فني سريع</strong><small>نحن هنا لمساعدتك</small></div>
-</section>
 <section class="landing-footer" id="faqLanding">
 <div aria-label="حسابات التواصل" class="footer-social">
 <a aria-label="Telegram" href="https://t.me/o7ah11" rel="noopener noreferrer" target="_blank" title="Telegram"><img alt="Telegram" loading="lazy" src="https://cdn.simpleicons.org/telegram/229ED9"/></a>
@@ -2486,7 +2449,63 @@ html, body{
 <div class="footer-brand"><b><span class="footer-logo-mark">D</span> Dopamine Store</b><small>متجرك الرقمي الموثوق</small></div>
 <small>© 2026 Dopamine Store . جميع الحقوق محفوظة.</small>
 </section>
-<div hidden id="supportPage"><section class="ticket-section shell" id="ticketsLanding">
+<section class="about reveal service-about page-about">
+<h2><span>👋</span> من نحن</h2>
+<p class="founder-name">Ali Rida | علي رضا</p>
+<p>أهلاً بك في عالمك الرقمي.<br/>هنا لنُسطّر معاً نجاح حساباتك بخدمات سريعة، آمنة، ومصممة خصيصاً لتلبي احتياجاتك على مدار الساعة.</p>
+<div class="contacts">
+<a class="contact" data-wa="" href="#" rel="noopener" target="_blank">
+<span class="ci wa">
+<svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.06c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.12-.96-.3-1.66-.6-2.92-1.26-4.82-4.2-4.97-4.4-.14-.2-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.26-.29.57-.36.76-.36l.55.01c.17.01.41-.07.64.49.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.2-.14.32-.28.49l-.42.49c-.14.14-.28.29-.12.57.16.29.71 1.17 1.53 1.9 1.05.93 1.93 1.22 2.21 1.36.27.15.43.12.59-.07.16-.2.68-.79.86-1.07.18-.29.36-.24.61-.14.24.1 1.56.73 1.83.87.27.14.45.2.51.31.07.12.07.68-.17 1.35z"></path></svg>
+</span>
+<span>واتساب <small></small></span>
+</a>
+<div class="contact contact-card-info">
+<span class="ci card-ci">💳</span>
+<span><b>معلومات البطاقة</b><small class="master-number">💳 **** **** 1035</small><em>تبليغ حول المبلغ هنا من أجل شحن الرصيد</em></span>
+</div>
+<a class="contact" href="mailto:ye19cm@gmail.com?subject=%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20-%20Dopamine%20Store">
+<span class="ci em">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="15" rx="3" width="19" x="2.5" y="4.5"></rect><path d="M3 7l9 6 9-6"></path></svg>
+</span>
+<span>البريد الإلكتروني <small>ye19cm@gmail.com</small></span>
+</a>
+</div>
+<p class="foot service-about-foot">© Dopamine Store — جميع الحقوق محفوظة</p>
+</section></main>
+<div hidden="True" id="comingPage"><div><section class="coming" id="paymentLanding">
+<div class="coming-head"><span class="hero-pill">✦ قريباً</span><h2>بطائق ستتوفر قريباً</h2></div>
+<div class="payment-grid">
+<div class="pay-card"><span class="pay-logo google"><img alt="Google Play" loading="lazy" src="https://cdn.simpleicons.org/googleplay/414141"/></span><b>Google Play</b><small>بطاقات جوجل بلاي</small></div>
+<div class="pay-card"><span class="pay-logo apple"><img alt="iTunes" loading="lazy" src="https://cdn.simpleicons.org/apple/111111"/></span><b>iTunes</b><small>بطاقات آيتونز</small></div>
+<div class="pay-card"><span class="pay-logo steam"><img alt="Steam" loading="lazy" src="https://cdn.simpleicons.org/steam/143e91"/></span><b>Steam</b><small>بطاقات ستيم</small></div>
+<div class="pay-card soon"><span class="pay-logo card"><img alt="بطاقات أخرى" loading="lazy" src="https://cdn.simpleicons.org/visa/5b2be0"/></span><b>ستتوفر قريباً</b><small>بطاقات أخرى</small></div>
+</div>
+</section></div><section class="about reveal service-about page-about">
+<h2><span>👋</span> من نحن</h2>
+<p class="founder-name">Ali Rida | علي رضا</p>
+<p>أهلاً بك في عالمك الرقمي.<br/>هنا لنُسطّر معاً نجاح حساباتك بخدمات سريعة، آمنة، ومصممة خصيصاً لتلبي احتياجاتك على مدار الساعة.</p>
+<div class="contacts">
+<a class="contact" data-wa="" href="#" rel="noopener" target="_blank">
+<span class="ci wa">
+<svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.06c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.12-.96-.3-1.66-.6-2.92-1.26-4.82-4.2-4.97-4.4-.14-.2-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.26-.29.57-.36.76-.36l.55.01c.17.01.41-.07.64.49.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.2-.14.32-.28.49l-.42.49c-.14.14-.28.29-.12.57.16.29.71 1.17 1.53 1.9 1.05.93 1.93 1.22 2.21 1.36.27.15.43.12.59-.07.16-.2.68-.79.86-1.07.18-.29.36-.24.61-.14.24.1 1.56.73 1.83.87.27.14.45.2.51.31.07.12.07.68-.17 1.35z"></path></svg>
+</span>
+<span>واتساب <small></small></span>
+</a>
+<div class="contact contact-card-info">
+<span class="ci card-ci">💳</span>
+<span><b>معلومات البطاقة</b><small class="master-number">💳 **** **** 1035</small><em>تبليغ حول المبلغ هنا من أجل شحن الرصيد</em></span>
+</div>
+<a class="contact" href="mailto:ye19cm@gmail.com?subject=%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20-%20Dopamine%20Store">
+<span class="ci em">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="15" rx="3" width="19" x="2.5" y="4.5"></rect><path d="M3 7l9 6 9-6"></path></svg>
+</span>
+<span>البريد الإلكتروني <small>ye19cm@gmail.com</small></span>
+</a>
+</div>
+<p class="foot service-about-foot">© Dopamine Store — جميع الحقوق محفوظة</p>
+</section></div><div hidden="" id="supportPage">
+<section class="ticket-section shell" id="ticketsLanding">
 <div class="ticket-intro">
 <span class="hero-pill">🎫 نظام التذاكر</span>
 <h2>تواصل معنا عبر تذكرة</h2>
@@ -2504,7 +2523,8 @@ html, body{
 </form>
 <div class="ticket-list" id="ticketList"></div>
 </div>
-</section><section class="service-faq shell" id="faqServices">
+</section>
+<section class="service-faq shell" id="faqServices">
 <div class="sec-head"><span class="hero-pill">✦ الأسئلة الشائعة</span><h2>الأسئلة الشائعة</h2><p>إجابات سريعة على أكثر الأسئلة التي تهمك قبل الطلب.</p></div>
 <div class="landing-faq-grid">
 <details><summary>كيف أطلب خدمة؟</summary><p>ادخل إلى قسم الخدمات، اختر المنصة والخدمة، ثم ضع الرابط والكمية وشاهد السعر قبل إتمام الطلب.</p></details>
@@ -2512,9 +2532,33 @@ html, body{
 <details><summary>هل يجب أن يكون الحساب عاماً؟</summary><p>نعم، يجب أن يكون الحساب أو المنشور عاماً أثناء تنفيذ الخدمة.</p></details>
 <details><summary>متى يتم تنفيذ الطلب؟</summary><p>تختلف السرعة حسب الخدمة، وستظهر تفاصيل السرعة والضمان ضمن معلومات الخدمة.</p></details>
 <details><summary>هل توجد خدمات بضمان؟</summary><p>نعم، بعض الخدمات تتضمن إعادة تعبئة أو ضماناً حسب تفاصيل الخدمة المختارة.</p></details>
-<details><summary>كيف أتواصل مع الدعم؟</summary><p>يمكنك التواصل معنا عبر نظام التذاكر أو واتساب أو البريد الإلكتروني.</p></details>
+<details><summary>كيف يتم الدفع؟</summary><p>الدفع يتم من رصيد حسابك في المحفظة، ويمكنك شحن الرصيد من وسائل الدفع المتاحة.</p></details>
 </div>
+</section>
+<section class="about reveal service-about page-about">
+<h2><span>👋</span> من نحن</h2>
+<p class="founder-name">Ali Rida | علي رضا</p>
+<p>أهلاً بك في عالمك الرقمي.<br/>هنا لنُسطّر معاً نجاح حساباتك بخدمات سريعة، آمنة، ومصممة خصيصاً لتلبي احتياجاتك على مدار الساعة.</p>
+<div class="contacts">
+<a class="contact" data-wa="" href="#" rel="noopener" target="_blank">
+<span class="ci wa">
+<svg aria-hidden="true" fill="currentColor" viewbox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.06c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.12-.96-.3-1.66-.6-2.92-1.26-4.82-4.2-4.97-4.4-.14-.2-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.26-.29.57-.36.76-.36l.55.01c.17.01.41-.07.64.49.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.2-.14.32-.28.49l-.42.49c-.14.14-.28.29-.12.57.16.29.71 1.17 1.53 1.9 1.05.93 1.93 1.22 2.21 1.36.27.15.43.12.59-.07.16-.2.68-.79.86-1.07.18-.29.36-.24.61-.14.24.1 1.56.73 1.83.87.27.14.45.2.51.31.07.12.07.68-.17 1.35z"></path></svg>
+</span>
+<span>واتساب <small></small></span>
+</a>
+<div class="contact contact-card-info">
+<span class="ci card-ci">💳</span>
+<span><b>معلومات البطاقة</b><small class="master-number">💳 **** **** 1035</small><em>تبليغ حول المبلغ هنا من أجل شحن الرصيد</em></span>
 </div>
+<a class="contact" href="mailto:ye19cm@gmail.com?subject=%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20-%20Dopamine%20Store">
+<span class="ci em">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="15" rx="3" width="19" x="2.5" y="4.5"></rect><path d="M3 7l9 6 9-6"></path></svg>
+</span>
+<span>البريد الإلكتروني <small>ye19cm@gmail.com</small></span>
+</a>
+</div>
+<p class="foot service-about-foot">© Dopamine Store — جميع الحقوق محفوظة</p>
+</section></div>
 <div hidden="" id="servicePage">
 <section id="dailyOffers" aria-label="عروض Dopamine Store اليومية">
   <div class="daily-offers-head">
@@ -2531,20 +2575,6 @@ html, body{
     <div class="daily-offers-empty">جاري تحميل عروض اليوم...</div>
   </div>
 </section>
-
-<div class="service-topbar">
-<div aria-hidden="true" class="service-headline">
-<span class="service-head-icon">ϟ</span>
-<span class="service-head-dots"><i></i><i></i><i></i></span>
-</div>
-<button class="back-home" id="backHome" type="button">← الواجهة الرئيسية</button>
-</div>
-<div class="shell">
-<div aria-hidden="true" class="service-tools">
-<span><b>⚡</b> تنفيذ سريع</span>
-<span><b>🔒</b> آمن</span>
-<span><b>💬</b> دعم مستمر</span>
-</div>
 <main class="layout">
 <section class="steps">
 <div class="step">
@@ -2618,7 +2648,7 @@ html, body{
 </main>
 <section class="about reveal service-about" id="about">
 <h2><span>👋</span> من نحن</h2>
-<p class="founder-name"><b>Ali Muhannad | علي مهند</b></p>
+<p class="founder-name">Ali Rida | علي رضا</p>
 <p>أهلاً بك في عالمك الرقمي.<br/>هنا لنُسطّر معاً نجاح حساباتك بخدمات سريعة، آمنة، ومصممة خصيصاً لتلبي احتياجاتك على مدار الساعة.</p>
 <div class="contacts">
 <a class="contact" data-wa="" href="#" id="waLink" rel="noopener" target="_blank">
@@ -2721,41 +2751,6 @@ html, body{
 </div>
 </div>
 </section>
-<section class="band" id="faq">
-<div class="band-in">
-<div class="sec-head reveal">
-<h2>الأسئلة الشائعة</h2>
-<p>إجابات سريعة لأكثر ما يسأل عنه الزبائن.</p>
-</div>
-<div class="faq reveal">
-<details>
-<summary>كيف أسوي طلب؟</summary>
-<p>اختر المنصة، ثم نوع الخدمة (متابعين، لايكات...)، ثم الخدمة المناسبة. بعدها ألصق رابط الحساب أو المنشور، واكتب الكمية، وتشوف السعر النهائي قبل إتمام الطلب.</p>
-</details>
-<details>
-<summary>هل تحتاجون كلمة مرور حسابي؟</summary>
-<p>أبداً. نحتاج الرابط فقط. لا تشارك كلمة مرورك مع أي شخص أو موقع.</p>
-</details>
-<details>
-<summary>لازم يكون حسابي عام؟</summary>
-<p>نعم، الحساب أو المنشور لازم يكون عاماً (غير خاص) أثناء تنفيذ الطلب، حتى تقدر الخدمة توصله.</p>
-</details>
-<details>
-<summary>كم يستغرق التنفيذ؟</summary>
-<p>يختلف من خدمة لثانية. سرعة كل خدمة مكتوبة باسمها (مثل "فوري" أو عدد الآلاف اليومي)، فاختر اللي يناسب وقتك.</p>
-</details>
-<details>
-<summary>شنو معنى إعادة التعبئة والضمان؟</summary>
-<p>بعض الخدمات تشمل إعادة تعبئة لفترة محددة (مثل 30 يوماً) مكتوبة باسم الخدمة. إذا نقص العدد خلال هذي المدة يتم تعويضه حسب شروط الخدمة.</p>
-</details>
-<details>
-<summary>كيف أدفع وكيف أتواصل معكم؟</summary>
-<p>الدفع يتم من رصيد حسابك (المحفظة). لشحن الرصيد اضغط زر 💰 أعلى الصفحة واختر مبلغ من 10,000 إلى 50,000 د.ع (كل 1 د.ع = 1 نقطة)، وبعد ما تدفع نؤكد طلبك ونضيف الرصيد لمحفظتك. وإذا فشل تنفيذ أي طلب يرجع مبلغه لرصيدك تلقائياً.</p>
-</details>
-</div>
-</div>
-</section>
-
 <div aria-live="polite" aria-modal="true" class="modal" hidden="" id="payModal" role="dialog">
 <div class="modal-card" id="payBody"></div>
 </div>
@@ -5712,33 +5707,110 @@ trialBtn.addEventListener("click",submitTrial);
 $("trialLogin").addEventListener("click",()=>openAuth("login"));
 
 /* نربط تحديث حالة الدخول: كل ما تتغير الجلسة نحدّث القسم */
+/* Landing / services / support pages switch */
 (function(){
-  const base = updateAcctBtn;
-  updateAcctBtn = function(){
-    base();
-    trialSessionChanged();
-  };
+  const landing = document.getElementById('landingPage');
+  const service = document.getElementById('servicePage');
+  const support = document.getElementById('supportPage');
+  const coming = document.getElementById('comingPage');
+  const comingLink = document.getElementById('comingLink');
+  const navServices = document.getElementById('servicesLink');
+  const back = document.getElementById('backHome');
+  const home = document.getElementById('homeLink');
+
+  function hideSupport(){
+    if(support) support.hidden = true;
+    if(coming) coming.hidden = true;
+    const ticket = document.getElementById('ticketsLanding');
+    const faq = document.getElementById('faqServices');
+    if(ticket) ticket.style.display = 'none';
+    if(faq) faq.style.display = 'none';
+  }
+
+  function showHome(e){
+    if(e) e.preventDefault();
+    if(service) service.hidden = true;
+    if(coming) coming.hidden = true;
+    hideSupport();
+    if(landing) landing.hidden = false;
+    window.location.hash = 'home';
+    window.scrollTo({top:0,behavior:'auto'});
+  }
+
+  function showServices(e){
+    if(e) e.preventDefault();
+    hideSupport();
+    if(coming) coming.hidden = true;
+    if(landing) landing.hidden = true;
+    if(service) service.hidden = false;
+    window.location.hash = 'services';
+    window.scrollTo({top:0,behavior:'auto'});
+
+    tab='all';
+    selectedType='all';
+    selectedCat='all';
+    const offerSelected = !!window.__offerServiceId;
+    selectedId = window.__offerServiceId ? String(window.__offerServiceId) : null;
+    window.__offerServiceId = null;
+    renderTabs();
+    loadServices().then(()=>{
+      if(offerSelected){
+        setTimeout(()=>{
+          const target = document.getElementById("serviceBtn") || document.getElementById("combo");
+          target?.scrollIntoView({behavior:"smooth",block:"center"});
+        },80);
+      }
+    });
+  }
+
+  function showComing(e){
+    if(e) e.preventDefault();
+    if(landing) landing.hidden = true;
+    if(service) service.hidden = true;
+    hideSupport();
+    if(coming) coming.hidden = false;
+    window.location.hash = 'comingSoon';
+    window.scrollTo({top:0,behavior:'auto'});
+  }
+
+  function showSupport(targetId){
+    if(service) service.hidden = true;
+    if(landing) landing.hidden = true;
+    if(coming) coming.hidden = true;
+    if(support) support.hidden = false;
+
+    const ticket = document.getElementById('ticketsLanding');
+    const faq = document.getElementById('faqServices');
+    if(ticket) ticket.style.display = targetId==='ticketsLanding' ? '' : 'none';
+    if(faq) faq.style.display = targetId==='faqServices' ? '' : 'none';
+
+    window.location.hash = targetId==='faqServices' ? 'faq' : 'tickets';
+    window.scrollTo({top:0,behavior:'auto'});
+  }
+
+  navServices?.addEventListener('click',showServices);
+  comingLink?.addEventListener('click',showComing);
+  document.getElementById('homeNav')?.addEventListener('click',showHome);
+  document.getElementById('heroServicesBtn')?.addEventListener('click',showServices);
+  back?.addEventListener('click',showHome);
+  home?.addEventListener('click',showHome);
+
+  document.getElementById('ticketsLink')?.addEventListener('click',e=>{
+    e.preventDefault();
+    showSupport('ticketsLanding');
+  });
+
+  document.getElementById('faqLink')?.addEventListener('click',e=>{
+    e.preventDefault();
+    showSupport('faqServices');
+  });
+
+  // الصفحة الافتتاحية: الرئيسية فقط، بدون التذاكر والأسئلة الشائعة.
+  hideSupport();
+  showServices();
 })();
 
-trialSessionChanged();
-
-loadTrial();
-
-
-renderTabs();
-
-renderChips();
-
-/* Page switch: services / home / support */
-(function(){
- const landing=document.getElementById('landingPage'), service=document.getElementById('servicePage'), support=document.getElementById('supportPage');
- const showServices=e=>{if(e)e.preventDefault();landing.hidden=true;support.hidden=true;service.hidden=false;history.replaceState(null,'','#services');window.scrollTo(0,0);tab='all';selectedType='all';selectedCat='all';const offer=!!window.__offerServiceId;selectedId=window.__offerServiceId?String(window.__offerServiceId):null;window.__offerServiceId=null;renderTabs();loadServices().then(()=>{if(offer)requestAnimationFrame(()=>requestAnimationFrame(()=>{(document.getElementById('combo')||document.getElementById('serviceBtn'))?.scrollIntoView({behavior:'auto',block:'center'});}));});};
- const showHome=e=>{if(e)e.preventDefault();service.hidden=true;support.hidden=true;landing.hidden=false;[...landing.children].forEach(x=>x.hidden=false);history.replaceState(null,'','#home');window.scrollTo(0,0);};
- const showSupport=id=>{landing.hidden=true;service.hidden=true;support.hidden=false;document.getElementById('ticketsLanding').hidden=id!=='ticketsLanding';document.getElementById('faqServices').hidden=id!=='faqServices';history.replaceState(null,'',id==='faqServices'?'#faqServices':'#tickets');window.scrollTo(0,0);};
- document.getElementById('servicesLink')?.addEventListener('click',showServices);document.getElementById('homeNav')?.addEventListener('click',showHome);document.getElementById('homeLink')?.addEventListener('click',showHome);document.getElementById('heroServicesBtn')?.addEventListener('click',showServices);document.getElementById('ticketsLink')?.addEventListener('click',e=>{e.preventDefault();showSupport('ticketsLanding')});document.getElementById('faqLink')?.addEventListener('click',e=>{e.preventDefault();showSupport('faqServices')});showServices();
-})();
 </script>
-
 <script id="daily-offers-script">
 (function(){
   const API_URL = "https://kwxqjtnfppffuoohlmpl.supabase.co/functions/v1/admin-worker";
@@ -5870,7 +5942,7 @@ renderChips();
       return `
         <article class="daily-offer-card">
           <span class="daily-offer-badge">-${discount}%</span>
-          <div class="daily-offer-platform">${iconFor(s)}</div>
+    <img class="daily-offer-app-image" src="${slot.platform === "tiktok" ? "https://cdn.simpleicons.org/tiktok" : "https://cdn.simpleicons.org/instagram"}" alt="${slot.platform === "tiktok" ? "TikTok" : "Instagram"}">
           <div class="daily-offer-name">${esc(slot.title)}<br>${esc(s.name)}</div>
           <div class="daily-offer-prices">
             <span class="daily-offer-old">${money(old)}</span>
@@ -5914,63 +5986,6 @@ renderChips();
   }
   tick(); setInterval(tick,1000);
   load();
-})();
-</script>
-
-
-<style id="final-page-fix">
-  #landingPage[hidden], #supportPage[hidden], #servicePage[hidden] { display:none !important; }
-  #servicePage:not([hidden]) { display:block !important; }
-</style>
-<script id="final-page-init">
-(function(){
-  function init(){
-    const landing=document.getElementById('landingPage');
-    const service=document.getElementById('servicePage');
-    const support=document.getElementById('supportPage');
-    if(!landing || !service) return;
-    // البداية دائماً من الخدمات
-    landing.hidden=true;
-    if(support) support.hidden=true;
-    service.hidden=false;
-    service.style.display='block';
-
-    const servicesLink=document.getElementById('servicesLink');
-    const homeNav=document.getElementById('homeNav');
-    const homeLink=document.getElementById('homeLink');
-    const ticketsLink=document.getElementById('ticketsLink');
-    const faqLink=document.getElementById('faqLink');
-
-    function goServices(e){
-      if(e) e.preventDefault();
-      landing.hidden=true; if(support) support.hidden=true; service.hidden=false;
-      service.style.display='block';
-      history.replaceState(null,'','#services');
-      window.scrollTo({top:0,left:0,behavior:'auto'});
-      if(typeof window.loadServices==='function') window.loadServices();
-    }
-    function goHome(e){
-      if(e) e.preventDefault();
-      service.hidden=true; if(support) support.hidden=true; landing.hidden=false;
-      history.replaceState(null,'','#home'); window.scrollTo({top:0,left:0,behavior:'auto'});
-    }
-    function goSupport(which,e){
-      if(e) e.preventDefault();
-      landing.hidden=true; service.hidden=true; if(support) support.hidden=false;
-      const t=document.getElementById('ticketsLanding'), f=document.getElementById('faqServices');
-      if(t) t.hidden=which!=='ticketsLanding';
-      if(f) f.hidden=which!=='faqServices';
-      history.replaceState(null,'',which==='faqServices'?'#faqServices':'#tickets');
-      window.scrollTo({top:0,left:0,behavior:'auto'});
-    }
-    // إزالة أي مستمع قديم لا يمكن إزالته، وإضافة مستمع آمن
-    servicesLink?.addEventListener('click',goServices);
-    homeNav?.addEventListener('click',goHome);
-    homeLink?.addEventListener('click',goHome);
-    ticketsLink?.addEventListener('click',e=>goSupport('ticketsLanding',e));
-    faqLink?.addEventListener('click',e=>goSupport('faqServices',e));
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
 </body>
@@ -6204,6 +6219,22 @@ renderChips();
     max-width:calc(100vw - 16px)!important;
   }
 }
+
+/* Daily offers: full titles + exact platform icons */
+.daily-offer-card{overflow:visible!important}
+.daily-offer-card .daily-offer-name,
+.daily-offer-card .daily-offer-title,
+.daily-offer-card h3{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;word-break:normal!important;line-height:1.5!important}
+.daily-offer-card .daily-offer-platform,
+.daily-offer-card .daily-offer-platform-icon{display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important}
+.daily-offer-card .daily-offer-platform img,
+.daily-offer-card img.platform-icon{width:32px!important;height:32px!important;object-fit:contain!important}
+
+
+.daily-offer-card .daily-offer-app-image{
+  width:58px!important;height:58px!important;
+  object-fit:contain!important;display:block!important;
+  margin:8px auto 6px!important;border-radius:14px!important;
+}
+
 </style>
-DopamineStore-SERVICES-FIRST-AUTO-SELECT-FINAL.html
-HTML
