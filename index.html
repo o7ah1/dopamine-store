@@ -610,7 +610,7 @@ select[aria-invalid="true"]{
   font-size:15px;
 }
 
-.about p{
+.founder-line{margin-top:18px!important;color:#4b20cf;font-size:18px!important}.about p{
   margin:0 0 12px;
   color:var(--muted);
   font-size:15px;
@@ -1325,7 +1325,9 @@ body{
 .site-nav{position:sticky;top:0;z-index:100;background:rgba(248,249,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid #eeeef8}
 .site-nav-in{max-width:1180px;margin:auto;padding:16px 22px;display:flex;align-items:center;gap:26px;direction:rtl}
 .site-brand{margin-inline-start:auto;display:flex;align-items:center;gap:9px;text-decoration:none;color:#17104e;font-weight:800;font-size:23px;white-space:nowrap}
-.brand-bolt{width:36px;height:36px;border-radius:12px;background:#ffcc27;color:#fff;display:grid;place-items:center;font-size:27px;box-shadow:0 8px 18px rgba(255,204,39,.28)}
+.brand-bolt{width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,#5b2be0,#3414a4);color:#ffd83d;display:grid;place-items:center;font-size:25px;font-weight:1000;box-shadow:0 9px 22px rgba(67,33,190,.28);border:2px solid rgba(255,216,61,.35);position:relative;transform:rotate(-2deg)}
+.brand-bolt:before{content:"D";font-size:21px;font-weight:1000;line-height:1;transform:rotate(2deg);font-family:Arial,sans-serif}.brand-bolt:after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:#ffd83d;top:5px;right:5px;box-shadow:0 0 0 3px rgba(255,216,61,.12)}
+.brand-bolt{font-size:0}
 .site-links{display:flex;gap:27px;align-items:center;font-weight:600;color:#30206e;font-size:14px}
 .site-links a{text-decoration:none;color:inherit}
 .site-actions{display:flex;gap:8px;align-items:center;margin-inline-end:auto}
@@ -1337,8 +1339,8 @@ body{
 .hero-copy h1{font-size:42px;margin:18px 0 8px;font-weight:800;line-height:1.15}.hero-copy h1 span{color:#ffd12e}.hero-copy p{font-size:18px;line-height:1.9;max-width:610px;margin:0 0 22px;color:#f3efff}
 .hero-features{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.hero-features div{text-align:center}.hero-features b{width:54px;height:54px;margin:auto auto 8px;border-radius:50%;background:#5121c2;display:grid;place-items:center;font-size:24px}.hero-features strong{font-size:14px;line-height:1.5;display:block}
 .hero-art{position:relative;height:340px;display:grid;place-items:center;z-index:2}.phone{width:150px;height:270px;border-radius:34px;background:linear-gradient(145deg,#5224e0,#281078);border:7px solid #6f44ed;box-shadow:0 24px 50px rgba(0,0,0,.35),inset 0 0 25px rgba(255,255,255,.08);transform:rotate(-5deg);position:relative;display:grid;place-items:center}.phone:before{content:"";position:absolute;inset:18px;border-radius:24px;background:linear-gradient(160deg,#6c39e9,#291173)}.phone-notch{position:absolute;top:9px;width:55px;height:9px;background:#1e0d58;border-radius:0 0 9px 9px;z-index:2}.phone-bolt{z-index:3;font-size:88px;color:#fff;text-shadow:0 0 22px #fff;transform:skew(-8deg)}.orbit{position:absolute;border:2px solid rgba(185,147,255,.55);border-radius:50%;width:300px;height:300px}.o2{width:360px;height:220px;transform:rotate(-25deg);border-color:rgba(255,208,52,.35)}.social img{width:32px;height:32px;object-fit:contain}.social{position:absolute;width:58px;height:58px;border-radius:17px;display:grid;place-items:center;font-size:29px;font-weight:900;box-shadow:0 10px 25px rgba(0,0,0,.25);border:3px solid rgba(255,255,255,.12)}.s-tiktok{left:8%;top:19%;background:#111}.s-inst{right:10%;top:18%;background:#e1306c}.s-youtube{left:12%;bottom:23%;background:#f33}.s-telegram{right:13%;bottom:28%;background:#269bd4}.s-snap{left:3%;bottom:6%;background:#ffdc2f;color:#111}.s-x{right:8%;bottom:6%;background:#080808}.crown{position:absolute;top:2%;left:44%;color:#ffd43c;font-size:52px;transform:rotate(12deg)}
-.contact-grid{max-width:1180px;margin:0 auto 28px;display:grid;grid-template-columns:1fr 1fr;gap:24px}.support-card{background:linear-gradient(135deg,#3820c5,#2a18a7);border-radius:28px;color:#fff;padding:34px 38px;min-height:335px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;position:relative}.support-card:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(126,91,255,.22);left:-90px;bottom:-100px}.support-card h2{font-size:34px;margin:20px 0 12px}.support-card p{font-size:17px;line-height:2;max-width:560px}.support-sign{margin-top:18px;color:#ffd32f;font-size:23px;font-weight:800}.contact-stack{display:grid;gap:16px}.contact-card{display:grid;grid-template-columns:64px 1fr 20px;align-items:center;gap:16px;border-radius:24px;padding:22px;background:#fff;border:1px solid #e6e5f2;text-decoration:none;color:#18134e;box-shadow:0 12px 35px rgba(35,20,120,.08)}.contact-card.wa-card{background:linear-gradient(110deg,#eafff4,#f2fff9);border-color:#b9efd2}.contact-icon{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-size:29px;color:#fff;background:#5526df}.wa-card .contact-icon{background:#16c866}.contact-card b{display:block;font-size:19px}.contact-card small{display:block;font-size:16px;margin-top:2px;direction:ltr;text-align:right}.contact-card em{display:block;font-size:12px;color:#6c6b83;font-style:normal;margin-top:3px}.contact-card i{font-style:normal;font-size:34px;color:#34207c}
-.coming{max-width:1180px;margin:0 auto 26px;background:#f5f3ff;border:1px solid #ece8fb;border-radius:28px;padding:26px 28px 28px}.coming-head{text-align:center}.coming-head .hero-pill{background:#5120cf;color:#fff}.coming-head h2{font-size:34px;color:#241268;margin:8px 0 4px}.coming-head p{margin:0 0 20px;color:#5d5b76}.payment-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.pay-card{background:#fff;border:1px solid #e8e6f2;border-radius:18px;padding:20px 10px;text-align:center;box-shadow:0 7px 20px rgba(38,24,120,.05)}.pay-card b{display:block;color:#16104b;margin-top:9px}.pay-card small{display:block;color:#6e6b86;margin-top:2px}.pay-logo{width:58px;height:58px;margin:auto;border-radius:16px;display:grid;place-items:center;font-size:30px;font-weight:900}.google{color:#2e6fe8;background:#eef4ff}.asia{color:#ed243b;background:#fff1f3}.apple{color:#111;background:#f0f0f0}.steam{color:#143e91;background:#eef2ff}.card{color:#5b2be0;background:#f0eaff}.pay-card.soon{background:#eee8ff;border-color:#d9caff}.feature-strip{max-width:1180px;margin:0 auto 26px;background:linear-gradient(120deg,#4723ce,#4a20d3);border-radius:24px;padding:22px 28px;color:#fff;display:grid;grid-template-columns:repeat(4,1fr)}.feature-strip div{text-align:center;padding:8px 20px;border-inline-start:1px solid rgba(255,255,255,.18)}.feature-strip div:first-child{border-inline-start:0}.feature-strip b{display:grid;place-items:center;width:46px;height:46px;margin:0 auto 7px;border-radius:50%;background:#5d31e0;color:#ffd83b;font-size:22px}.feature-strip strong,.feature-strip small{display:block}.feature-strip small{opacity:.85;margin-top:3px}.landing-footer{max-width:1180px;margin:0 auto;padding:22px 0 30px;display:flex;justify-content:space-between;align-items:center;color:#4e4674}.footer-social{display:flex;gap:8px}.footer-social span{width:34px;height:34px;background:#fff;border:1px solid #e8e6f3;border-radius:10px;display:grid;place-items:center;color:#27166e}.footer-brand{text-align:center;color:#2b1975}.footer-brand b{font-size:18px}.footer-brand b span{display:inline-grid;place-items:center;background:#ffce2f;color:#fff;width:32px;height:32px;border-radius:50%}.footer-brand small{display:block}
+.contact-grid{max-width:1180px;margin:0 auto 28px;display:grid;grid-template-columns:1fr 1fr;gap:24px}.support-card{background:linear-gradient(135deg,#3820c5,#2a18a7);border-radius:28px;color:#fff;padding:34px 38px;min-height:335px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;position:relative}.support-card:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(126,91,255,.22);left:-90px;bottom:-100px}.support-card h2{font-size:34px;margin:20px 0 12px}.support-card p{font-size:17px;line-height:2;max-width:560px}.support-sign{margin-top:18px;color:#ffd32f;font-size:23px;font-weight:800}.contact-stack{display:grid;gap:16px}.contact-card{display:grid;grid-template-columns:64px 1fr 20px;align-items:center;gap:16px;border-radius:24px;padding:22px;background:#fff;border:1px solid #e6e5f2;text-decoration:none;color:#18134e;box-shadow:0 12px 35px rgba(35,20,120,.08)}.contact-card.wa-card{background:linear-gradient(110deg,#eafff4,#f2fff9);border-color:#b9efd2}.contact-card.master-card{background:linear-gradient(110deg,#fff9e6,#fffdf5);border-color:#f1d56a}.master-card .contact-icon{background:linear-gradient(135deg,#f7b500,#ffd84d);color:#17134e}.master-card .master-number{font-weight:900;letter-spacing:1px;font-size:18px;direction:ltr;display:flex;align-items:center;justify-content:flex-start;gap:8px;margin-top:3px;text-align:right}.master-blue-card{width:26px;height:18px;object-fit:contain;display:inline-block}.master-card .master-note{display:block;font-size:12px;color:#6c6b83;margin-top:3px;line-height:1.6}.master-card>span:nth-child(2){display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px}.master-card>i{font-size:28px;justify-self:start}.contact-icon{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-size:29px;color:#fff;background:#5526df}.wa-card .contact-icon{background:#16c866}.contact-card b{display:block;font-size:19px}.contact-card small{display:block;font-size:16px;margin-top:2px;direction:ltr;text-align:right}.contact-card em{display:block;font-size:12px;color:#6c6b83;font-style:normal;margin-top:3px}.contact-card i{font-style:normal;font-size:34px;color:#34207c}
+.coming{max-width:1180px;margin:-4px auto 26px;background:#f5f3ff;border:1px solid #ece8fb;border-radius:28px;padding:18px 28px 28px}.coming-head{text-align:center}.coming-head .hero-pill{background:#5120cf;color:#fff}.coming-head h2{font-size:34px;color:#241268;margin:3px 0 4px}.coming-head p{margin:0 0 20px;color:#5d5b76}.payment-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.pay-card{background:#fff;border:1px solid #e8e6f2;border-radius:18px;padding:20px 10px;text-align:center;box-shadow:0 7px 20px rgba(38,24,120,.05)}.pay-card b{display:block;color:#16104b;margin-top:9px}.pay-card small{display:block;color:#6e6b86;margin-top:2px}.pay-logo{width:58px;height:58px;margin:auto;border-radius:16px;display:grid;place-items:center;font-size:30px;font-weight:900}.google{color:#2e6fe8;background:#eef4ff}.asia{color:#ed243b;background:#fff1f3}.apple{color:#111;background:#f0f0f0}.steam{color:#143e91;background:#eef2ff}.card{color:#5b2be0;background:#f0eaff}.pay-card.soon{background:#eee8ff;border-color:#d9caff}.feature-strip{max-width:1180px;margin:0 auto 26px;background:linear-gradient(120deg,#4723ce,#4a20d3);border-radius:24px;padding:22px 28px;color:#fff;display:grid;grid-template-columns:repeat(4,1fr)}.feature-strip div{text-align:center;padding:8px 20px;border-inline-start:1px solid rgba(255,255,255,.18)}.feature-strip div:first-child{border-inline-start:0}.feature-strip b{display:grid;place-items:center;width:46px;height:46px;margin:0 auto 7px;border-radius:50%;background:#5d31e0;color:#ffd83b;font-size:22px}.feature-strip strong,.feature-strip small{display:block}.feature-strip small{opacity:.85;margin-top:3px}.landing-footer{max-width:1180px;margin:0 auto;padding:22px 0 30px;display:flex;justify-content:space-between;align-items:center;color:#4e4674}.footer-social{display:flex;gap:8px;align-items:center}.footer-social span,.footer-social a{width:34px;height:34px;background:#fff;border:1px solid #e8e6f3;border-radius:10px;display:grid;place-items:center;color:#27166e;text-decoration:none}.footer-social a img{width:20px;height:20px;object-fit:contain}.footer-social a:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(39,22,110,.12)}.footer-brand{text-align:center;color:#2b1975}.footer-brand b{font-size:18px}.footer-brand b span{display:inline-grid;place-items:center;background:linear-gradient(145deg,#5b2be0,#3414a4);color:#ffd83d;width:32px;height:32px;border-radius:11px;font-weight:1000;box-shadow:0 6px 14px rgba(67,33,190,.22)}.footer-brand small{display:block}
 .landing-faq{scroll-margin-top:90px;max-width:1180px;margin:0 auto 26px;background:#fff;border:1px solid #ebe8f7;border-radius:28px;padding:30px 28px;box-shadow:0 12px 35px rgba(35,20,120,.06)}
 .landing-faq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
 .landing-faq details{background:#f8f7ff;border:1px solid #e9e5fa;border-radius:16px;padding:0 18px;transition:.2s}
@@ -1350,14 +1352,69 @@ body{
 .landing-faq details p{margin:0 0 18px;color:#5d5b76;line-height:1.9}
 @media(max-width:900px){.landing-faq{margin-left:12px;margin-right:12px}.landing-faq-grid{grid-template-columns:1fr}}
 .service-topbar{max-width:1100px;margin:0 auto 18px;padding:20px 10px 0}.service-topbar h1{margin:10px 0 0;color:#25116f}.service-topbar p{margin:0;color:#6a6880}.back-home{border:0;background:#4c23ce;color:#fff;border-radius:14px;padding:10px 18px;font:inherit;font-weight:700;cursor:pointer}
-#servicePage{padding-bottom:40px}#servicePage .about{display:none}#servicePage .foot{display:none}
+/* نظام التذاكر */
+.ticket-section{max-width:1180px;margin:0 auto 28px;background:#fff;border:1px solid #e8e5f5;border-radius:28px;padding:28px;box-shadow:0 14px 38px rgba(35,20,120,.07);display:grid;grid-template-columns:1fr 1.15fr;gap:22px;direction:rtl}
+.ticket-intro{background:linear-gradient(135deg,#3f22d0,#5b38e8);border-radius:24px;color:#fff;padding:30px;position:relative;overflow:hidden}.ticket-intro:after{content:'?';position:absolute;left:-25px;bottom:-45px;width:150px;height:150px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);font-size:110px;font-weight:900}.ticket-intro .hero-pill{display:inline-flex;background:#ffd32f;color:#29166f;padding:8px 16px;border-radius:999px;font-weight:900}.ticket-intro h2{font-size:30px;margin:18px 0 10px}.ticket-intro p{line-height:1.9;opacity:.9;margin:0 0 20px}.ticket-points{display:grid;gap:10px}.ticket-points span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:10px 12px;font-size:13px}
+.ticket-panel{background:#f9f8ff;border:1px solid #ece9f7;border-radius:24px;padding:22px}.ticket-panel h3{margin:0 0 14px;color:#241268;font-size:21px}.ticket-form{display:grid;gap:11px}.ticket-form input,.ticket-form textarea,.ticket-form select{width:100%;box-sizing:border-box;border:1px solid #dedbed;background:#fff;border-radius:14px;padding:12px 14px;font:inherit;color:#25213e;outline:none}.ticket-form textarea{min-height:110px;resize:vertical}.ticket-form input:focus,.ticket-form textarea:focus,.ticket-form select:focus{border-color:#6546e8;box-shadow:0 0 0 4px rgba(101,70,232,.09)}.ticket-submit{border:0;border-radius:14px;background:#ffd32f;color:#241268;font-weight:900;padding:13px;cursor:pointer}.ticket-list{margin-top:18px;display:grid;gap:9px;max-height:245px;overflow:auto}.ticket-empty{padding:18px;text-align:center;color:#77728e;background:#fff;border:1px dashed #ddd8ef;border-radius:14px}.ticket-item{background:#fff;border:1px solid #e6e2f2;border-radius:15px;padding:12px}.ticket-item-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.ticket-item b{color:#25136f}.ticket-status{font-size:11px;font-weight:900;border-radius:999px;padding:5px 9px;background:#fff5cf;color:#876600}.ticket-status.closed{background:#e9f9ef;color:#15803d}.ticket-note{font-size:12px;color:#77728e;margin-top:5px}.ticket-login{padding:18px;text-align:center;background:#fff;border:1px dashed #dcd6ef;border-radius:16px;color:#655f7e}.ticket-login button{border:0;background:#5a3cf0;color:#fff;border-radius:10px;padding:9px 14px;font-weight:800;cursor:pointer}
+@media(max-width:900px){.ticket-section{grid-template-columns:1fr;margin-left:12px;margin-right:12px;padding:18px}.ticket-intro{padding:24px}}
+.service-faq{margin-top:26px;margin-bottom:30px;background:#fff;border:1px solid #e8e5f5;border-radius:26px;padding:28px;box-shadow:0 14px 38px rgba(35,20,120,.06)}.service-faq .sec-head{text-align:center;margin-bottom:18px}.service-faq .hero-pill{display:inline-flex;background:#eee8ff;color:#5a3cf0;padding:8px 15px;border-radius:999px;font-weight:900}.service-faq h2{color:#241268;margin:10px 0 5px;font-size:30px}.service-faq .sec-head p{color:#716d86;margin:0}.service-faq .landing-faq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.service-faq details{background:#f8f7ff;border:1px solid #e9e5fa;border-radius:16px;padding:0 18px}.service-faq details[open]{background:#f2efff;border-color:#d8ccff}.service-faq summary{cursor:pointer;list-style:none;font-weight:800;color:#26136e;padding:18px 2px;position:relative;padding-inline-end:28px}.service-faq summary::-webkit-details-marker{display:none}.service-faq summary:after{content:'+';position:absolute;inset-inline-end:2px;top:15px;width:28px;height:28px;border-radius:50%;background:#e9e2ff;color:#4c23ce;display:grid;place-items:center;font-size:20px}.service-faq details[open] summary:after{content:'−'}.service-faq details p{margin:0 0 18px;color:#5d5b76;line-height:1.9}@media(max-width:900px){.service-faq .landing-faq-grid{grid-template-columns:1fr}.service-faq{margin-left:12px;margin-right:12px;padding:20px}}
+#servicePage{padding-bottom:40px}#servicePage .about{display:none}#servicePage .foot{display:none}#servicePage .sec-head{display:none}
 @media(max-width:900px){.site-nav-in{flex-wrap:wrap}.site-links{order:3;width:100%;justify-content:center;gap:16px;overflow:auto}.site-actions{margin-inline-end:0}.landing-hero{margin:8px 12px 20px;padding:30px 22px;grid-template-columns:1fr;min-height:auto}.hero-art{order:-1;height:270px}.hero-copy h1{font-size:34px}.hero-features{grid-template-columns:repeat(2,1fr)}.contact-grid,.coming,.feature-strip,.landing-footer{margin-left:12px;margin-right:12px}.contact-grid{grid-template-columns:1fr}.payment-grid{grid-template-columns:repeat(2,1fr)}.payment-grid .pay-card:last-child{grid-column:1/-1}.feature-strip{grid-template-columns:repeat(2,1fr)}.feature-strip div{border:0}.landing-footer{flex-direction:column;gap:16px;text-align:center}.hero-art{transform:scale(.9)}}
-@media(max-width:560px){.site-brand{font-size:19px}.site-actions .icon-action{display:none}.site-links{font-size:12px}.landing-hero{border-radius:22px}.hero-features{gap:10px}.hero-copy p{font-size:15px}.support-card{padding:28px 22px}.support-card h2{font-size:28px}.contact-card{grid-template-columns:52px 1fr 15px;padding:16px}.contact-icon{width:52px;height:52px}.coming{padding:20px 14px}.coming-head h2{font-size:27px}.payment-grid{gap:9px}.pay-card{padding:15px 5px}.feature-strip{padding:14px}.feature-strip div{padding:8px 4px}.service-topbar{padding-inline:14px}}
+@media(max-width:560px){.site-brand{font-size:19px}.site-actions .icon-action{display:none}.site-actions .wallet-top,.site-actions .bell-top{display:inline-flex}.site-links{font-size:12px}.landing-hero{border-radius:22px}.hero-features{gap:10px}.hero-copy p{font-size:15px}.support-card{padding:28px 22px}.support-card h2{font-size:28px}.contact-card{grid-template-columns:52px 1fr 15px;padding:16px}.contact-icon{width:52px;height:52px}.coming{padding:20px 14px}.coming-head h2{font-size:27px}.payment-grid{gap:9px}.pay-card{padding:15px 5px}.feature-strip{padding:14px}.feature-strip div{padding:8px 4px}.service-topbar{padding-inline:14px}}
 
 
 /* تحسين الشعارات: صور فعلية مع fallback */
 .platforms .ico img{width:32px;height:32px;object-fit:contain;display:block}.payment-grid .pay-logo img{width:42px;height:42px;object-fit:contain;display:block}.pay-card{position:relative;overflow:hidden}.pay-card.soon:after{content:"سيتوفر قريباً";position:absolute;top:10px;left:10px;background:#5a2bd4;color:#fff;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:800}
-.service-topbar{background:#fff;border:1px solid #ebe8f7;border-radius:22px;padding:20px 22px;box-shadow:0 10px 30px rgba(40,20,120,.06)}
+.service-topbar{max-width:1100px;margin:0 auto;padding:18px 22px 8px;display:flex;justify-content:flex-start;align-items:center}.back-home{border:0;background:linear-gradient(135deg,#5128d8,#3b20b8);color:#fff;border-radius:16px;padding:11px 22px;font:inherit;font-weight:800;cursor:pointer;box-shadow:0 10px 24px rgba(74,35,206,.22);transition:.2s}.back-home:hover{transform:translateY(-1px);box-shadow:0 13px 28px rgba(74,35,206,.28)}
+.wallet-top,.bell-top{position:relative;min-width:46px;padding:9px 11px}.wallet-top span{font-size:12px}.bell-top .bell-badge{top:1px;inset-inline-start:1px}.site-actions button[hidden]{display:none}.
+
+
+/* v9 — Service Dashboard polish */
+#servicePage{background:linear-gradient(180deg,#f7f8ff 0%,#f7f8fc 55%,#ffffff 100%);min-height:calc(100vh - 72px);padding-bottom:50px}
+#servicePage .service-topbar{max-width:1180px;margin:0 auto;padding:20px 24px 8px;display:flex;align-items:center;justify-content:space-between;direction:rtl}
+#servicePage .service-headline{display:flex;align-items:center;gap:10px;direction:ltr}
+#servicePage .service-head-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#ffc928,#ffdd68);color:#5b36d5;font-size:25px;font-weight:900;box-shadow:0 10px 25px rgba(91,54,213,.14)}
+#servicePage .service-head-dots{display:flex;gap:5px;opacity:.7}
+#servicePage .service-head-dots i{width:7px;height:7px;border-radius:50%;background:#5a3cf0;display:block}
+#servicePage .service-head-dots i:nth-child(2){opacity:.55}.service-head-dots i:nth-child(3){opacity:.28}
+#servicePage .service-tools{max-width:1180px;margin:4px auto 18px;padding:0 24px;display:flex;justify-content:flex-start;gap:9px;direction:rtl}
+#servicePage .service-tools span{background:#fff;border:1px solid #e8e9f4;border-radius:999px;padding:8px 13px;color:#626b88;font-size:12px;font-weight:800;box-shadow:0 7px 20px rgba(31,28,77,.05)}
+#servicePage .service-tools b{margin-inline-end:4px}
+#servicePage .layout{max-width:1180px;gap:22px;align-items:start}
+#servicePage .steps{gap:16px}
+#servicePage .step{border:1px solid #e7e8f2;border-radius:24px;background:rgba(255,255,255,.94);box-shadow:0 14px 40px rgba(43,35,105,.07);padding:22px;position:relative;overflow:hidden}
+#servicePage .step:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,#5a3cf0,#7b61ff,#f4c52c);opacity:.9}
+#servicePage .step h2{font-size:18px;margin:0 0 17px;color:#171b38;display:flex;align-items:center;gap:10px}
+#servicePage .step h2 b{width:31px;height:31px;border-radius:10px;display:grid;place-items:center;background:#eeeaff;color:#5a3cf0;font-size:14px}
+#servicePage .platforms{gap:10px}
+#servicePage .plat{min-width:92px;border:1px solid #e8e9f2;background:#fbfbfe;border-radius:17px;padding:11px 9px;transition:.2s;box-shadow:none}
+#servicePage .plat:hover{transform:translateY(-3px);border-color:#cfc8ff;box-shadow:0 10px 22px rgba(90,60,240,.10)}
+#servicePage .plat[aria-pressed="true"]{background:linear-gradient(180deg,#f2efff,#fff);border-color:#6a4af2;box-shadow:0 9px 24px rgba(90,60,240,.14);transform:translateY(-2px)}
+#servicePage .plat .ico{width:46px;height:46px;border-radius:14px;margin-bottom:7px}
+#servicePage .plat .ico img{width:29px;height:29px}
+#servicePage .plat>span:last-child{font-weight:800;color:#252945;font-size:12px}
+#servicePage .types{gap:8px}
+#servicePage .chip{border:1px solid #e5e6ef;background:#fafaff;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:800;color:#5d6480;transition:.18s}
+#servicePage .chip[aria-pressed="true"]{background:#5a3cf0;color:#fff;border-color:#5a3cf0;box-shadow:0 7px 17px rgba(90,60,240,.18)}
+#servicePage .field{margin-top:15px}
+#servicePage .field label{font-size:12px;font-weight:900;color:#555d78;margin-bottom:7px}
+#servicePage input,#servicePage .combo-btn{border:1px solid #e4e6ef;background:#fafbff;border-radius:15px;min-height:48px;box-shadow:inset 0 1px 0 rgba(255,255,255,.8);transition:.2s}
+#servicePage input:focus,#servicePage .combo-btn:focus{outline:none;border-color:#7258f2;box-shadow:0 0 0 4px rgba(90,60,240,.09)}
+#servicePage .summary{position:sticky;top:88px;border:0;border-radius:28px;background:linear-gradient(145deg,#4d2bd5 0%,#5b3be9 58%,#6f55f4 100%);box-shadow:0 22px 50px rgba(73,42,205,.25);color:#fff;padding:28px;overflow:hidden}
+#servicePage .summary:before{content:"";position:absolute;width:230px;height:230px;border-radius:50%;background:rgba(255,255,255,.08);left:-110px;top:-105px}
+#servicePage .summary:after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(255,213,54,.10);right:-80px;bottom:-80px}
+#servicePage .summary>*{position:relative;z-index:1}
+#servicePage .summary .label{font-size:13px;opacity:.88}
+#servicePage .price{margin:4px 0 8px;font-size:42px;font-weight:900;letter-spacing:-1px}
+#servicePage .rate{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:7px 11px;font-size:11px;display:inline-block}
+#servicePage .facts{margin:22px 0;padding-top:17px;border-top:1px solid rgba(255,255,255,.16)}
+#servicePage .facts div{display:flex;justify-content:space-between;gap:12px;margin:10px 0;font-size:12px}
+#servicePage .facts dt{opacity:.72}.facts dd{font-weight:800;max-width:62%;text-align:left}
+#servicePage .order{background:#ffd43b;color:#20184b;border:0;border-radius:15px;min-height:52px;font-weight:900;box-shadow:0 10px 25px rgba(0,0,0,.13);transition:.2s}
+#servicePage .order:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,0,0,.17)}
+#servicePage .login-hint{color:rgba(255,255,255,.8)}
+@media(max-width:900px){#servicePage .service-topbar{padding-inline:14px}.service-tools{padding-inline:14px!important;overflow:auto;justify-content:flex-start!important}.service-tools span{white-space:nowrap}.layout{grid-template-columns:1fr!important}.summary{position:static!important;order:-1}.steps{order:2}}
+@media(max-width:560px){#servicePage .service-head-icon{width:38px;height:38px}.service-tools span{font-size:11px;padding:7px 10px}#servicePage .step{padding:16px;border-radius:20px}#servicePage .plat{min-width:78px;padding:9px 6px}#servicePage .plat .ico{width:40px;height:40px}#servicePage .price{font-size:35px}}
 </style>
 </head>
 
@@ -1371,14 +1428,12 @@ body{
     <nav class="site-links" aria-label="التنقل">
       <a href="#home">الرئيسية</a>
       <a href="#services" id="servicesLink">الخدمات</a>
-      <a href="#featuresLanding">المميزات</a>
-      <a href="#faqLanding">الأسئلة الشائعة</a>
-      <a href="#aboutLanding">من نحن</a>
     </nav>
     <div class="site-actions">
-      <button class="icon-action" type="button" aria-label="البحث">⌕</button>
-      <button class="about-action" type="button" id="acctLanding">👤 من نحن</button>
-      <a class="wa-mini" data-wa href="#" target="_blank" rel="noopener">تواصل</a>
+      <button class="icon-action wallet-top" id="walletBtn" type="button" aria-label="المحفظة" title="المحفظة">💰 <span id="walletBal">0</span></button>
+      <button class="icon-action bell-top bell" id="bellBtn" type="button" aria-label="التنبيهات" title="التنبيهات">🔔<span class="bell-badge" id="bellBadge" hidden>0</span></button>
+      <button class="about-action" type="button" id="acctBtn">👤 دخول</button>
+      <button class="icon-action" id="ordersBtn" type="button" aria-label="طلباتي" title="طلباتي" hidden>📦</button>
     </div>
   </div>
 </header>
@@ -1388,7 +1443,7 @@ body{
     <div class="hero-copy">
       <span class="hero-pill">♙ من نحن</span>
       <h1>إحنا <span>Dopamine Store</span></h1>
-      <p>أهلاً بك! أنا <b>علي مهند</b>، مؤسس Dopamine Store. منصة موثوقة تقدم لك خدمات رقمية مميزة، تساعدك على تعزيز حضورك الرقمي وتنشيط حساباتك بأعلى جودة وأسعار منافسة.</p>
+      <p>أهلاً بك في Dopamine Store. منصة موثوقة تقدم لك خدمات رقمية مميزة، تساعدك على تعزيز حضورك الرقمي وتنشيط حساباتك بأعلى جودة وأسعار منافسة.</p>
       <div class="hero-features">
         <div><b>♢</b><strong>أسعار تنافسية<br>ومناسبة</strong></div>
         <div><b>ϟ</b><strong>تفعيل فوري<br>بعد الدفع</strong></div>
@@ -1420,11 +1475,15 @@ body{
       <a class="contact-card wa-card" data-wa href="#" target="_blank" rel="noopener">
         <span class="contact-icon">◉</span><span><b>واتساب : راسلنا</b><small id="waLandingNum">+9647717885719</small><em>تواصل مباشر وسريع</em></span><i>‹</i>
       </a>
+      <div class="contact-card master-card">
+        <span class="contact-icon"><img src="https://cdn.simpleicons.org/mastercard/17134e" alt="Mastercard" style="width:34px;height:34px" loading="lazy"></span>
+        <span><b>معلومات البطاقة</b><span class="master-number"><img class="master-blue-card" src="https://cdn.simpleicons.org/mastercard/246BFD" alt="بطاقة" loading="lazy">8855481035</span><span class="master-note">ماستر — عند طلب الرصيد حوّل نفس المبلغ</span></span><i>💳</i>
+      </div>
     </div>
   </section>
 
   <section class="coming" id="paymentLanding">
-    <div class="coming-head"><span class="hero-pill">✦ قريباً</span><h2>بطائق ستتوفر قريباً</h2><p>نوفر لك عدة طرق دفع آمنة وسهلة تناسب جميع العملاء.</p></div>
+    <div class="coming-head"><span class="hero-pill">✦ قريباً</span><h2>بطائق ستتوفر قريباً</h2></div>
     <div class="payment-grid">
       <div class="pay-card"><span class="pay-logo google"><img src="https://cdn.simpleicons.org/googleplay/414141" alt="Google Play" loading="lazy"></span><b>Google Play</b><small>بطاقات جوجل بلاي</small></div>
       <div class="pay-card"><span class="pay-logo apple"><img src="https://cdn.simpleicons.org/apple/111111" alt="iTunes" loading="lazy"></span><b>iTunes</b><small>بطاقات آيتونز</small></div>
@@ -1440,36 +1499,32 @@ body{
     <div><b>♧</b><strong>دعم فني سريع</strong><small>نحن هنا لمساعدتك</small></div>
   </section>
 
-  <section class="landing-faq" id="faqLanding">
-    <div class="coming-head">
-      <span class="hero-pill">✦ الأسئلة الشائعة</span>
-      <h2>الأسئلة الشائعة</h2>
-      <p>إجابات سريعة على أكثر الأسئلة التي تهمك قبل الطلب.</p>
-    </div>
-    <div class="landing-faq-grid">
-      <details><summary>كيف أطلب خدمة؟</summary><p>ادخل إلى قسم الخدمات، اختر المنصة والخدمة، ثم ضع الرابط والكمية وشاهد السعر قبل إتمام الطلب.</p></details>
-      <details><summary>هل أحتاج إلى كلمة مرور حسابي؟</summary><p>لا، لا نحتاج إلى كلمة المرور. المطلوب هو رابط الحساب أو المنشور فقط.</p></details>
-      <details><summary>هل يجب أن يكون الحساب عاماً؟</summary><p>نعم، يجب أن يكون الحساب أو المنشور عاماً أثناء تنفيذ الخدمة.</p></details>
-      <details><summary>متى يتم تنفيذ الطلب؟</summary><p>تختلف السرعة حسب الخدمة، وستظهر تفاصيل السرعة والضمان ضمن معلومات الخدمة.</p></details>
-      <details><summary>هل توجد خدمات بضمان؟</summary><p>نعم، بعض الخدمات تتضمن إعادة تعبئة أو ضماناً حسب تفاصيل الخدمة المختارة.</p></details>
-      <details><summary>كيف أتواصل مع الدعم؟</summary><p>يمكنك التواصل معنا مباشرة عبر واتساب أو البريد الإلكتروني الموجودين في الصفحة الرئيسية.</p></details>
-    </div>
-  </section>
+
 
   <section class="landing-footer" id="faqLanding">
-    <div class="footer-social"><span>♪</span><span>▶</span><span>◎</span><span>➤</span><span>𝕏</span></div>
-    <div class="footer-brand"><b><span>ϟ</span> Dopamine Store</b><small>متجرك الرقمي الموثوق</small></div>
+    <div class="footer-social" aria-label="حسابات التواصل">
+      <a href="https://t.me/o7ah11" target="_blank" rel="noopener noreferrer" title="Telegram" aria-label="Telegram"><img src="https://cdn.simpleicons.org/telegram/229ED9" alt="Telegram" loading="lazy"></a>
+      <a href="https://wa.me/9647717885719" target="_blank" rel="noopener noreferrer" title="WhatsApp" aria-label="WhatsApp"><img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp" loading="lazy"></a>
+    </div>
+    <div class="footer-brand"><b><span class="footer-logo-mark">D</span> Dopamine Store</b><small>متجرك الرقمي الموثوق</small></div>
     <small>© 2026 Dopamine Store . جميع الحقوق محفوظة.</small>
   </section>
 </main>
 
 <div id="servicePage" hidden>
-  <div class="service-topbar"><button class="back-home" id="backHome" type="button">← الرئيسية</button><h1>خدمات Dopamine Store</h1><p>الخدمات هنا هي خدمات موقعك الفعلية. اختر المنصة ثم نوع الخدمة لعرض الخدمات والأسعار.</p></div>
+  <div class="service-topbar">
+    <div class="service-headline" aria-hidden="true">
+      <span class="service-head-icon">ϟ</span>
+      <span class="service-head-dots"><i></i><i></i><i></i></span>
+    </div>
+    <button class="back-home" id="backHome" type="button">← الرئيسية</button>
+  </div>
 <div class="shell">
 
-  <div class="sec-head reveal" id="order">
-    <h2>اطلب خدمتك</h2>
-    <p>اختر المنصة ثم نوع الخدمة، واكتب الرابط والكمية.</p>
+  <div class="service-tools" aria-hidden="true">
+    <span><b>⚡</b> تنفيذ سريع</span>
+    <span><b>🔒</b> آمن</span>
+    <span><b>💬</b> دعم مستمر</span>
   </div>
 
   <main class="layout">
@@ -1589,10 +1644,42 @@ body{
 
   </main>
 
+  <section class="ticket-section" id="ticketsLanding">
+    <div class="ticket-intro">
+      <span class="hero-pill">🎫 نظام التذاكر</span>
+      <h2>تواصل معنا عبر تذكرة</h2>
+      <p>عندك مشكلة أو استفسار؟ افتح تذكرة واكتب التفاصيل، وراح تقدر تتابع حالة التذكرة من نفس المكان.</p>
+      <div class="ticket-points"><span>⚡ متابعة سريعة للطلبات والاستفسارات</span><span>🔒 كل تذكرة مرتبطة بحسابك</span><span>💬 تقدر تتابع الردود والحالة</span></div>
+    </div>
+    <div class="ticket-panel">
+      <h3>🎟️ إنشاء تذكرة جديدة</h3>
+      <div id="ticketGuest" class="ticket-login" hidden>سجّل دخولك حتى تقدر تنشئ وتتابع التذاكر.<br><button id="ticketLoginBtn" type="button">تسجيل الدخول</button></div>
+      <form id="ticketForm" class="ticket-form" hidden>
+        <input id="ticketSubject" maxlength="100" placeholder="عنوان المشكلة أو الاستفسار" required>
+        <select id="ticketCategory"><option value="طلب">استفسار عن طلب</option><option value="خدمة">استفسار عن خدمة</option><option value="دفع">الدفع / المحفظة</option><option value="أخرى">أخرى</option></select>
+        <textarea id="ticketMessage" maxlength="1000" placeholder="اكتب تفاصيل المشكلة هنا..." required></textarea>
+        <button class="ticket-submit" id="ticketSubmit" type="submit">+ فتح تذكرة</button>
+      </form>
+      <div class="ticket-list" id="ticketList"></div>
+    </div>
+  </section>
+
+  <section class="service-faq shell" id="faqServices">
+    <div class="sec-head"><span class="hero-pill">✦ الأسئلة الشائعة</span><h2>الأسئلة الشائعة</h2><p>إجابات سريعة على أكثر الأسئلة التي تهمك قبل الطلب.</p></div>
+    <div class="landing-faq-grid">
+      <details><summary>كيف أطلب خدمة؟</summary><p>ادخل إلى قسم الخدمات، اختر المنصة والخدمة، ثم ضع الرابط والكمية وشاهد السعر قبل إتمام الطلب.</p></details>
+      <details><summary>هل أحتاج إلى كلمة مرور حسابي؟</summary><p>لا، لا نحتاج إلى كلمة المرور. المطلوب هو رابط الحساب أو المنشور فقط.</p></details>
+      <details><summary>هل يجب أن يكون الحساب عاماً؟</summary><p>نعم، يجب أن يكون الحساب أو المنشور عاماً أثناء تنفيذ الخدمة.</p></details>
+      <details><summary>متى يتم تنفيذ الطلب؟</summary><p>تختلف السرعة حسب الخدمة، وستظهر تفاصيل السرعة والضمان ضمن معلومات الخدمة.</p></details>
+      <details><summary>هل توجد خدمات بضمان؟</summary><p>نعم، بعض الخدمات تتضمن إعادة تعبئة أو ضماناً حسب تفاصيل الخدمة المختارة.</p></details>
+      <details><summary>كيف أتواصل مع الدعم؟</summary><p>يمكنك التواصل معنا عبر نظام التذاكر أو واتساب أو البريد الإلكتروني.</p></details>
+    </div>
+  </section>
+
 </div>
 
 
-<section class="shell trial" id="trial">
+<section class="shell trial id="trial" hidden>
 
   <div class="sec-head reveal">
     <h2>🎁 جرّب مجاناً <span class="trial-free">$0</span></h2>
@@ -1652,14 +1739,14 @@ body{
 
 </section>
 
-<section class="band" id="stats">
+<section class="band" id="stats" hidden>
   <div class="band-in">
     <div class="stats-grid" id="statsGrid"></div>
   </div>
 </section>
 
 
-<section class="band" id="features">
+<section class="band" id="features" hidden>
   <div class="band-in">
 
     <div class="sec-head reveal">
@@ -1710,7 +1797,7 @@ body{
 </section>
 
 
-<section class="band" id="faq">
+<section class="band" id="faq" hidden>
   <div class="band-in">
 
     <div class="sec-head reveal">
@@ -1755,12 +1842,14 @@ body{
 </section>
 
 
-<div class="shell">
+<div class="shell" hidden>
 
   <section class="about reveal" id="about">
     <h2><span>👋</span> من نحن</h2>
 
-    <p>أهلاً بك! أنا <b>علي مهند</b>، مؤسس هذا المشروع التقني. نقدم لك حلولاً سريعة ومضمونة لتعزيز حضورك الرقمي وتنشيط حساباتك على منصات التواصل الاجتماعي بأفضل الأسعار وأعلى معايير الجودة.</p>
+    <p>أهلاً بك في هذا المشروع التقني. نقدم لك حلولاً سريعة ومضمونة لتعزيز حضورك الرقمي وتنشيط حساباتك على منصات التواصل الاجتماعي بأفضل الأسعار وأعلى معايير الجودة.</p>
+
+    <p class="founder-line"><b>مؤسس المتجر: علي مهند</b></p>
 
     <p>نضمن لك سرعة التنفيذ، الأمان التام، والدعم المستمر على مدار الساعة.</p>
 
@@ -1930,13 +2019,9 @@ const fmtPts = n => Number(n || 0).toLocaleString("en-US") + " نقطة";
 const fmtWallet = () => fmtIqd(walletBalance || 0) + " + " + fmtUsd(walletUsd || 0);
 
 function renderWalletBtn(){
-
   const b = $("walletBtn");
-
-  b.hidden = !session;
-
-  $("walletBal").textContent = fmtWallet();
-
+  b.hidden = false;
+  $("walletBal").textContent = session ? fmtWallet() : "0";
 }
 
 function updateWalletLine(){
@@ -2041,6 +2126,12 @@ function openTopup(preset,currency){
     '<div class="chips tp-chips" id="tpChips"></div>' +
     '<input class="auth-in" id="tpAmt" type="text" inputmode="' + (isUsd() ? "decimal" : "numeric") + '" dir="ltr" style="margin-top:12px;text-align:center" autocomplete="off">' +
     '<div class="amt" id="tpPts"></div>' +
+    '<div style="margin:12px 0;padding:14px;border:1px solid rgba(90,60,240,.18);border-radius:16px;background:rgba(90,60,240,.06);text-align:right">' +
+      '<b>💳 طريقة الدفع</b><br>' +
+      '<span style="display:block;margin-top:6px">عند طلب الرصيد <b>حوّل نفس المبلغ</b> عن طريق <b>ماستر</b> إلى الرقم:</span>' +
+      '<strong dir="ltr" style="display:block;text-align:center;font-size:20px;margin:8px 0">8855481035</strong>' +
+      '<small style="display:block;color:#666">بعد التحويل، أرسل إثبات الدفع عبر واتساب حتى تتم مراجعة الطلب والموافقة عليه.</small>' +
+    '</div>' +
     '<p id="tpHint"></p>' +
     '<div class="tp-err" id="tpMsg"></div>' +
     '<div class="row">' +
@@ -2159,12 +2250,15 @@ function showTopupSent(r){
   const shown = r.currency === "USD" ? fmtUsd(r.amount) : fmtIqd(r.amount);
 
   openModal(
-    '<div class="big">✅</div>' +
-    "<h3>وصل طلب الشحن</h3>" +
+    '<div class="big">💳</div>' +
+    "<h3>تم تسجيل طلب الشحن</h3>" +
     "<p>رقم الطلب: <b>#" + r.id + "</b></p>" +
     '<div class="amt">' + shown + "</div>" +
-    "<p>راح يُضاف <b>" + shown + "</b> إلى رصيدك بعد تأكيد الدفع.</p>" +
-    "<p>بعد ما تدفع المبلغ، راسلنا على واتساب حتى نؤكد طلبك ونضيف الرصيد.</p>" +
+    "<div style=\"margin:12px 0;padding:15px;border-radius:16px;background:rgba(90,60,240,.07);border:1px solid rgba(90,60,240,.18)\">" +
+      "<b>عند طلب الرصيد حوّل نفس المبلغ عن طريق ماستر</b>" +
+      "<strong dir=\"ltr\" style=\"display:block;text-align:center;font-size:22px;margin:8px 0\">8855481035</strong>" +
+      "<small style=\"display:block;color:#666\">بعد التحويل اضغط «إرسال عبر واتساب» وأرسل إثبات الدفع. لن تتم إضافة الرصيد/النقاط إلا بعد مراجعة التحويل والموافقة على الطلب.</small>" +
+    "</div>" +
     '<div class="row">' +
       '<button class="btn ghost" type="button" onclick="closeModal()">إغلاق</button>' +
       '<a class="btn primary" target="_blank" rel="noopener" href="' + esc(topupUrl(r.amount,r.id)) + '">إرسال عبر واتساب</a>' +
@@ -2183,7 +2277,10 @@ function topupUrl(amount,reqId){
     "السلام عليكم، أريد شحن رصيدي في Dopamine Store.\n" +
     (u ? "بريد الحساب: " + (u.email || "") + "\nرقم الحساب: " + u.id + "\n" : "") +
     (reqId ? "رقم طلب الشحن: #" + reqId + "\n" : "") +
-    (amount ? "المبلغ: " + Number(amount).toLocaleString("en-US") + " د.ع" : "المبلغ: ");
+    (amount ? "المبلغ المحوّل: " + Number(amount).toLocaleString("en-US") + " د.ع\n" : "المبلغ المحوّل: ") +
+    "طريقة الدفع: ماستر\n" +
+    "رقم الماستر: 8855481035\n" +
+    "أرفقت إثبات التحويل، يرجى مراجعة الطلب والموافقة عليه.";
 
   return "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
 
@@ -2555,53 +2652,89 @@ function renderChips(){
 
 
 async function loadServices(){
+
   const myRequest = ++requestId;
   statusBox.textContent = "جاري تحميل الخدمات...";
   setMessage("جاري تحميل الخدمات...");
 
-  const platformKeys = ["instagram","tiktok","youtube","facebook","twitter","telegram","snapchat"];
+  const platforms = ["instagram","tiktok","youtube","facebook","twitter","telegram","snapchat"];
 
-  async function fetchPlatform(platform){
+  async function requestPlatform(platform){
     const response = await fetch(API,{
       method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body:JSON.stringify({ action:"public_services", platform, search:searchBox.value.trim() })
+      headers:{
+        "Content-Type":"application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + SUPABASE_ANON_KEY
+      },
+      body:JSON.stringify({
+        action:"public_services",
+        platform:platform,
+        search:searchBox.value.trim()
+      })
     });
-    const result = await response.json().catch(()=>({}));
-    if(!response.ok) throw new Error(result.error || ("HTTP " + response.status));
+
+    const text = await response.text();
+    let result = {};
+    try { result = text ? JSON.parse(text) : {}; } catch(e) {
+      throw new Error("رد غير صالح من الخادم (" + response.status + ")");
+    }
+
+    if(!response.ok){
+      throw new Error(result.error || result.message || ("HTTP " + response.status));
+    }
+
     return Array.isArray(result.items) ? result.items : [];
   }
 
   try{
-    let items=[];
+    let items = [];
+
     if(tab === "all"){
-      // بعض نسخ الـ API لا تقبل platform=all، لذلك نجلب كل منصة على حدة ثم نجمعها.
-      const results = await Promise.allSettled(platformKeys.map(fetchPlatform));
-      const failed = results.filter(r=>r.status === "rejected");
-      results.forEach(r=>{ if(r.status === "fulfilled") items.push(...r.value); });
-      if(!items.length && failed.length) throw failed[0].reason;
+      const results = await Promise.allSettled(platforms.map(requestPlatform));
+      results.forEach(r=>{
+        if(r.status === "fulfilled") items.push(...r.value);
+      });
+
+      /* إزالة التكرار إن أعاد الخادم نفس الخدمة بأكثر من قسم */
+      const seen = new Set();
+      items = items.filter(s=>{
+        const key = String(s.id ?? ((s.name||"") + "|" + (s.platform||"") + "|" + (s.category||"")));
+        if(seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
     }else{
-      items = await fetchPlatform(tab);
+      items = await requestPlatform(tab);
     }
 
     if(myRequest !== requestId) return;
-    const seen = new Set();
-    allServices = items.filter(x=>{
-      const key=String(x.id ?? x.service ?? x.service_id ?? JSON.stringify(x));
-      if(seen.has(key)) return false; seen.add(key); return true;
-    });
+
+    allServices = items;
     renderTypes();
     applyFilters();
+
+    if(!allServices.length){
+      setMessage("لم تصل خدمات من الخادم حالياً");
+      statusBox.textContent = "لم يتم العثور على خدمات. جرّب إعادة المحاولة.";
+    }else{
+      statusBox.textContent = "تم تحميل " + allServices.length.toLocaleString("en-US") + " خدمة";
+    }
+
   }catch(error){
+
     if(myRequest !== requestId) return;
+
     console.error("LOAD SERVICES ERROR:", error);
-    allServices=[]; services=[]; renderTypes(); renderCats([]); setMessage("تعذر تحميل الخدمات");
-    statusBox.innerHTML='<span style="color:#b42318;font-weight:800">تعذر تحميل الخدمات من الخادم.</span> <button type="button" id="retryServices" style="border:0;background:#4c23ce;color:#fff;border-radius:10px;padding:7px 12px;font:inherit;font-weight:700;cursor:pointer">إعادة المحاولة</button>';
-    document.getElementById('retryServices')?.addEventListener('click',()=>loadServices());
+    allServices = [];
+    services = [];
+    renderTypes();
+    renderCats([]);
+    setMessage("تعذر الاتصال بخادم الخدمات");
+    statusBox.textContent = "تعذر تحميل الخدمات: " + (error.message || "خطأ غير معروف");
     updatePrice();
   }
 }
-
 
 function fmtRate(service){
 
@@ -3574,8 +3707,10 @@ function renderAuth(view){
       "<h3>إنشاء حساب</h3>" +
       '<p class="lead-s">احفظ طلباتك ومعلوماتك وتابعها بأي وقت.</p>' +
       google +
-      '<label class="auth-lbl" for="aName">الاسم</label>' +
-      '<input class="auth-in" id="aName" autocomplete="name">' +
+      '<label class="auth-lbl" for="aName">الاسم <span style="color:#e53935">*</span></label>' +
+      '<input class="auth-in" id="aName" autocomplete="name" placeholder="اكتب اسمك بالعربي" required>' +
+      '<label class="auth-lbl" for="aBusiness">اسم المحل التجاري (إن وُجد) <span style="color:#777;font-weight:400">— اختياري</span></label>' +
+      '<input class="auth-in" id="aBusiness" autocomplete="organization" placeholder="مثال: متجر علي">' +
       '<label class="auth-lbl" for="aEmail">البريد الإلكتروني</label>' +
       '<input class="auth-in" id="aEmail" type="email" dir="ltr" autocomplete="email">' +
       '<label class="auth-lbl" for="aPass">كلمة المرور (6 أحرف على الأقل)</label>' +
@@ -3588,9 +3723,15 @@ function renderAuth(view){
     $("aGo").onclick = ()=>withBusy($("aGo"),async ()=>{
 
       const name = $("aName").value.trim();
+      const businessName = $("aBusiness").value.trim();
       const email = $("aEmail").value.trim();
       const password = $("aPass").value;
 
+      // الاسم الشخصي إجباري ويجب أن يكون مكتوباً بالعربية.
+      const arabicNamePattern = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\s]+$/;
+      const hasArabicLetter = /[\u0621-\u064A]/.test(name);
+      if(!name){ authMsg("الاسم إجباري"); return; }
+      if(!arabicNamePattern.test(name) || !hasArabicLetter){ authMsg("اكتب الاسم باللغة العربية فقط"); return; }
       if(!email || !password){ authMsg("اكتب البريد وكلمة المرور"); return; }
 
       setRemember(true);
@@ -3599,7 +3740,7 @@ function renderAuth(view){
         email,
         password,
         options:{
-          data:{full_name:name},
+          data:{full_name:name,business_name:businessName},
           emailRedirectTo:location.origin + location.pathname
         }
       });
@@ -3616,7 +3757,7 @@ function renderAuth(view){
 
     $("aSwitch").onclick = ()=>renderAuth("login");
 
-    enterToSubmit(["aName","aEmail","aPass"],"aGo");
+    enterToSubmit(["aName","aBusiness","aEmail","aPass"],"aGo");
 
   }else if(view === "forgot"){
 
@@ -3932,6 +4073,17 @@ $("hintLogin").addEventListener("click",()=>openAuth("login"));
 
 
 /* =====================================================
+   نظام التذاكر
+   ===================================================== */
+const ticketForm = $("ticketForm"), ticketGuest = $("ticketGuest"), ticketList = $("ticketList"), ticketSubject = $("ticketSubject"), ticketCategory = $("ticketCategory"), ticketMessage = $("ticketMessage");
+function ticketKey(){return "dopamine_tickets_"+(session&&session.user?session.user.id:"guest")}
+function getTickets(){try{return JSON.parse(localStorage.getItem(ticketKey())||"[]")}catch(e){return []}}
+function saveTickets(a){localStorage.setItem(ticketKey(),JSON.stringify(a))}
+function renderTickets(){if(!ticketList)return;if(!session){ticketGuest.hidden=false;ticketForm.hidden=true;ticketList.innerHTML="";return}ticketGuest.hidden=true;ticketForm.hidden=false;const a=getTickets();if(!a.length){ticketList.innerHTML='<div class="ticket-empty">ما عندك تذاكر حالياً. افتح أول تذكرة من النموذج أعلاه 🎫</div>';return}ticketList.innerHTML=a.map(t=>'<div class="ticket-item"><div class="ticket-item-top"><b>#'+esc(t.id)+' — '+esc(t.subject)+'</b><span class="ticket-status '+(t.status==='مغلقة'?'closed':'')+'">'+esc(t.status)+'</span></div><div class="ticket-note">'+esc(t.category)+' · '+esc(t.created)+'</div><div class="ticket-note">'+esc(t.message)+'</div></div>').join("")}
+if(ticketForm)ticketForm.addEventListener("submit",e=>{e.preventDefault();if(!session){openAuth("login","سجّل دخولك حتى تفتح تذكرة");return}const subject=ticketSubject.value.trim(),message=ticketMessage.value.trim();if(!subject||!message)return;const a=getTickets(),t={id:String(Date.now()).slice(-7),subject,category:ticketCategory.value,message,status:"مفتوحة",created:new Date().toLocaleString("ar-IQ")};a.unshift(t);saveTickets(a);ticketForm.reset();renderTickets();if(typeof showNotifToast==="function")showNotifToast({title:"تم فتح تذكرة جديدة",body:"رقم التذكرة #"+t.id})});
+$("ticketLoginBtn")?.addEventListener("click",()=>openAuth("login","سجّل دخولك حتى تفتح وتتابع التذاكر"));
+
+/* =====================================================
    التبليغات: رسائل من الإدارة توصل فوراً (Supabase Realtime)
    ===================================================== */
 
@@ -4052,9 +4204,10 @@ function renderNotifs(){
 
 
 async function openNotifs(){
-
-  if(!session) return;
-
+  if(!session){
+    openAuth("login","سجّل دخولك حتى تشوف التنبيهات");
+    return;
+  }
   notifModal.hidden = false;
 
   notifToast.hidden = true;
@@ -4239,7 +4392,7 @@ document.addEventListener("keydown",e=>{
     updateAcctBtn();
 
     /* نأجلها لأن Supabase ما يحب ينادى عليه داخل هذا الحدث مباشرة */
-    setTimeout(()=>{ syncNotifs(); loadWallet(); },0);
+    setTimeout(()=>{ syncNotifs(); renderTickets(); loadWallet(); },0);
 
     if(event === "PASSWORD_RECOVERY"){
       openAuth("reset");
