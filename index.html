@@ -3834,11 +3834,24 @@ payModal.addEventListener("click",e=>{
 
 async function callApi(body){
 
-  const r = await fetch(API,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(body)
-  });
+  /* منع شاشة "جاري التحميل" من البقاء للأبد إذا علقت دالة الخادم أو انقطعت الشبكة */
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(),10000);
+
+  let r;
+  try{
+    r = await fetch(API,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(body),
+      signal:controller.signal
+    });
+  }catch(e){
+    if(e && e.name === "AbortError") throw new Error("الخادم تأخر بالرد. تأكد من نشر admin-worker ثم حاول مرة ثانية.");
+    throw new Error("تعذر الاتصال بالخادم. تحقق من الإنترنت ثم حاول مرة ثانية.");
+  }finally{
+    clearTimeout(timer);
+  }
 
   const d = await r.json().catch(()=>({}));
 
@@ -4680,33 +4693,40 @@ async function renderAccount(){
 
   try{
 
-    const [pr,or,wl] = await Promise.all([
+    /* تحميل كل جزء بشكل مستقل حتى لا يتعطل "حسابي" كله إذا تعطل طلب واحد */
+    const results = await Promise.allSettled([
       callApi({action:"my_profile",access_token:token}),
       callApi({action:"my_orders",access_token:token}),
-      callApi({action:"my_wallet",access_token:token}).catch(()=>null)
+      callApi({action:"my_wallet",access_token:token})
     ]);
 
-    prof = pr;
+    const pr = results[0];
+    const or = results[1];
+    const wl = results[2];
 
-    orders = or.items || [];
+    if(pr.status === "fulfilled") prof = pr.value;
+    else problem = pr.reason?.message || "تعذر تحميل معلومات الحساب";
 
-    if(wl){
+    if(or.status === "fulfilled") orders = or.value?.items || [];
+    else if(!problem) problem = or.reason?.message || "تعذر تحميل الطلبات";
 
-      wal = wl;
-
-      walletPending = Array.isArray(wl.pending) ? wl.pending : [];
-
-      walletBalance = Number(wl.balance) || 0;
-
+    if(wl.status === "fulfilled") {
+      wal = wl.value || {balance:0,items:[]};
+      walletPending = Array.isArray(wal.pending) ? wal.pending : [];
+      walletBalance = Number(wal.balance) || 0;
       renderWalletBtn();
-
       updateWalletLine();
+    }
 
+    /* إذا فشل أكثر من طلب، نعرض رسالة واحدة واضحة بدل البقاء على التحميل */
+    const failed = results.filter(x=>x.status === "rejected");
+    if(failed.length && !problem){
+      problem = failed[0].reason?.message || "تعذر تحميل بيانات الحساب";
     }
 
   }catch(e){
 
-    problem = e.message;
+    problem = e.message || "تعذر تحميل بيانات الحساب";
 
   }
 
@@ -4729,6 +4749,7 @@ async function renderAccount(){
     '<label class="auth-lbl" for="pPhone">رقم الهاتف / واتساب</label>' +
     '<input class="auth-in" id="pPhone" dir="ltr" inputmode="tel" autocomplete="tel" value="' + esc(prof.phone) + '">' +
     '<div class="auth-err" id="aMsg">' + esc(problem) + "</div>" +
+    (problem ? '<button class="btn ghost" style="width:100%;margin-bottom:10px" id="pRetry" type="button">إعادة المحاولة</button>' : "") +
     '<button class="btn primary" style="width:100%" id="pSave" type="button">حفظ المعلومات</button>' +
     '<h3 style="margin:20px 0 4px;font-size:16px;text-align:start">طلباتي</h3>' +
     '<div class="ord-list">' + list + "</div>" +
@@ -4740,6 +4761,8 @@ async function renderAccount(){
   authBody.querySelectorAll(".ord[data-oid]").forEach(el =>{
     el.onclick = ()=>openOrder(el.dataset.oid);
   });
+
+  if($("pRetry")) $("pRetry").onclick = ()=>renderAccount();
 
   $("wTopup").onclick = ()=>{
 
