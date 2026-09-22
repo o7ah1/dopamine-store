@@ -2504,6 +2504,155 @@ body{
 }
 </style>
 
+
+<style id="mobile-service-compact-fix">
+/* ترتيب مضغوط للجوال داخل صفحة الخدمات فقط */
+@media (max-width:700px){
+  body:has(#servicePage:not([hidden])) .site-nav-in{
+    padding:10px 12px 8px!important;
+    gap:8px!important;
+  }
+  body:has(#servicePage:not([hidden])) .site-brand{
+    font-size:18px!important;
+    gap:6px!important;
+  }
+  body:has(#servicePage:not([hidden])) .site-brand .brand-bolt{
+    width:34px!important;height:34px!important;font-size:18px!important;
+  }
+  body:has(#servicePage:not([hidden])) .site-actions{
+    gap:6px!important; margin-inline-start:auto!important;
+  }
+  body:has(#servicePage:not([hidden])) .site-actions>*{
+    min-height:40px!important; height:40px!important;
+  }
+  body:has(#servicePage:not([hidden])) .site-actions .wallet-top{
+    padding:0 10px!important; font-size:12px!important;
+  }
+  body:has(#servicePage:not([hidden])) .site-actions .bell-top{
+    width:40px!important; padding:0!important;
+  }
+  body:has(#servicePage:not([hidden])) .site-actions .login-btn{
+    padding:0 13px!important; font-size:13px!important;
+  }
+  body:has(#servicePage:not([hidden])) .site-links{
+    order:3!important; width:100%!important;
+    gap:22px!important; padding:4px 0 0!important;
+    font-size:13px!important;
+  }
+  body:has(#servicePage:not([hidden])) .site-links a{
+    padding:5px 2px!important;
+  }
+  body:has(#servicePage:not([hidden])) .service-topbar{
+    margin-bottom:8px!important;
+  }
+  body:has(#servicePage:not([hidden])) .back-home{
+    min-height:40px!important; padding:8px 14px!important; font-size:13px!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .steps{
+    padding:7px 10px!important; border-radius:20px!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .step{
+    padding:13px 0!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .step h2{
+    font-size:15px!important; margin-bottom:10px!important; gap:7px!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .step h2 b{
+    width:26px!important;height:26px!important;border-radius:8px!important;font-size:12px!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .platforms{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:7px!important; padding:0!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .plat{
+    min-width:0!important; width:100%!important;
+    min-height:78px!important;
+    padding:7px 3px 6px!important;
+    border-radius:14px!important;
+    font-size:10.5px!important;
+    line-height:1.2!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .plat .ico{
+    width:38px!important;height:38px!important;
+    border-radius:11px!important;margin-bottom:4px!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .plat .ico img{
+    width:23px!important;height:23px!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .plat>span:last-child{
+    font-size:11px!important; font-weight:800!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .types{
+    gap:6px!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .chip{
+    padding:6px 9px!important;font-size:10.5px!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .field{
+    margin-top:10px!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage .field label{
+    font-size:11px!important;margin-bottom:5px!important;
+  }
+  body:has(#servicePage:not([hidden])) #servicePage input,
+  body:has(#servicePage:not([hidden])) #servicePage .combo-btn{
+    min-height:42px!important;border-radius:13px!important;font-size:12px!important;
+  }
+}
+</style>
+
+<style id="final-mobile-notifications-fix">
+/* لا نخفي إشعار السعر أو جرس التنبيهات مع النسخة المضغوطة */
+.live-price-notice{
+  display:flex !important;
+  visibility:visible;
+  z-index:999999 !important;
+}
+.live-price-notice[hidden]{display:none !important}
+
+/* جرس التنبيهات يبقى ظاهراً */
+.bell-top,
+#bellBtn,
+.bell-badge{
+  visibility:visible !important;
+}
+@media (max-width:700px){
+  .live-price-notice{
+    right:10px !important;
+    left:10px !important;
+    bottom:calc(12px + env(safe-area-inset-bottom)) !important;
+    width:auto !important;
+    max-width:none !important;
+  }
+  .live-price-notice .live-price-copy{min-width:0 !important}
+  .live-price-notice .live-price-copy span{white-space:normal !important}
+}
+
+/* إشعار السعر بشكل صغير وأنيق حتى لا يغطي الخدمات */
+@media (max-width:420px){
+  .live-price-notice{
+    min-height:54px !important;
+    padding:8px 9px !important;
+    gap:8px !important;
+    border-radius:15px !important;
+  }
+  .live-price-icon{
+    width:34px !important;
+    height:34px !important;
+    flex-basis:34px !important;
+    border-radius:10px !important;
+    font-size:17px !important;
+  }
+  .live-price-copy strong{font-size:12px !important}
+  .live-price-copy span{font-size:10px !important}
+  .live-price-amount{
+    font-size:14px !important;
+    padding:6px 8px !important;
+    border-radius:10px !important;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -5939,5 +6088,52 @@ renderChips();
 })();
 </script>
 
+
+<script>
+/* حماية إشعار السعر: يبقى محدثاً مع اختيار الخدمة والكمية حتى مع ضغط واجهة الجوال */
+(function(){
+  const notice = document.getElementById("livePriceNotice");
+  const qty = document.getElementById("quantity");
+  const servicePanel = document.getElementById("servicePanel");
+  if(!notice || !qty) return;
+
+  function update(){
+    let service = null;
+    try { if(typeof selectedService === "function") service = selectedService(); } catch(e){}
+    const q = Number(qty.value || 0);
+    if(!service){
+      notice.hidden = true;
+      return;
+    }
+
+    const rate = Number(service.sell_rate || 0);
+    const total = rate * q / 1000;
+    const title = document.getElementById("livePriceTitle");
+    const desc = document.getElementById("livePriceText");
+    const amount = document.getElementById("livePriceAmount");
+
+    if(title) title.textContent = q > 0 ? "تم تحديث السعر" : "تم اختيار الخدمة";
+    if(desc) desc.textContent = q > 0
+      ? "الكمية " + q.toLocaleString("en-US") + " • السعر الإجمالي"
+      : "اختر الكمية حتى يظهر السعر النهائي";
+    if(amount){
+      amount.textContent = q > 0
+        ? "$" + (typeof money === "function" ? money(total) : total.toFixed(2))
+        : (typeof fmtRate === "function" ? fmtRate(service) : "$0.00");
+    }
+    notice.hidden = false;
+  }
+
+  qty.addEventListener("input", update);
+  qty.addEventListener("change", update);
+  servicePanel?.addEventListener("click", ()=>setTimeout(update,30));
+  servicePanel?.addEventListener("change", ()=>setTimeout(update,30));
+
+  const observer = new MutationObserver(()=>setTimeout(update,20));
+  if(servicePanel) observer.observe(servicePanel,{subtree:true,childList:true,characterData:true,attributes:true});
+  setInterval(update,700);
+  setTimeout(update,200);
+})();
+</script>
 </body>
 </html>
