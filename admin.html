@@ -336,6 +336,34 @@ td.lnk a{color:#7cb7ff}
 .tlx b{display:block;font-size:14px}
 .tlx b.adm{color:var(--amber)}
 .tlx small{display:block;color:var(--muted)}
+
+/* ---------- التذاكر ---------- */
+.ticket-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;margin-inline-start:5px;border-radius:999px;background:var(--red);color:#fff;font-size:11px}
+.ticket-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.ticket-head h3{margin:0 0 4px}.ticket-sub{color:var(--muted);font-size:13px}
+.ticket-filters{margin-bottom:12px}.ticket-filters button{display:inline-flex;gap:5px;align-items:center}
+.ticket-admin-grid{display:grid;grid-template-columns:minmax(260px,360px) minmax(0,1fr);gap:12px;min-height:520px}
+.ticket-list-box,.ticket-admin-detail{background:var(--card2);border:1px solid var(--line);border-radius:14px;min-width:0}
+.ticket-list-box{overflow:auto;max-height:70vh}.ticket-admin-list{display:grid}
+.ticket-admin-row{padding:13px;border-bottom:1px solid var(--line);cursor:pointer;transition:.15s}
+.ticket-admin-row:hover,.ticket-admin-row.active{background:rgba(59,130,246,.10)}
+.ticket-admin-row.active{border-inline-start:3px solid var(--blue)}
+.ticket-admin-row b{display:block;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.ticket-admin-row small{display:block;color:var(--muted);margin-top:4px;font-size:12px;overflow-wrap:anywhere}
+.ticket-admin-detail{padding:14px;display:flex;flex-direction:column;min-height:520px}
+.ticket-admin-detail.empty{align-items:center;justify-content:center}
+.ticket-admin-meta{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:12px}
+.ticket-admin-status{min-width:130px}
+.ticket-admin-thread{flex:1;overflow:auto;display:grid;align-content:start;gap:9px;padding:12px 2px;max-height:48vh}
+.ticket-admin-msg{background:#1b2942;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.ticket-admin-msg.admin{border-color:rgba(245,158,11,.45);background:rgba(245,158,11,.07)}
+.ticket-admin-msg b{font-size:13px}.ticket-admin-msg.admin b{color:var(--amber)}
+.ticket-admin-msg p{margin:6px 0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;font-size:14px}
+.ticket-admin-msg small{color:var(--muted);font-size:11px}
+.ticket-admin-compose{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:8px}
+.ticket-admin-compose textarea{min-height:90px}.ticket-admin-empty{padding:24px;color:var(--muted);text-align:center}
+@media(max-width:800px){.ticket-admin-grid{grid-template-columns:1fr}.ticket-list-box{max-height:36vh}.ticket-admin-detail{min-height:500px}.ticket-admin-thread{max-height:44vh}}
+
 </style>
 </head>
 
@@ -375,6 +403,7 @@ td.lnk a{color:#7cb7ff}
         <button id="vbOrders" onclick="switchView('orders')">🧾 الطلبات والأرباح</button>
         <button id="vbUsers" onclick="switchView('users')">👥 الحسابات</button>
         <button id="vbNotifs" onclick="switchView('notifs')">📣 التبليغات</button>
+        <button id="vbTickets" onclick="switchView('tickets')">🎫 التذاكر <span id="ticketBadge" class="ticket-badge">0</span></button>
         <button class="b-red" onclick="logout()">خروج</button>
       </div>
     </div>
@@ -665,6 +694,38 @@ td.lnk a{color:#7cb7ff}
 
     </div>
 
+    <!-- ============ قسم التذاكر ============ -->
+    <div id="viewTickets" class="hidden">
+
+      <div class="ticket-head">
+        <div>
+          <h3>🎫 تذاكر العملاء</h3>
+          <div class="ticket-sub">عرض التذاكر والرد على الزبائن وتغيير حالتها.</div>
+        </div>
+        <button class="b-gray" id="ticketRefresh" onclick="loadAdminTickets()">↻ تحديث</button>
+      </div>
+
+      <div class="chips ticket-filters">
+        <button class="active" data-ticket-filter="">الكل <span id="tcAll">0</span></button>
+        <button data-ticket-filter="open">مفتوحة <span id="tcOpen">0</span></button>
+        <button data-ticket-filter="answered">تم الرد <span id="tcAnswered">0</span></button>
+        <button data-ticket-filter="closed">مغلقة <span id="tcClosed">0</span></button>
+      </div>
+
+      <div class="ticket-admin-grid">
+        <div class="ticket-list-box">
+          <div id="ticketAdminList" class="ticket-admin-list">
+            <div class="status">اضغط تحديث لتحميل التذاكر.</div>
+          </div>
+        </div>
+
+        <div id="ticketAdminDetail" class="ticket-admin-detail empty">
+          <div class="ticket-admin-empty">اختر تذكرة من القائمة لعرض الرسائل والرد عليها.</div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 
 </div>
@@ -828,11 +889,13 @@ function switchView(name){
   $("viewOrders").classList.toggle("hidden",name !== "orders");
   $("viewUsers").classList.toggle("hidden",name !== "users");
   $("viewNotifs").classList.toggle("hidden",name !== "notifs");
+  $("viewTickets").classList.toggle("hidden",name !== "tickets");
 
   $("vbServices").classList.toggle("active",name === "services");
   $("vbOrders").classList.toggle("active",name === "orders");
   $("vbUsers").classList.toggle("active",name === "users");
   $("vbNotifs").classList.toggle("active",name === "notifs");
+  $("vbTickets").classList.toggle("active",name === "tickets");
 
   if(name === "orders" && !ordersLoaded){
     initOrders();
@@ -846,6 +909,10 @@ function switchView(name){
   if(name === "notifs" && !sentLoaded){
     sentLoaded = true;
     loadSent();
+  }
+
+  if(name === "tickets"){
+    loadAdminTickets();
   }
 
 }
@@ -2675,6 +2742,137 @@ async function delNotif(id){
   }
 
 }
+
+
+/* =====================================================
+   إدارة تذاكر العملاء
+   ===================================================== */
+let ticketAdminFilter = "";
+let ticketAdminSelected = null;
+let ticketAdminItems = [];
+
+function ticketStatusText(s){
+  return s === "closed" ? "مغلقة" : s === "answered" ? "تم الرد" : "مفتوحة";
+}
+function ticketCount(items,status){
+  return items.filter(x=>status ? x.status===status : true).length;
+}
+function updateTicketCounts(items){
+  const all=ticketCount(items), open=ticketCount(items,"open");
+  $("tcAll").textContent=fmtInt(all);
+  $("tcOpen").textContent=fmtInt(open);
+  $("tcAnswered").textContent=fmtInt(ticketCount(items,"answered"));
+  $("tcClosed").textContent=fmtInt(ticketCount(items,"closed"));
+  $("ticketBadge").textContent=fmtInt(open);
+  $("ticketBadge").style.display=open ? "inline-flex" : "none";
+}
+
+async function loadAdminTickets(){
+  const list=$("ticketAdminList"), detail=$("ticketAdminDetail");
+  if(!list)return;
+  list.innerHTML='<div class="ticket-admin-empty">جاري تحميل التذاكر…</div>';
+  try{
+    const allResult=await api("ticket_admin_list",{status:""});
+    const allItems=Array.isArray(allResult.items)?allResult.items:[];
+    updateTicketCounts(allItems);
+    const result=ticketAdminFilter ? await api("ticket_admin_list",{status:ticketAdminFilter}) : allResult;
+    ticketAdminItems=Array.isArray(result.items)?result.items:[];
+    document.querySelectorAll("[data-ticket-filter]").forEach(b=>b.classList.toggle("active",b.dataset.ticketFilter===ticketAdminFilter));
+    if(!ticketAdminItems.length){
+      list.innerHTML='<div class="ticket-admin-empty">لا توجد تذاكر بهذا الفلتر.</div>';
+      detail.className="ticket-admin-detail empty";
+      detail.innerHTML='<div class="ticket-admin-empty">لا توجد تذاكر لعرضها.</div>';
+      return;
+    }
+    list.innerHTML=ticketAdminItems.map(t=>`
+      <div class="ticket-admin-row ${Number(t.id)===Number(ticketAdminSelected)?"active":""}" data-admin-ticket="${Number(t.id)}">
+        <b>#${escapeHtml(t.id)} — ${escapeHtml(t.subject||"بدون عنوان")}</b>
+        <small>${escapeHtml(t.customer_email||t.user_id||"")}</small>
+        <small>${escapeHtml(t.category||"أخرى")} · ${escapeHtml(t.status_label||ticketStatusText(t.status))} · ${escapeHtml(fmtDate(t.updated_at||t.created_at))}</small>
+      </div>`).join("");
+    if(ticketAdminSelected && ticketAdminItems.some(x=>Number(x.id)===Number(ticketAdminSelected))){
+      await openAdminTicket(ticketAdminSelected);
+    }else{
+      await openAdminTicket(ticketAdminItems[0].id);
+    }
+  }catch(error){
+    list.innerHTML=`<div class="ticket-admin-empty">${escapeHtml(error.message||"تعذر تحميل التذاكر")}</div>`;
+    detail.className="ticket-admin-detail empty";
+    detail.innerHTML=`<div class="ticket-admin-empty">${escapeHtml(error.message||"تعذر تحميل التذاكر")}</div>`;
+  }
+}
+
+async function openAdminTicket(id){
+  ticketAdminSelected=Number(id);
+  const detail=$("ticketAdminDetail");
+  detail.className="ticket-admin-detail";
+  detail.innerHTML='<div class="ticket-admin-empty">جاري فتح التذكرة…</div>';
+  try{
+    const d=await api("ticket_admin_get",{ticket_id:ticketAdminSelected});
+    const t=d.ticket;
+    if(!t)throw new Error("التذكرة غير موجودة");
+    const messages=Array.isArray(t.messages)?t.messages:[];
+    detail.innerHTML=`
+      <div class="ticket-admin-meta">
+        <div>
+          <b>#${escapeHtml(t.id)} — ${escapeHtml(t.subject||"بدون عنوان")}</b>
+          <div class="ticket-sub">${escapeHtml(t.customer_email||t.user_id||"")} · ${escapeHtml(t.category||"أخرى")} · ${escapeHtml(fmtDate(t.created_at))}</div>
+        </div>
+        <select class="ticket-admin-status" id="ticketAdminStatus">
+          <option value="open" ${t.status==="open"?"selected":""}>مفتوحة</option>
+          <option value="answered" ${t.status==="answered"?"selected":""}>تم الرد</option>
+          <option value="closed" ${t.status==="closed"?"selected":""}>مغلقة</option>
+        </select>
+      </div>
+      <div class="ticket-admin-thread">
+        ${messages.length?messages.map(m=>`
+          <div class="ticket-admin-msg ${m.sender_type==="admin"?"admin":""}">
+            <b>${m.sender_type==="admin"?"الإدارة":"الزبون"}</b>
+            <p>${escapeHtml(m.message||"")}</p>
+            <small>${escapeHtml(fmtDate(m.created_at))}</small>
+          </div>`).join(""):'<div class="ticket-admin-empty">لا توجد رسائل.</div>'}
+      </div>
+      <div class="ticket-admin-compose">
+        <textarea id="ticketAdminReply" maxlength="2000" placeholder="${t.status==="closed"?"التذكرة مغلقة — غيّر الحالة حتى تتمكن من الرد.":"اكتب ردك للزبون…"}" ${t.status==="closed"?"disabled":""}></textarea>
+        <button class="b-blue" id="ticketAdminSend" ${t.status==="closed"?"disabled":""}>💬 إرسال الرد للزبون</button>
+      </div>`;
+    document.querySelectorAll("[data-admin-ticket]").forEach(x=>x.classList.toggle("active",Number(x.dataset.adminTicket)===ticketAdminSelected));
+  }catch(error){
+    detail.innerHTML=`<div class="ticket-admin-empty">${escapeHtml(error.message||"تعذر فتح التذكرة")}</div>`;
+  }
+}
+
+document.addEventListener("click",async e=>{
+  const row=e.target.closest("[data-admin-ticket]");
+  if(row){await openAdminTicket(Number(row.dataset.adminTicket));return;}
+  const filter=e.target.closest("[data-ticket-filter]");
+  if(filter){ticketAdminFilter=filter.dataset.ticketFilter||"";ticketAdminSelected=null;await loadAdminTickets();return;}
+  if(e.target.id==="ticketAdminSend"){
+    const input=$("ticketAdminReply"), message=input?input.value.trim():"";
+    if(!message){toast("اكتب الرد أولاً",true);return;}
+    e.target.disabled=true;
+    try{
+      await api("ticket_admin_reply",{ticket_id:ticketAdminSelected,message});
+      toast("تم إرسال الرد للزبون ✅");
+      await loadAdminTickets();
+    }catch(error){
+      toast(error.message||"تعذر إرسال الرد",true);
+      e.target.disabled=false;
+    }
+  }
+});
+
+document.addEventListener("change",async e=>{
+  if(e.target.id!=="ticketAdminStatus")return;
+  try{
+    await api("ticket_admin_status",{ticket_id:ticketAdminSelected,status:e.target.value});
+    toast("تم تحديث حالة التذكرة ✅");
+    await loadAdminTickets();
+  }catch(error){
+    toast(error.message||"تعذر تحديث الحالة",true);
+    await openAdminTicket(ticketAdminSelected);
+  }
+});
 
 </script>
 
